@@ -1,7 +1,18 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
     <router-view/>
+
+	<div class="row">
+    	<div class="col s12 m6 l3">hello</div>
+
+    	<div class="col s12 m6 l3">how</div>
+
+    	<div class="col s12 m6 l3">are</div>
+
+    	<div class="col s12 m6 l3">you</div>
+    </div>
+
+
   </div>
 </template>
 
@@ -10,14 +21,3 @@ export default {
   name: 'app'
 }
 </script>
-
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
