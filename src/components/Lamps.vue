@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import Lamp from "./lamp";
+import Lamp from "./Lamp";
 
 export default {
 	components: { Lamp },

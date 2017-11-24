@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import Window from "./window";
+import Window from "./Window";
 
 export default {
 	components: { Window },
