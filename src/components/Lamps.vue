@@ -1,15 +1,35 @@
 <template>
-  <div>
+	<div class="card">
+	    <div class="card-content">
+	    <span class="card-title">Lamps</span>
 
-  </div>
+	    <lamp 
+	    	v-for="lamp in lamps"
+	    	:key="lamp.id" 
+	    	:lamp="lamp">		
+    	</lamp>
+
+
+	    </div>
+	</div> 
 </template>
 
 <script>
-export default {
-  data () {
-    return {
+import Lamp from "./lamp";
 
-    }
-  }
+export default {
+	components: { Lamp },
+
+	data() {
+		return {
+			lamps: []
+		}
+	},
+
+	created() {
+		this.$http.get('lamp')
+			.then(data => this.lamps = data.data)
+			.catch(error => console.log(error));	
+	}
 }
 </script>

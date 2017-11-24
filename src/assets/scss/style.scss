@@ -1,0 +1,21 @@
+// Fonts
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+
+// Materialize colors
+// @import "materialize-css/sass/components/color";
+
+
+// $primary-color: color("blue", "lighten-2") !default;
+
+// @import 'materialize-css/sass/materialize'   
+
+// Variables
+@import "variables";
+
+// Materialize
+//@import "node_modules/materialize-css/sass/materialize";
+
+
+body {
+	background-color: $color;
+}
