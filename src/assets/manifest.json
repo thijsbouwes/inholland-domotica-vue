@@ -1,0 +1,11 @@
+{
+  "short_name": "home-comfort",
+  "name": "Home Comfort",
+  "icons": [
+    {
+      "512": "/src/assets/home_comfort.png"
+    }
+  ],
+  "start_url": "./",
+  "display": "standalone"
+}
