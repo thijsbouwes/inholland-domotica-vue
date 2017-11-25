@@ -1,5 +1,5 @@
 <template>
-  <ul id="slide-out" class="side-nav">
+  <ul id="slide-out" class="sidenav">
     <li>
       <div class="user-view">
         <div class="background">
