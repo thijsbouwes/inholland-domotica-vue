@@ -1,9 +1,9 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import Dashboard from '@/pages/Dashboard'
-import Admin from '@/pages/Admin'
+import Vue from 'vue';
+import Router from 'vue-router';
+import Dashboard from '@/pages/Dashboard';
+import Admin from '@/pages/Admin';
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
   linkActiveClass: 'active',
@@ -17,7 +17,8 @@ export default new Router({
     {
       path: '/admin',
       name: 'Admin',
-      component: Admin
+      component: Admin,
+      meta: { requiresAuth: true }
     },
   ]
-})
+});

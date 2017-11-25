@@ -1,6 +1,6 @@
 $(function() {
     // Activate sidenave
-    $(".sidenav").sidenav();
+    // $(".sidenav").sidenav();
 
     $('.fixed-action-btn').floatingActionButton({
         direction: 'top', // Direction menu comes out
