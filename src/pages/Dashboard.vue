@@ -8,10 +8,12 @@
             <windows></windows>
         </div>
 
-        <div class="col s12 m6 l3">are</div>
+        <div class="col s12 m6 l3">
+            
+        </div>
 
         <div class="col s12 m6 l3">
-            <a class="waves-effect waves-light btn"><i class="material-icons left">cloud</i>button</a>
+
         </div>
 
         <action-button></action-button>

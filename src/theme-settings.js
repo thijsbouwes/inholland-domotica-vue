@@ -5,6 +5,6 @@ $(function() {
     $('.fixed-action-btn').floatingActionButton({
         direction: 'top', // Direction menu comes out
         hoverEnabled: true, // Hover enabled
-        toolbarEnabled: true // Toolbar transition enabled
+        toolbarEnabled: false // Toolbar transition enabled
     });
 });

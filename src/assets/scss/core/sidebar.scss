@@ -1,0 +1,7 @@
+.sidenav {
+    li {
+        & > div {
+            padding: 0 32px;
+        }
+    }
+}
