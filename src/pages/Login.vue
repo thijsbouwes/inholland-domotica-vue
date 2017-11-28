@@ -3,17 +3,17 @@
         <div class="banner full-height center-panel" :style="randomBackground">
             <div class="card-panel">
 
-                <form role="form" method="POST">
+                <form role="form" method="POST" @submit.prevent="doSubmit()">
                     <div class="input-field">
                         <i class="material-icons prefix">mail_outline</i>
                         <label for="email">Email</label>
-                        <input id="email" type="email" class="form-control" name="email" length="255" maxlength="255" required autofocus>
+                        <input id="email" v-model="user.email" type="email" class="form-control" name="email" length="255" maxlength="255" required autofocus>
                     </div>
 
                     <div class="input-field">
                         <i class="material-icons prefix">lock_outline</i>
                         <label for="password">Password</label>
-                        <input id="password" type="password" class="form-control" name="password" length="255" maxlength="255" minlength="5" required>
+                        <input id="password" v-model="user.password" type="password" class="form-control" name="password" length="255" maxlength="255" minlength="5" required>
                     </div>
 
                     <div class="input-field center-align">
@@ -32,6 +32,18 @@
 
     export default {
         components: { ExternalLayout },
-        mixins: [RandomBackground]
+        mixins: [RandomBackground],
+
+        data() {
+            return {
+                user: {}
+            }
+        },
+
+        methods: {
+            doSubmit() {
+                console.log(this.user.email);
+            }
+        }
     }
 </script>

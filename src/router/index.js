@@ -4,6 +4,7 @@ import Dashboard from '@/pages/Dashboard';
 import Admin from '@/pages/Admin';
 import Register from '@/pages/Register';
 import Login from '@/pages/Login';
+import NotFound from '@/pages/NotFound';
 
 Vue.use(Router);
 
@@ -31,6 +32,11 @@ export const router = new Router({
             name: 'Admin',
             component: Admin,
             meta: { requiresAuth: true }
+        },
+        {
+            path: '*',
+            name: 'Not found',
+            component: NotFound,
         }
     ]
 });

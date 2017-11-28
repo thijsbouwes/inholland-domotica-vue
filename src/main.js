@@ -11,8 +11,9 @@ try {
 } catch (e) {}
 
 Vue.config.productionTip = false;
+
 Vue.prototype.$http = axios.create({
-	baseURL: 'https://localhost:44305/api/',
+	baseURL: 'https://api.inholland.it/v1/',
 	header: {
 		'X-Requested-With': 'XMLHttpRequest'
 	}

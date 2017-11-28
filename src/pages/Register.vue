@@ -3,29 +3,23 @@
         <div class="banner full-height center-panel" :style="randomBackground">
             <div class="card-panel">
 
-                <form role="form" method="POST">
+                <form role="form" method="POST" @submit.prevent="doSubmit()">
                     <div class="input-field">
                         <i class="material-icons prefix">face</i>
                         <label for="name">Name</label>
-                        <input id="name" type="text" class="validate" name="name" length="255" maxlength="255" required>
+                        <input id="name" v-model="user.name" type="text" class="validate" name="name" length="255" maxlength="255" required>
                     </div>
 
                     <div class="input-field">
                         <i class="material-icons prefix">mail_outline</i>
                         <label for="email">Email</label>
-                        <input id="email" type="email" class="validate" name="email" length="255" maxlength="255" required>
+                        <input id="email" v-model="user.email" type="email" class="validate" name="email" length="255" maxlength="255" required>
                     </div>
 
                     <div class="input-field">
                         <i class="material-icons prefix">lock_outline</i>
                         <label for="password">Password</label>
-                        <input id="password" type="password" class="validate" name="password" length="255" maxlength="255" minlength="6" required>
-                    </div>
-
-                    <div class="input-field">
-                        <i class="material-icons prefix">lock_outline</i>
-                        <label for="password-confirm">Confirm password</label>
-                        <input id="password-confirm" type="password" class="validate" name="password_confirmation" length="255" maxlength="255" minlength="6" required>
+                        <input id="password" v-model="user.password" type="password" class="validate" name="password" length="255" maxlength="255" minlength="6" required>
                     </div>
 
                     <div class="input-field center-align">
@@ -44,6 +38,26 @@
 
     export default {
         components: { ExternalLayout },
-        mixins: [RandomBackground]
+        mixins: [RandomBackground],
+
+        data() {
+            return {
+                user: {}
+            }
+        },
+
+        methods: {
+            doSubmit() {
+                this.$http.post('user/register', this.user)
+                    .then(data => {
+                        M.toast({html: 'Thanks' + this.user.name + 'you are registered!', classes: 'green darken-1'});
+                        console.log(data)
+                    })
+                    .catch(error => {
+                        M.toast({html: 'Error: check the form!', classes: 'red darken-1'});
+                        console.log(error)
+                    });
+            }
+        }
     }
 </script>
