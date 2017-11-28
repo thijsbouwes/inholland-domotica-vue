@@ -26,7 +26,7 @@
 
 		methods: {
 			updateStatus() {
-				this.$http.put('window/' + this.windowList.id)
+				axios.put('window/' + this.windowList.id)
 					.then(data => this.windowList = data.data)
 					.catch(error => console.log(error));
 			}

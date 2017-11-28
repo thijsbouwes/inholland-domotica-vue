@@ -5,7 +5,7 @@ class AuthService {
         let data = {email, password};
 
         // Login
-        axios.post(ENDPOINTS.LOGIN, data)
+        return axios.post(ENDPOINTS.LOGIN, data)
             .then(data => {
                 this.updateTokens(data.token, data.refresh_token);
                 return Promise.resolve(data);
@@ -19,7 +19,7 @@ class AuthService {
         let data = {name, email, password};
 
         // Login
-        axios.post(ENDPOINTS.REGISTER, data)
+        return axios.post(ENDPOINTS.REGISTER, data)
             .then(data => {
                 this.updateTokens(data.token, data.refresh_token);
                 return Promise.resolve(data);
@@ -31,7 +31,7 @@ class AuthService {
 
     refreshToken() {
         // Get refresh token
-        axios.post(ENDPOINTS.LOGIN_REFRESH, this.getRefreshToken())
+        return axios.post(ENDPOINTS.LOGIN_REFRESH, this.getRefreshToken())
             .then(data => {
                 this.updateTokens(data.token, data.refresh_token);
                 return Promise.resolve(data);

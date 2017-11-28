@@ -27,7 +27,7 @@ export default {
 	},
 
 	created() {
-		this.$http.get('lamp')
+		axios.get('lamp')
 			.then(data => this.lamps = data.data)
 			.catch(error => console.log(error));	
 	}

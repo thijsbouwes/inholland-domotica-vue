@@ -35,6 +35,7 @@
 <script>
     import ExternalLayout from '../layouts/external/Layout';
     import RandomBackground from '../mixins/RandomBackground';
+    import Auth from '../service/auth-service';
 
     export default {
         components: { ExternalLayout },
@@ -54,9 +55,9 @@
                         console.log(data);
                         this.$router.push('/');
                     })
-                    .catch(data => {
+                    .catch(error => {
                         // Show error
-                        console.log("Error: " + data)
+                        console.log("Error: " + error)
                     });
             }
         }

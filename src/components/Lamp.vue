@@ -26,7 +26,7 @@
 
 		methods: {
 			updateStatus() {
-				this.$http.put('lamp/' + this.lampList.id)
+				axios.put('lamp/' + this.lampList.id)
 					.then(data => this.lampList = data.data)
 					.catch(error => console.log(error));
 			}

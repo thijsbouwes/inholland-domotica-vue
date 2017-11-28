@@ -27,7 +27,7 @@ export default {
 	},
 
 	created() {
-		this.$http.get('window')
+		axios.get('window')
 			.then(data => this.windows = data.data)
 			.catch(error => console.log(error));	
 	}

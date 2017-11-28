@@ -47,11 +47,11 @@
                     .then(data => {
                         // Redirect
                         console.log(data);
-//                        this.$router.push('/');
+                        this.$router.push('/');
                     })
-                    .catch(data => {
+                    .catch(error => {
                         // Show error
-                        console.log("Error: " + data)
+                        console.log("Error: " + error)
                     });
             }
         }
