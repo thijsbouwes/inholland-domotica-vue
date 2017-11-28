@@ -1,5 +1,4 @@
 <template>
-    <div>
     <ul id="slide-out" class="sidenav">
         <li>
             <div class="user-view">
@@ -80,7 +79,6 @@
             <a class="waves-effect" href="#!"><i class="material-icons">exit_to_app</i>Logout</a>
         </li>
     </ul>
-</div>
 </template>
 
 <script>

@@ -1,25 +1,11 @@
 <template>
-  <div id="app">
-    <navigation></navigation>
-    <sidebar></sidebar>
-
-    <div class="row">
-        <router-view/>
-    </div>
-
-  </div>
+    <router-view/>
 </template>
 
 <script>
-
-import Navigation from './components/Navigation';
-import Sidebar from './components/Sidebar';
-
-export default {
-	components: { Navigation, Sidebar },
-  	name: 'app'
-}
-
+  export default {
+      name: 'app'
+  }
 </script>
 
 <style src="./assets/scss/style.scss" lang="scss"></style>
