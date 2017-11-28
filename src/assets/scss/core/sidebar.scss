@@ -4,4 +4,17 @@
             padding: 0 32px;
         }
     }
+
+    .input-field {
+        line-height: normal;
+    }
+
+    .collapsible-header,
+    .collapsible-body {
+        padding: 0 32px;
+    }
+
+    .collapsible-body {
+        padding-top: 10px;
+    }
 }

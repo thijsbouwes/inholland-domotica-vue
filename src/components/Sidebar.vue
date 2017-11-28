@@ -1,4 +1,5 @@
 <template>
+    <div>
     <ul id="slide-out" class="sidenav">
         <li>
             <div class="user-view">
@@ -17,54 +18,61 @@
 
         <!--Settings-->
         <li><div class="divider"></div></li>
-
-        <li><div>
+        <li><a class="subheader">Settings</a></li>
+        <li class="no-padding">
             <form action="post" @submit.prevent="doSubmit()">
-                <div class="row">
-                    <div class="input-field col s12">
-                        <select class="icons" v-model="settings.background">
-                            <option value="" disabled selected>Choose your option</option>
-                            <option
-                                    v-for="background in this.backgrounds"
-                                    v-text="background.name"
-                                    :value="background.url"
-                                    :data-icon="background.url">
-                            </option>
-                        </select>
-                        <label>Selecteer background</label>
-                    </div>
+                <ul class="collapsible collapsible-accordion">
+                    <li>
+                        <a class="collapsible-header"><i class="material-icons">face</i>User</a>
+                        <div class="collapsible-body">
+                            <div class="input-field">
+                                <input id="name" type="text" class="validate" v-model="settings.user.name" required>
+                                <label class="active" for="name">Naam</label>
+                            </div>
 
-                    <div class="input-field col s12">
-                        <input id="name" type="text" class="validate" v-model="settings.user.name" required>
-                        <label class="active" for="name">Naam</label>
-                    </div>
+                            <div class="input-field">
+                                <input id="email" type="email" class="validate" v-model="settings.user.email" required>
+                                <label class="active" for="email">Email</label>
+                            </div>
 
-                    <div class="input-field col s12">
-                        <input id="email" type="email" class="validate" v-model="settings.user.email" required>
-                        <label class="active" for="email">Email</label>
-                    </div>
-
-                    <div class="input-field col s12">
-                        <input id="location" type="text" class="validate" v-model="settings.user.location">
-                        <label class="active" for="location">Locatie</label>
-                    </div>
-
-                    <div class="switch icon-before col s12" v-for="(module, index) in settings.enabled_modules">
-                        <span>{{ index }}</span>
-                        <label class="right">
-                            <input type="checkbox" :checked="module">
-                            <span class="lever"></span>
-                        </label>
-                    </div>
-
-                    <div class="center-align col s12">
-                        <button class="btn waves-effect waves-light" type="submit" name="action">
-                            Update <i class="material-icons right">save</i>
-                        </button>
-                    </div>
-                </div>
+                            <div class="input-field">
+                                <input id="location" type="text" class="validate" v-model="settings.user.location">
+                                <label class="active" for="location">Locatie</label>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="collapsible-header"><i class="material-icons">widgets</i>Widgets</a>
+                        <div class="collapsible-body">
+                            <div class="switch icon-before" v-for="(module, index) in settings.enabled_modules">
+                                <span>{{ index }}</span>
+                                <label class="right">
+                                    <input type="checkbox" :checked="module">
+                                    <span class="lever"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <a class="collapsible-header"><i class="material-icons">image</i>Background</a>
+                        <div class="collapsible-body">
+                            <div class="input-field">
+                                <select class="icons" v-model="settings.background">
+                                    <option value="" disabled selected>Choose your option</option>
+                                    <option
+                                            v-for="background in this.backgrounds"
+                                            v-text="background.name"
+                                            :value="background.url"
+                                            :data-icon="background.url">
+                                    </option>
+                                </select>
+                                <label>Selecteer background</label>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
             </form>
-        </div></li>
+        </li>
 
         <!--Logout-->
         <li><div class="divider"></div></li>
@@ -72,6 +80,7 @@
             <a class="waves-effect" href="#!"><i class="material-icons">exit_to_app</i>Logout</a>
         </li>
     </ul>
+</div>
 </template>
 
 <script>
@@ -81,7 +90,7 @@ export default {
     mounted() {
         let options = {
             onCloseStart() {
-                M.toast({html: 'Saving profile...'});
+                M.toast({html: 'I am a toast!', classes: 'green darken-1'});
             }
         };
 
@@ -90,6 +99,9 @@ export default {
 
         let elem = document.querySelector('.sidenav');
         this.sidebar = new M.Sidenav(elem, options);
+
+         let collapsibleElem = document.querySelector('.collapsible');
+         var collapsibleInstance = new M.Collapsible(collapsibleElem, {});
     },
 
     data() {
@@ -131,8 +143,7 @@ export default {
 
     methods: {
         doSubmit() {
-            M.toast({html: 'Profile updated'});
-            this.profile_saved = true;
+            M.toast({html: 'I am a toast!', classes: 'green darken-1'});
             this.sidebar.close();
         }
     }
