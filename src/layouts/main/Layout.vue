@@ -3,7 +3,7 @@
         <navigation></navigation>
         <sidebar></sidebar>
         <section class="mainContent">
-            </slot>
+            <slot></slot>
         </section>
     </div>
 </template>

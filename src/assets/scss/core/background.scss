@@ -1,0 +1,23 @@
+.nav ~ div > .banner {
+    margin-top: -20px;
+}
+
+.banner {
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    &.space-top {
+        padding-top: 100px;
+    }
+
+    &.full-height {
+        height: calc(100vh - 64px);
+    }
+
+    &.center-panel {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
