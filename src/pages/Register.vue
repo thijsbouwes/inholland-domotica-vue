@@ -48,14 +48,15 @@
 
         methods: {
             doSubmit() {
-                this.$http.post('user/register', this.user)
+                Auth.register(this.user.name, this.user.email, this.user.password)
                     .then(data => {
-                        M.toast({html: 'Thanks' + this.user.name + 'you are registered!', classes: 'green darken-1'});
-                        console.log(data)
+                        // Redirect
+                        console.log(data);
+                        this.$router.push('/');
                     })
-                    .catch(error => {
-                        M.toast({html: 'Error: check the form!', classes: 'red darken-1'});
-                        console.log(error)
+                    .catch(data => {
+                        // Show error
+                        console.log("Error: " + data)
                     });
             }
         }

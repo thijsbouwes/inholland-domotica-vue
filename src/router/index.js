@@ -1,10 +1,10 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Dashboard from '@/pages/Dashboard';
-import Admin from '@/pages/Admin';
 import Register from '@/pages/Register';
 import Login from '@/pages/Login';
 import NotFound from '@/pages/NotFound';
+import Auth from '@/service/auth-service';
 
 Vue.use(Router);
 
@@ -15,7 +15,8 @@ export const router = new Router({
         {
             path: '/',
             name: 'Dashboard',
-            component: Dashboard
+            component: Dashboard,
+            meta: { requiresAuth: true }
         },
         {
             path: '/login',
@@ -28,12 +29,6 @@ export const router = new Router({
             component: Register
         },
         {
-            path: '/admin',
-            name: 'Admin',
-            component: Admin,
-            meta: { requiresAuth: true }
-        },
-        {
             path: '*',
             name: 'Not found',
             component: NotFound,
@@ -41,7 +36,17 @@ export const router = new Router({
     ]
 });
 
+// Set meta title
 router.beforeEach((to, from, next) => {
     document.title = 'Home Comfort | ' + to.name;
+    next();
+});
+
+// Check auth
+router.beforeEach((to, from, next) => {
+    if (to.meta.requiresAuth && Auth.isLoggedIn() === false) {
+        next('/login');
+    }
+
     next();
 });

@@ -29,6 +29,7 @@
 <script>
     import ExternalLayout from '../layouts/external/Layout';
     import RandomBackground from '../mixins/RandomBackground';
+    import Auth from '../service/auth-service';
 
     export default {
         components: { ExternalLayout },
@@ -42,7 +43,16 @@
 
         methods: {
             doSubmit() {
-                console.log(this.user.email);
+                Auth.login(this.user.email, this.user.password)
+                    .then(data => {
+                        // Redirect
+                        console.log(data);
+//                        this.$router.push('/');
+                    })
+                    .catch(data => {
+                        // Show error
+                        console.log("Error: " + data)
+                    });
             }
         }
     }

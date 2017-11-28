@@ -1,21 +1,22 @@
 <template>
 	<layout>
-        <div class="col s12 m6 l3">
-            <lamps></lamps>
+        <div class="row">
+            <div class="col s12 m6 l3">
+                <lamps></lamps>
+            </div>
+
+            <div class="col s12 m6 l3">
+                <windows></windows>
+            </div>
+
+            <div class="col s12 m6 l3">
+
+            </div>
+
+            <div class="col s12 m6 l3">
+
+            </div>
         </div>
-
-        <div class="col s12 m6 l3">
-            <windows></windows>
-        </div>
-
-        <div class="col s12 m6 l3">
-
-        </div>
-
-        <div class="col s12 m6 l3">
-
-        </div>
-
         <action-button></action-button>
 	</layout>
 </template>

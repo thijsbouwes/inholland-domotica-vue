@@ -76,13 +76,13 @@
         <!--Logout-->
         <li><div class="divider"></div></li>
         <li>
-            <a class="waves-effect" href="#!"><i class="material-icons">exit_to_app</i>Logout</a>
+            <a class="waves-effect" href="#" @click="logout"><i class="material-icons">exit_to_app</i>Logout</a>
         </li>
     </ul>
 </template>
 
 <script>
-
+    import Auth from '../../service/auth-service';
 
 export default {
     mounted() {
@@ -143,6 +143,11 @@ export default {
         doSubmit() {
             M.toast({html: 'I am a toast!', classes: 'green darken-1'});
             this.sidebar.close();
+        },
+
+        logout() {
+            Auth.logout();
+            this.$router.push('/login');
         }
     }
 }
