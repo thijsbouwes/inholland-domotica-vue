@@ -51,13 +51,20 @@
             doSubmit() {
                 Auth.register(this.user.name, this.user.email, this.user.password)
                     .then(data => {
-                        // Redirect
-                        console.log(data);
-                        this.$router.push('/');
+
+                        // Login and redirect
+                        Auth.login(this.user.email, this.user.password)
+                            .then(data => {
+                                this.$router.push('/')
+                            })
+                            .catch(error => {
+                                Console.log("Error: " + error);
+                            })
+                            
                     })
                     .catch(error => {
                         // Show error
-                        console.log("Error: " + error)
+                        console.log("Error: " + error);
                     });
             }
         }

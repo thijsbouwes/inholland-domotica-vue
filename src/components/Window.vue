@@ -10,6 +10,8 @@
 </template>
 
 <script type="text/javascript">
+	import {ENDPOINTS} from "../config/api";
+
 	export default {
 		props: {
 			window: {

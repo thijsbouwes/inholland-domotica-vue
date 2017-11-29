@@ -51,7 +51,7 @@
                     })
                     .catch(error => {
                         // Show error
-                        console.log("Error: " + error)
+                        M.toast({ html: "Error: " + error.response.status + ", " + error.response.data, classes: "red" });
                     });
             }
         }

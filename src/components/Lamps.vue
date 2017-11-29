@@ -16,6 +16,7 @@
 
 <script>
 import Lamp from "./Lamp";
+import {ENDPOINTS} from "../config/api";
 
 export default {
 	components: { Lamp },
@@ -27,8 +28,8 @@ export default {
 	},
 
 	created() {
-		axios.get('lamp')
-			.then(data => this.lamps = data.data)
+		axios.get(ENDPOINTS.LAMPS)
+			.then(response => this.lamps = response.data)
 			.catch(error => console.log(error));	
 	}
 }
