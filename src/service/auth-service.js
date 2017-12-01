@@ -20,8 +20,8 @@ class AuthService {
 
         // Login
         return axios.post(ENDPOINTS.REGISTER, data)
-            .then(data => {
-                return Promise.resolve(data);
+            .then(response => {
+                return Promise.resolve(response);
             })
             .catch(error => {
                 return Promise.reject(error);
@@ -30,10 +30,10 @@ class AuthService {
 
     refreshToken() {
         // Get refresh token
-        return axios.post(ENDPOINTS.LOGIN_REFRESH, this.getRefreshToken())
-            .then(data => {
-                this.updateTokens(data.token, data.refresh_token);
-                return Promise.resolve(data);
+        return axios.post(ENDPOINTS.LOGIN_REFRESH, {token: this.getRefreshToken()})
+            .then(response => {
+                this.updateTokens(response.data.access_token, response.data.refresh_token);
+                return Promise.resolve(response);
             })
             .catch(error => {
                 this.logout();

@@ -1,7 +1,7 @@
 <template>
 	<div class="switch">
 		<i class="material-icons">lightbulb_outline</i>
-		<span>{{ windowList.description }}</span>
+		<span>{{ windowList.location }} {{ windowList.floor }}</span>
 		<label class="right">
 			<input type="checkbox" v-model="windowList.status" @click="updateStatus">
 			<span class="lever"></span>
@@ -28,7 +28,7 @@
 
 		methods: {
 			updateStatus() {
-				axios.put('window/' + this.windowList.id)
+				axios.put(ENDPOINTS.WINDOW_SWITCH + this.windowList.id)
 					.then(data => this.windowList = data.data)
 					.catch(error => console.log(error));
 			}

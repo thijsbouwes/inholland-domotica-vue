@@ -16,6 +16,7 @@
 
 <script>
 import Window from "./Window";
+import {ENDPOINTS} from "../config/api";
 
 export default {
 	components: { Window },
@@ -27,7 +28,7 @@ export default {
 	},
 
 	created() {
-		axios.get('window')
+		axios.get(ENDPOINTS.WINDOWS)
 			.then(data => this.windows = data.data)
 			.catch(error => console.log(error));	
 	}

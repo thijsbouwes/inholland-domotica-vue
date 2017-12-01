@@ -4,8 +4,10 @@ export const ENDPOINTS = {
     'REGISTER': 'user/register',
     'LOGIN': 'auth/authorize',
     'LOGIN_REFRESH': 'auth/token/refresh',
+    'LAMPS': '/house/lamps',
+    'LAMP_SWITCH': '/house/lamps/switch/',
     'WINDOWS': '/house/windows',
-    'LAMPS': '/house/lamps'
+    'WINDOW_SWITCH': '/house/windows/switch/'
 };
 
 export const HTTP_CODES = {

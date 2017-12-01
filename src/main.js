@@ -16,10 +16,11 @@ Vue.config.productionTip = false;
 
 // Add a request interceptor, to add token
 axios.interceptors.request.use(config => {
+
     let token = Auth.getToken();
 
     if (token) {
-        config.headers.common['Authorization'] = token;
+        config.headers.common['Authorization'] = "Token " + token;
     }
 
     return config;
@@ -27,17 +28,25 @@ axios.interceptors.request.use(config => {
 
 // Add a response interceptor, to check response
 axios.interceptors.response.use(response => {
-    if (response.status === HTTP_CODES.UNAUTHORIZED) {
-        console.warn("Access Token expired");
-
-        Auth.refreshToken()
-            .catch(error => {
-                console.warn(error);
-                router.push('/');
-            })
-    }
-
+    console.log("token blabla hell");
+    
     return response;
+
+
+    },error => {
+        console.log("hello 1233");
+
+        if (error.response.status === HTTP_CODES.UNAUTHORIZED) {
+            console.warn("Access Token expired");
+
+            Auth.refreshToken()
+                .catch(error => {
+                    console.warn(error);
+                    router.push('/');
+                });
+        }
+
+    return Promise.reject(error);
 });
 
 window.axios = require('axios');

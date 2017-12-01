@@ -1,7 +1,7 @@
 <template>
 	<div class="switch">
 		<i class="material-icons">lightbulb_outline</i>
-		<span>{{ lamp.description }}</span>
+		<span>{{ lamp.location }} {{ lamp.floor }}</span>
 		<label class="right">
 			<input type="checkbox" v-model="lampList.status" @click="updateStatus">
 			<span class="lever"></span>
@@ -10,6 +10,8 @@
 </template>
 
 <script type="text/javascript">
+import {ENDPOINTS} from "../config/api";
+
 	export default {
 		props: {
 			lamp: {
@@ -26,7 +28,7 @@
 
 		methods: {
 			updateStatus() {
-				axios.put('lamp/' + this.lampList.id)
+				axios.put(ENDPOINTS.LAMP_SWITCH + this.lampList.id)
 					.then(data => this.lampList = data.data)
 					.catch(error => console.log(error));
 			}
