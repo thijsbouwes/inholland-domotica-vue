@@ -46,8 +46,8 @@
                 Auth.login(this.user.email, this.user.password)
                     .then(data => {
                         // Redirect
-                        console.log(data);
                         this.$router.push('/');
+                        M.toast({ html: "Welcome  👋🏼", classes: "green" });
                     })
                     .catch(error => {
                         // Show error

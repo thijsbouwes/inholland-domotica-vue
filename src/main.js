@@ -16,35 +16,35 @@ Vue.config.productionTip = false;
 
 // Add a request interceptor, to add token
 axios.interceptors.request.use(config => {
-
     let token = Auth.getToken();
-
     if (token) {
-        config.headers.common['Authorization'] = "Token " + token;
+        config.headers.common['Authorization'] = token;
     }
 
     return config;
 });
 
-// Add a response interceptor, to check response
-axios.interceptors.response.use(response => {
-    console.log("token blabla hell");
-    
-    return response;
+// Add a response interceptor, to check response on auth
+axios.interceptors.response.use(null, (error) => {
+    let originalRequest = error.config;
 
+    if (error.response.status === HTTP_CODES.UNAUTHORIZED && !originalRequest._retry) {
+        console.warn("Access Token expired");
+        originalRequest._retry = true;
 
-    },error => {
-        console.log("hello 1233");
-
-        if (error.response.status === HTTP_CODES.UNAUTHORIZED) {
-            console.warn("Access Token expired");
-
-            Auth.refreshToken()
-                .catch(error => {
-                    console.warn(error);
-                    router.push('/');
-                });
-        }
+        return Auth.refreshToken()
+            .then(data => {
+                // retry request, with new token
+                Auth.resetAuthRefreshTokenRequest();
+                originalRequest.headers['Authorization'] = Auth.getToken();
+                return axios(originalRequest);
+            })
+            .catch(error => {
+                Auth.logout();
+                router.push('/login');
+                console.warn(error);
+            });
+    }
 
     return Promise.reject(error);
 });

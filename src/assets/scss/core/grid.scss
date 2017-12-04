@@ -1,0 +1,12 @@
+.grid {
+    display: grid;
+    grid-template-columns: 20% 20% 20% 20% 20%;
+    grid-template-rows: 20% 20% 20% 20% 20%;
+
+    grid-column-gap: 20px;
+    grid-padding: 20px;
+
+    .item {
+        align-self: stretch;
+    }
+}

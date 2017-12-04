@@ -1,5 +1,5 @@
 export const ENDPOINTS = {
-    'BASE': 'http://localhost:55193/v1/',
+    'BASE': 'https://api.inholland.it/v1/',
     'CHECK_AUTH': '',
     'REGISTER': 'user/register',
     'LOGIN': 'auth/authorize',

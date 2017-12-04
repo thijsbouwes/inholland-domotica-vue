@@ -1,16 +1,18 @@
 <template>
 	<div class="card">
 	    <div class="card-content">
-	    <span class="card-title">Lamps</span>
+			<span class="card-title">Lamps</span>
 
-	    <lamp 
-	    	v-for="lamp in lamps"
-	    	:key="lamp.id" 
-	    	:lamp="lamp">		
-    	</lamp>
+			<lamp
+				v-for="lamp in lamps"
+				:key="lamp.id"
+				:lamp="lamp">
+			</lamp>
 
-
-	    </div>
+			<div class="progress" v-show="loading">
+				<div class="indeterminate"></div>
+			</div>
+		</div>
 	</div> 
 </template>
 
@@ -23,13 +25,17 @@ export default {
 
 	data() {
 		return {
+		    loading: true,
 			lamps: []
 		}
 	},
 
 	created() {
 		axios.get(ENDPOINTS.LAMPS)
-			.then(response => this.lamps = response.data)
+			.then(response => {
+			    this.lamps = response.data;
+				this.loading = false;
+            })
 			.catch(error => console.log(error));	
 	}
 }

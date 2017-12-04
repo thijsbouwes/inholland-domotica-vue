@@ -51,7 +51,6 @@
             doSubmit() {
                 Auth.register(this.user.name, this.user.email, this.user.password)
                     .then(response => {
-                        console.log(response);
                         // Login and redirect
                         Auth.login(this.user.email, this.user.password)
                             .then(response => {
@@ -64,8 +63,7 @@
                     })
                     .catch(error => {
                         // Show error
-                         M.toast({ html: "Error: " + error.response.status + ", " + error.response.data, classes: "red" });
-                        console.log("Error: " + error.response);
+                        M.toast({ html: "Error: " + error.response.status + ", " + error.response.data, classes: "red" });
                     });
             }
         }

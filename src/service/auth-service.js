@@ -1,6 +1,8 @@
 import {ENDPOINTS} from "../config/api";
+let authRefreshTokenRequest;
 
 class AuthService {
+
     login(email, password) {
         let data = {email, password};
 
@@ -18,7 +20,7 @@ class AuthService {
     register(name, email, password) {
         let data = {name, email, password};
 
-        // Login
+        // Register
         return axios.post(ENDPOINTS.REGISTER, data)
             .then(response => {
                 return Promise.resolve(response);
@@ -28,7 +30,7 @@ class AuthService {
             });
     }
 
-    refreshToken() {
+    requestRefreshToken() {
         // Get refresh token
         return axios.post(ENDPOINTS.LOGIN_REFRESH, {token: this.getRefreshToken()})
             .then(response => {
@@ -36,9 +38,23 @@ class AuthService {
                 return Promise.resolve(response);
             })
             .catch(error => {
-                this.logout();
                 return Promise.reject(new Error('Refresh and Access Tokens have expired'));
             });
+    }
+
+    // Check if we are already making a token refresh request
+    refreshToken() {
+        if (!authRefreshTokenRequest) {
+            authRefreshTokenRequest = this.requestRefreshToken();
+            return authRefreshTokenRequest;
+        }
+
+        return authRefreshTokenRequest;
+    }
+
+    // Reset auth refresh request
+    resetAuthRefreshTokenRequest() {
+        authRefreshTokenRequest = null;
     }
 
     isLoggedIn() {
@@ -56,7 +72,7 @@ class AuthService {
     }
 
     getToken() {
-        return localStorage.getItem('token');
+        return "Token " + localStorage.getItem('token');
     }
 
     getRefreshToken() {
