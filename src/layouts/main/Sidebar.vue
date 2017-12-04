@@ -83,12 +83,22 @@
 
 <script>
     import Auth from '../../service/auth-service';
+    import {ENDPOINTS} from "../../config/api";
 
 export default {
+    created() {
+        axios.get(ENDPOINTS.PROFILE)
+            .then(response => {
+                this.settings.user.name = response.data.name;
+                this.settings.user.email = response.data.email;
+            })
+            .catch(error => console.log(error));
+    },
+
     mounted() {
         let options = {
             onCloseStart() {
-                M.toast({html: 'I am a toast!', classes: 'green darken-1'});
+
             }
         };
 
@@ -107,9 +117,9 @@ export default {
             settings: {
                 background: "https://images.unsplash.com/photo-1458682625221-3a45f8a844c7?auto=format&fit=crop&w=1267&q=60&ixid=dW5zcGxhc2guY29tOzs7Ozs%3D",
                 user: {
-                    name: "Jhon doe",
-                    email: "jhondoe@gmail.com",
-                    location: "Schagerbrug",
+                    name: "",
+                    email: "",
+                    location: "",
                     avatar: "http://materializecss.com/images/yuna.jpg"
                 },
                 enabled_modules: {
@@ -147,6 +157,7 @@ export default {
 
         logout() {
             Auth.logout();
+            this.sidebar.close();
             this.$router.push('/login');
         }
     }
