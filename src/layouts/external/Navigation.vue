@@ -11,11 +11,3 @@
         </nav>
     </div>
 </template>
-<script>
-    export default {
-        mounted() {
-            let elem = document.querySelector('.sidenav');
-            new M.Sidenav(elem);
-        }
-    }
-</script>
