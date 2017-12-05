@@ -3,7 +3,7 @@
   "name": "Home Comfort",
   "icons": [
     {
-      "512": "/src/assets/home_comfort.png"
+      "512": "/static/home_comfort.png"
     }
   ],
   "start_url": "./",
