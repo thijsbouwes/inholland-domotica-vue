@@ -19,6 +19,10 @@
                     <div class="input-field center-align">
                         <button class="btn waves-effect waves-light" type="submit" name="action">Login</button>
                     </div>
+
+                    <div class="center-align hide-on-large-only">
+                        <router-link tag="span" to="/register" exact><a>Register</a></router-link>
+                    </div>
                 </form>
 
             </div>
