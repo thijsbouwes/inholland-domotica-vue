@@ -109,7 +109,7 @@ export default {
         this.sidebar = new M.Sidenav(elem, options);
 
          let collapsibleElem = document.querySelector('.collapsible');
-         var collapsibleInstance = new M.Collapsible(collapsibleElem, {});
+         let collapsibleInstance = new M.Collapsible(collapsibleElem, {});
     },
 
     data() {
@@ -120,7 +120,7 @@ export default {
                     name: "",
                     email: "",
                     location: "",
-                    avatar: "http://materializecss.com/images/yuna.jpg"
+                    avatar: "https://x1.xingassets.com/assets/frontend_minified/img/users/nobody_m.original.jpg"
                 },
                 enabled_modules: {
                     lamps: true,

@@ -5,10 +5,11 @@ export const ENDPOINTS = {
     'PROFILE': 'user/profile',
     'LOGIN': 'auth/authorize',
     'LOGIN_REFRESH': 'auth/token/refresh',
-    'LAMPS': '/house/lamps',
-    'LAMP_SWITCH': '/house/lamps/switch/',
-    'WINDOWS': '/house/windows',
-    'WINDOW_SWITCH': '/house/windows/switch/'
+    'LAMPS': '/house/lamp',
+    'LAMP_SWITCH': '/house/lamp/switch/',
+    'WINDOWS': '/house/window',
+    'WINDOW_SWITCH': '/house/window/switch/',
+    'HOUSE_REMOTE': '/house/remote'
 };
 
 export const HTTP_CODES = {

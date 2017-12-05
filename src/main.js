@@ -6,10 +6,9 @@ import Auth from './service/auth-service';
 import {ENDPOINTS, HTTP_CODES} from './config/api';
 
 try {
-    window.$ = window.jQuery = require('jquery');
-
     require('materialize-css');
-    require('./theme-settings');
+    require('materialize-css/extras/noUiSlider/nouislider.css');
+    require('materialize-css/extras/noUiSlider/nouislider.min.js');
 } catch (e) {}
 
 Vue.config.productionTip = false;
@@ -51,6 +50,9 @@ axios.interceptors.response.use(null, (error) => {
 
 window.axios = require('axios');
 axios.defaults.baseURL = ENDPOINTS.BASE;
+
+// Register event buss
+window.Event = new Vue();
 
 new Vue({
   el: '#app',
