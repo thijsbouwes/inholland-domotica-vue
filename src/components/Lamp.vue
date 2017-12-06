@@ -1,7 +1,9 @@
 <template>
-	<div class="switch">
-		<i class="material-icons">lightbulb_outline</i>
-		<span>{{ lamp.location }} {{ lamp.floor }}</span>
+	<div class="switch house-item">
+		<span>
+			<i class="material-icons prefix">lightbulb_outline</i>
+			<span>{{ lamp.location }} {{ lamp.floor }}</span>
+		</span>
 		<label class="right">
 			<input type="checkbox" v-model="lampList.status" @click="updateStatus">
 			<span class="lever"></span>
