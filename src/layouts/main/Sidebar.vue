@@ -3,10 +3,10 @@
         <li>
             <div class="user-view">
                 <div class="background">
-                    <img :src="settings.background">
+                    <img :src="settings.background.url" :title="settings.background.name" width="100%">
                 </div>
 
-                <a href="#!user"><img class="circle" :src="settings.user.avatar"></a>
+                <a href="#!user"><img class="circle" src="https://x1.xingassets.com/assets/frontend_minified/img/users/nobody_m.original.jpg"></a>
                 <a href="#!name"><span class="white-text name" v-text="settings.user.name"></span></a>
                 <a href="#!email"><span class="white-text email" v-text="settings.user.email"></span></a>
             </div>
@@ -19,8 +19,8 @@
         <li><div class="divider"></div></li>
         <li><a class="subheader">Settings</a></li>
         <li class="no-padding">
-            <form action="post" @submit.prevent="doSubmit()">
-                <ul class="collapsible collapsible-accordion">
+            <form method="post" class="form_user" @submit.prevent="doSubmit()">
+                <ul class="collapsible">
                     <li>
                         <a class="collapsible-header"><i class="material-icons">face</i>User</a>
                         <div class="collapsible-body">
@@ -30,12 +30,12 @@
                             </div>
 
                             <div class="input-field">
-                                <input id="email" type="email" class="validate" v-model="settings.user.email" required>
+                                <input id="email" type="email" class="validate" v-model="settings.user.email" required disabled>
                                 <label class="active" for="email">Email</label>
                             </div>
 
                             <div class="input-field">
-                                <input id="location" type="text" class="validate" v-model="settings.user.location">
+                                <input id="location" type="text" class="validate" v-model="settings.user.location" required>
                                 <label class="active" for="location">Locatie</label>
                             </div>
                         </div>
@@ -43,7 +43,7 @@
                     <li>
                         <a class="collapsible-header"><i class="material-icons">widgets</i>Widgets</a>
                         <div class="collapsible-body">
-                            <div class="switch icon-before" v-for="(module, index) in settings.enabled_modules">
+                            <div class="switch icon-before" v-for="(module, index) in enabled_modules">
                                 <span>{{ index }}</span>
                                 <label class="right">
                                     <input type="checkbox" :checked="module">
@@ -56,12 +56,12 @@
                         <a class="collapsible-header"><i class="material-icons">image</i>Background</a>
                         <div class="collapsible-body">
                             <div class="input-field">
-                                <select class="icons" v-model="settings.background">
+                                <select class="icons" v-model="settings.background" required>
                                     <option value="" disabled selected>Choose your option</option>
                                     <option
-                                            v-for="background in this.backgrounds"
+                                            v-for="background in backgrounds"
                                             v-text="background.name"
-                                            :value="background.url"
+                                            :value="background"
                                             :data-icon="background.url">
                                     </option>
                                 </select>
@@ -70,6 +70,12 @@
                         </div>
                     </li>
                 </ul>
+
+                <div class="center-align">
+                    <button @click="openCollapsible" class="btn waves-effect waves-light" type="submit" name="action">Save
+                        <i class="material-icons right">save</i>
+                    </button>
+                </div>
             </form>
         </li>
 
@@ -87,79 +93,67 @@
 
 export default {
     created() {
-        axios.get(ENDPOINTS.PROFILE)
+        axios.get(ENDPOINTS.PROFILE_SETTINGS)
             .then(response => {
-                this.settings.user.name = response.data.name;
-                this.settings.user.email = response.data.email;
+                this.settings = response.data;
+            })
+            .then(response => {
+                M.updateTextFields();
+            })
+            .catch(error => console.log(error));
+
+        axios.get(ENDPOINTS.BACKGROUND_ALL)
+            .then(response => {
+                this.backgrounds = response.data;
+            })
+            .then(response => {
+                let elem_select = document.querySelector('select');
+                new M.Select(elem_select);
             })
             .catch(error => console.log(error));
     },
 
     mounted() {
-        let options = {
-            onCloseStart() {
-
-            }
-        };
-
-        let elem_select = document.querySelector('select');
-        let instance = new M.Select(elem_select);
-
         let elem = document.querySelector('.sidenav');
-        this.sidebar = new M.Sidenav(elem, options);
+        this.sidebar = new M.Sidenav(elem);
 
-         let collapsibleElem = document.querySelector('.collapsible');
-         let collapsibleInstance = new M.Collapsible(collapsibleElem, {});
+        let collapsibleElem = document.querySelector('.collapsible');
+        this.collapsible = new M.Collapsible(collapsibleElem);
     },
 
     data() {
         return {
             settings: {
-                background: "https://images.unsplash.com/photo-1458682625221-3a45f8a844c7?auto=format&fit=crop&w=1267&q=60&ixid=dW5zcGxhc2guY29tOzs7Ozs%3D",
-                user: {
-                    name: "",
-                    email: "",
-                    location: "",
-                    avatar: "https://x1.xingassets.com/assets/frontend_minified/img/users/nobody_m.original.jpg"
-                },
-                enabled_modules: {
-                    lamps: true,
-                    windows: true,
-                    heater: false,
-                    news_feed: true,
-                    time_date: false,
-                    weather: true
-                }
+                background: {},
+                user: {},
             },
-            backgrounds: [
-                {
-                    name: "Option 1",
-                    url: "https://images.unsplash.com/photo-1458682625221-3a45f8a844c7?auto=format&fit=crop&w=1267&q=60&ixid=dW5zcGxhc2guY29tOzs7Ozs%3D"
-                },
-                {
-                    name: "Option 2",
-                    url: "https://images.unsplash.com/photo-1507561942779-d2a26d42d51f?auto=format&fit=crop&w=1350&q=60&ixid=dW5zcGxhc2guY29tOzs7Ozs%3D"
-                },
-                {
-                    name: "Option 3",
-                    url: "https://images.unsplash.com/photo-1491592382973-75316efb392c?auto=format&fit=crop&w=1266&q=60&ixid=dW5zcGxhc2guY29tOzs7Ozs%3D"
-                }
-            ],
-            profile_saved: false,
+            enabled_modules: {
+                lamps: true,
+                windows: true,
+                heater: false,
+                news_feed: true,
+                time_date: false,
+                weather: true
+            },
+            backgrounds: [],
         }
     },
 
     methods: {
         doSubmit() {
-            M.toast({html: 'I am a toast!', classes: 'green darken-1'});
+            M.toast({html: 'Saving profile', classes: 'green'});
             this.sidebar.close();
         },
 
         logout() {
-            Auth.logout();
             this.sidebar.close();
+            Auth.logout();
             this.$router.push('/login');
+        },
+
+        openCollapsible() {
+            this.collapsible.open(0);
         }
-    }
+    },
 }
 </script>
