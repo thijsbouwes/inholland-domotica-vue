@@ -8,7 +8,7 @@ import {ENDPOINTS, HTTP_CODES} from './config/api';
 try {
     require('materialize-css');
     require('materialize-css/extras/noUiSlider/nouislider.css');
-    require('materialize-css/extras/noUiSlider/nouislider.min.js');
+    window.noUiSlider = require('materialize-css/extras/noUiSlider/nouislider.min.js');
 } catch (e) {}
 
 Vue.config.productionTip = false;

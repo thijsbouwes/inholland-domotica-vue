@@ -20,7 +20,6 @@
 
         mounted() {
             let elem = document.querySelector('.modal');
-            console.log(elem);
             let instance = new M.Modal(elem);
         }
     }

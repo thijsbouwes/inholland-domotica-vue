@@ -1,4 +1,4 @@
-import {BACKGROUNDS} from '../config/background';
+import {ENDPOINTS} from '../config/api';
 
 export default {
     data() {
@@ -8,13 +8,20 @@ export default {
     },
 
     created() {
-        this.backgrounds = BACKGROUNDS;
+        axios.get(ENDPOINTS.BACKGROUND_ALL)
+            .then(response => {
+                this.backgrounds = response.data;
+            });
     },
 
     computed: {
         randomBackground() {
-            let background = this.backgrounds[Math.floor(Math.random()*this.backgrounds.length)];
-            return "background-image: url(" + background['url'] + ");";
+            if (this.backgrounds.length > 0) {
+                let background = this.backgrounds[Math.floor(Math.random()*this.backgrounds.length)];
+                return "background-image: url(" + background['url'] + ");";
+            }
+
+            return "";
         }
     }
 }

@@ -3,7 +3,13 @@
         <p>Updated at: {{ base64_updated_at }}</p>
         <p>Location at: AMS Vultr server</p>
         <div class="center-align">
-            <img :src="base64" class="responsive-img" v-if="base64">
+            <img :src="base64" class="responsive-img" height="300px" v-if="base64">
+        </div>
+
+        <div class="center-align">
+            <button class="btn waves-effect waves-light" @click="getRemote">Reload state
+                <i class="material-icons right">autorenew</i>
+            </button>
         </div>
 
         <div class="progress" v-show="loading">

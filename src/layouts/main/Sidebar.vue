@@ -12,12 +12,7 @@
             </div>
         </li>
 
-        <!--Page links-->
-        <router-link tag="li" to="/" exact><a><i class="material-icons">dashboard</i>Dashboard</a></router-link>
-
         <!--Settings-->
-        <li><div class="divider"></div></li>
-        <li><a class="subheader">Settings</a></li>
         <li class="no-padding">
             <form method="post" class="form_user" @submit.prevent="doSubmit()">
                 <ul class="collapsible">
@@ -69,6 +64,14 @@
                             </div>
                         </div>
                     </li>
+                    <li>
+                        <a class="collapsible-header"><i class="material-icons">bookmark</i>Bookmarks</a>
+                        <div class="collapsible-body">
+                            <div class="chips">
+                                <input class="custom-class">
+                            </div>
+                        </div>
+                    </li>
                 </ul>
 
                 <div class="center-align">
@@ -92,37 +95,9 @@
     import {ENDPOINTS} from "../../config/api";
 
 export default {
-    created() {
-        axios.get(ENDPOINTS.PROFILE_SETTINGS)
-            .then(response => {
-                this.settings = response.data;
-            })
-            .then(response => {
-                M.updateTextFields();
-            })
-            .catch(error => console.log(error));
-
-        axios.get(ENDPOINTS.BACKGROUND_ALL)
-            .then(response => {
-                this.backgrounds = response.data;
-            })
-            .then(response => {
-                let elem_select = document.querySelector('select');
-                new M.Select(elem_select);
-            })
-            .catch(error => console.log(error));
-    },
-
-    mounted() {
-        let elem = document.querySelector('.sidenav');
-        this.sidebar = new M.Sidenav(elem);
-
-        let collapsibleElem = document.querySelector('.collapsible');
-        this.collapsible = new M.Collapsible(collapsibleElem);
-    },
-
     data() {
         return {
+            bookmark_url: "",
             settings: {
                 background: {},
                 user: {},
@@ -136,12 +111,61 @@ export default {
                 weather: true
             },
             backgrounds: [],
+            bookmarks: [{ tag: "Google.nl" }]
         }
+    },
+
+    mounted() {
+        let _refThis = this;
+        // Create sidenav
+        let elem = document.querySelector('.sidenav');
+        this.sidebar = new M.Sidenav(elem);
+
+        // Create dropdown
+        let collapsibleElem = document.querySelector('.collapsible');
+        this.collapsible = new M.Collapsible(collapsibleElem);
+
+        // Create chips
+        let chipsElem = document.querySelector('.chips');
+        let chipsOption = {
+            placeholder: 'Enter a website',
+            secondaryPlaceholder: '+Website',
+            data: this.bookmarks
+        };
+        this.chipBookmarks = new M.Chips(chipsElem, chipsOption);
+    },
+
+    created() {
+        axios.get(ENDPOINTS.PROFILE_SETTINGS)
+            .then(response => {
+                this.settings = response.data;
+            })
+            .then(response => {
+                M.updateTextFields();
+            });
+
+        axios.get(ENDPOINTS.BACKGROUND_ALL)
+            .then(response => {
+                this.backgrounds = response.data;
+            })
+            .then(response => {
+                let elem_select = document.querySelector('select');
+                new M.Select(elem_select);
+            });
     },
 
     methods: {
         doSubmit() {
-            M.toast({html: 'Saving profile', classes: 'green'});
+            let data = { name: this.settings.user.name, background_id: this.settings.background.id };
+
+            axios.put(ENDPOINTS.PROFILE, data)
+                .then(response => {
+                    M.toast({html: '<i class="material-icons">check_circle</i> saving profile', classes: 'green'});
+                })
+                .catch(error => {
+                    M.toast({html: '<i class="material-icons">error</i> error saving profile', classes: 'red'});
+                });
+
             this.sidebar.close();
         },
 
