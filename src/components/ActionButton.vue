@@ -3,9 +3,6 @@
         <a class="btn-floating btn-large">
             <i class="large material-icons">{{ icon }}</i>
         </a>
-
-
-        <!--<modal target_id="modalhouse"><remote-house></remote-house></modal>-->
     </div>
 </template>
 

@@ -115,6 +115,25 @@ export default {
         }
     },
 
+    created() {
+        axios.get(ENDPOINTS.PROFILE_SETTINGS)
+            .then(response => {
+                this.settings = response.data;
+            })
+            .then(response => {
+                M.updateTextFields();
+            });
+
+        axios.get(ENDPOINTS.BACKGROUND_ALL)
+            .then(response => {
+                this.backgrounds = response.data;
+            })
+            .then(response => {
+                let elem_select = document.querySelector('select');
+                new M.Select(elem_select);
+            });
+    },
+
     mounted() {
         let _refThis = this;
         // Create sidenav
@@ -133,25 +152,6 @@ export default {
             data: this.bookmarks
         };
         this.chipBookmarks = new M.Chips(chipsElem, chipsOption);
-    },
-
-    created() {
-        axios.get(ENDPOINTS.PROFILE_SETTINGS)
-            .then(response => {
-                this.settings = response.data;
-            })
-            .then(response => {
-                M.updateTextFields();
-            });
-
-        axios.get(ENDPOINTS.BACKGROUND_ALL)
-            .then(response => {
-                this.backgrounds = response.data;
-            })
-            .then(response => {
-                let elem_select = document.querySelector('select');
-                new M.Select(elem_select);
-            });
     },
 
     methods: {

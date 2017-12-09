@@ -7,13 +7,6 @@ export default {
         }
     },
 
-    created() {
-        axios.get(ENDPOINTS.BACKGROUND_ALL)
-            .then(response => {
-                this.backgrounds = response.data;
-            });
-    },
-
     computed: {
         randomBackground() {
             if (this.backgrounds.length > 0) {
@@ -23,5 +16,12 @@ export default {
 
             return "";
         }
+    },
+
+    created() {
+        axios.get(ENDPOINTS.BACKGROUND_ALL)
+            .then(response => {
+                this.backgrounds = response.data;
+            });
     }
 }
