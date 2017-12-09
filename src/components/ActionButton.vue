@@ -2,7 +2,7 @@
     <div>
         <div class="fixed-action-btn">
             <a class="btn-floating btn-large">
-                <i class="large material-icons">{{ icon }}</i>
+                <i class="large material-icons">mode_edit</i>
             </a>
             <ul>
                 <li><a class="btn-floating green modal-trigger" href="#remote"><i class="material-icons">settings_remote</i></a></li>
@@ -23,8 +23,6 @@
 
         data() {
             return {
-                edit_mode: false,
-                icon: "mode_edit"
             }
         },
 
@@ -32,13 +30,6 @@
             let elem = document.querySelector('.fixed-action-btn');
             let options = { direction: 'top', hoverEnabled: true, toolbarEnabled: false };
             let instance = new M.FloatingActionButton(elem, options);
-        },
-
-        methods: {
-            toggleEdit() {
-                this.edit_mode = true;
-                this.icon = "save";
-            }
         }
     }
 </script>
