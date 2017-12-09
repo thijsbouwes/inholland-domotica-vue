@@ -1,4 +1,4 @@
-.noUi-target.noUi-horizontal {
+.noUi-target.noUi-horizontal .noUi-base {
     .noUi-handle,
     .noUi-tooltip {
         background-color: $secondary-color;
@@ -7,9 +7,4 @@
     .noUi-connect {
         background-color: desaturate(lighten($secondary-color, 25%), 25%);
     }
-
-
-    //.noUi-tooltip {
-    //    box-shadow: 0 0 0 10px rgba($radio-fill-color, .26);
-    //}
 }
