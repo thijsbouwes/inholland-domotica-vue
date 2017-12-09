@@ -13,7 +13,17 @@
         display: inline-flex;
     }
 
+    &.center {
+        justify-content: center;
+    }
+
     .heater {
         min-width: 50%;
+    }
+
+    h4,
+    h5,
+    h6 {
+        margin: 0;
     }
 }
