@@ -20,8 +20,7 @@
 
         <div class="row">
             <div class="col s12 m6 l3">
-                <a class="waves-effect waves-light btn modal-trigger" href="#remote">Modal</a>
-                <modal target_id="remote"><remote-house></remote-house></modal>
+
             </div>
 
             <div class="col s12 m6 l3">
@@ -48,12 +47,10 @@
     import Windows from '../components/Windows';
     import Heater from '../components/Heater';
     import ActionButton from '../components/ActionButton';
-    import RemoteHouse from '../components/RemoteHouse';
     import TimeDate from '../components/TimeDate';
-    import Modal from '../components/Modal';
     import {ENDPOINTS} from '../config/api';
 
     export default {
-        components: { Lamps, Windows, ActionButton, Layout, Heater, Modal, RemoteHouse, TimeDate },
+        components: { Lamps, Windows, ActionButton, Layout, Heater, TimeDate },
     }
 </script>

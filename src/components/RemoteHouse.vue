@@ -3,7 +3,7 @@
         <p>Updated at: {{ base64_updated_at }}</p>
         <p>Location at: AMS Vultr server</p>
         <div class="center-align">
-            <img :src="base64" class="responsive-img" height="300px" v-if="base64">
+            <img :src="base64" class="responsive-img" v-if="base64">
         </div>
 
         <div class="center-align">
