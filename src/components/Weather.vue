@@ -98,8 +98,7 @@
                 this.setLocationToLocalStorage();
 
                 this.loading = false;
-                console.log(position);
-                M.toast({ html: "Succesvol got location", classes: "green" });
+                M.toast({ html: "Locatie succesvol opgehaald", classes: "green" });
 
                 this.loadWeather();
             },
