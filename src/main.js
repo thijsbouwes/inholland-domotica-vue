@@ -8,10 +8,15 @@ import {ENDPOINTS, HTTP_CODES} from './config/api';
 try {
     require('materialize-css');
     require('materialize-css/extras/noUiSlider/nouislider.css');
-    window.noUiSlider = require('materialize-css/extras/noUiSlider/nouislider.min.js');
 } catch (e) {}
 
 Vue.config.productionTip = false;
+
+Vue.filter('capitalize', value => {
+    if (!value) return '';
+    value = value.toString();
+    return value.charAt(0).toUpperCase() + value.slice(1);
+});
 
 // Add a request interceptor, to add token
 axios.interceptors.request.use(config => {
@@ -50,6 +55,8 @@ axios.interceptors.response.use(null, (error) => {
 
 window.axios = require('axios');
 axios.defaults.baseURL = ENDPOINTS.BASE;
+
+Vue.prototype.$http_external = axios.create();
 
 // Register event buss
 window.Event = new Vue();

@@ -1,0 +1,24 @@
+.weather_days {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+
+    .item {
+        cursor: pointer;
+        padding: 0 3% 5px;
+
+        &.active {
+            border-bottom: 2px solid color('grey', 'lighten-2');
+        }
+    }
+
+    img {
+        height: 50px;
+        margin: 5px 0;
+    }
+
+    .temp_max,
+    .weather_day {
+        color: color('grey', 'base');
+    }
+}

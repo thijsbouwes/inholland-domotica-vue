@@ -13,7 +13,6 @@
     "axios": "^0.17.1",
     "materialize-css": "1.0.0-alpha.1",
     "moment": "^2.19.3",
-    "roboto-fontface": "^0.8.0",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1"
   },

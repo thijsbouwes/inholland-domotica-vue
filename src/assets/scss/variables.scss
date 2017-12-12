@@ -1,5 +1,5 @@
-$primary-color: #3949ab;
-$secondary-color: #536dfe;
+$primary-color: color('indigo', 'darken-1') !default;
+$secondary-color: color('indigo', 'accent-2') !default;
 
 $success-color: color("green", "base") !default;
 $error-color: color("red", "base") !default;

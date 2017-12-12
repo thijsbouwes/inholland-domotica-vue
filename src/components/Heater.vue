@@ -22,6 +22,7 @@
 
 <script>
     import {ENDPOINTS} from "../config/api";
+    import noUiSlider from 'materialize-css/extras/noUiSlider/nouislider';
 
 	export default {
 	    data() {

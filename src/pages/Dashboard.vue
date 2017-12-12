@@ -19,8 +19,8 @@
         </div>
 
         <div class="row">
-            <div class="col s12 m6 l3">
-
+            <div class="col s12 m6 l4">
+                <weather></weather>
             </div>
 
             <div class="col s12 m6 l3">
@@ -48,9 +48,10 @@
     import Heater from '../components/Heater';
     import ActionButton from '../components/ActionButton';
     import TimeDate from '../components/TimeDate';
+    import Weather from '../components/Weather';
     import {ENDPOINTS} from '../config/api';
 
     export default {
-        components: { Lamps, Windows, ActionButton, Layout, Heater, TimeDate },
+        components: { Lamps, Windows, ActionButton, Layout, Heater, TimeDate, Weather },
     }
 </script>
