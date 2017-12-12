@@ -2,25 +2,25 @@
 	<layout>
         <div class="row">
             <div class="col s12 m6 l3">
-                <lamps></lamps>
+                <lamps v-if="enabled_modules.lamps"></lamps>
             </div>
 
             <div class="col s12 m6 l3">
-                <windows></windows>
+                <windows v-if="enabled_modules.windows"></windows>
             </div>
 
             <div class="col s12 m6 l3">
-                <heater></heater>
+                <heater v-if="enabled_modules.heater"></heater>
             </div>
 
             <div class="col s6 m6 l3 x3">
-                <time-date></time-date>
+                <time-date v-if="enabled_modules.time_date"></time-date>
             </div>
         </div>
 
         <div class="row">
             <div class="col s12 m6 l4">
-                <weather></weather>
+                <weather v-if="enabled_modules.weather"></weather>
             </div>
 
             <div class="col s12 m6 l3">
@@ -53,5 +53,24 @@
 
     export default {
         components: { Lamps, Windows, ActionButton, Layout, Heater, TimeDate, Weather },
+
+        data() {
+            return {
+                enabled_modules: {
+                    lamps: false,
+                    windows: false,
+                    heater: false,
+                    news_feed: false,
+                    time_date: false,
+                    weather: false
+                },
+            }
+        },
+
+        created() {
+            Event.$on('enabled_modules_update', (data) => {
+                this.enabled_modules = data;
+            });
+        }
     }
 </script>

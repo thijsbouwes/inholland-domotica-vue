@@ -28,11 +28,6 @@
                                 <input id="email" type="email" class="validate" v-model="settings.user.email" required disabled>
                                 <label class="active" for="email">Email</label>
                             </div>
-
-                            <div class="input-field">
-                                <input id="location" type="text" class="validate" v-model="settings.user.location" required>
-                                <label class="active" for="location">Locatie</label>
-                            </div>
                         </div>
                     </li>
                     <li>
@@ -41,7 +36,7 @@
                             <div class="switch icon-before" v-for="(module, index) in enabled_modules">
                                 <span>{{ index }}</span>
                                 <label class="right">
-                                    <input type="checkbox" :checked="module">
+                                    <input type="checkbox" :checked="module" @change="updateModule(index, $event)">
                                     <span class="lever"></span>
                                 </label>
                             </div>
@@ -75,7 +70,7 @@
                 </ul>
 
                 <div class="center-align">
-                    <button @click="openCollapsible" class="btn waves-effect waves-light" type="submit" name="action">Save
+                    <button class="btn waves-effect waves-light" type="submit" name="action">Save
                         <i class="material-icons right">save</i>
                     </button>
                 </div>
@@ -132,10 +127,20 @@ export default {
                 let elem_select = document.querySelector('select');
                 new M.Select(elem_select);
             });
+
+        Event.$emit('enabled_modules_update', this.enabled_modules);
+    },
+
+    watch: {
+        enabled_modules: {
+            handler() {
+                Event.$emit('enabled_modules_update', this.enabled_modules);
+            },
+            deep: true
+        },
     },
 
     mounted() {
-        let _refThis = this;
         // Create sidenav
         let elem = document.querySelector('.sidenav');
         this.sidebar = new M.Sidenav(elem);
@@ -175,8 +180,8 @@ export default {
             this.$router.push('/login');
         },
 
-        openCollapsible() {
-            this.collapsible.open(0);
+        updateModule(index, event) {
+            this.$set(this.enabled_modules, index, event.target.checked);
         }
     },
 }

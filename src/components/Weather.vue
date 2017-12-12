@@ -15,6 +15,7 @@
                     <div>Humidity % {{ forecast.humidity }}</div>
                     <div>Luchtdruk hPa {{ forecast.pressure }}</div>
                     <div>Wind m/s {{ forecast.speed }}</div>
+                    <div><a href="#!" class="btn-flat" :disabled="loading" @click="getLocation"><i class="material-icons left">sync</i>Locatie</a></div>
                 </div>
             </div>
 
@@ -97,6 +98,7 @@
                 this.setLocationToLocalStorage();
 
                 this.loading = false;
+                console.log(position);
                 M.toast({ html: "Succesvol got location", classes: "green" });
 
                 this.loadWeather();
