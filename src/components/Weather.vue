@@ -126,7 +126,7 @@
 
             loadWeather() {
                 let options = {
-                    baseURL: 'http://api.openweathermap.org',
+                    baseURL: 'https://api.openweathermap.org',
                     params: {
                         lat: this.latitude,
                         lon: this.longitude,
