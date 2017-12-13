@@ -100,9 +100,9 @@ export default {
             enabled_modules: {
                 lamps: true,
                 windows: true,
-                heater: false,
+                heater: true,
                 news_feed: true,
-                time_date: false,
+                time_date: true,
                 weather: true
             },
             backgrounds: [],
