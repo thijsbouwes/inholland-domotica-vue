@@ -1,13 +1,23 @@
 <template>
 	<layout>
         <div class="row">
-            <draggable v-model="list_a" :options="{group:'module'}" @start="drag=true" @end="drag=false" class="drag col m12 s12 l4 x4">
-                <div class="card-panel item" v-for="module in list_a">
+            <draggable v-model="column_a" @start="drag=true" @end="drag=false" class="drag col m12 s6 l3">
+                <div class="card-panel item" v-for="module in column_a">
                     <span>{{ module.name }}</span>
                 </div>
             </draggable>
-            <draggable v-model="list_b" :options="{group:'module'}" @start="drag=true" @end="drag=false" class="drag col m12 s12 l4 x4">
-                <div class="card-panel item" v-for="module in list_b">
+            <draggable v-model="column_b" @start="drag=true" @end="drag=false" class="drag col m12 s6 l3">
+                <div class="card-panel item" v-for="module in column_b">
+                    <span>{{ module.name }}</span>
+                </div>
+            </draggable>
+            <draggable v-model="column_c" @start="drag=true" @end="drag=false" class="drag col m12 s6 l3">
+                <div class="card-panel item" v-for="module in column_c">
+                    <span>{{ module.name }}</span>
+                </div>
+            </draggable>
+            <draggable v-model="column_d" @start="drag=true" @end="drag=false" class="drag col m12 s6 l3">
+                <div class="card-panel item" v-for="module in column_d">
                     <span>{{ module.name }}</span>
                 </div>
             </draggable>
@@ -34,57 +44,49 @@
 
         data() {
             return {
+                column_a: [],
+                column_b: [],
+                column_c: [],
+                column_d: [],
                 enabled_modules: [
                     {
-                        name: "Lamp",
-                        position: "A",
+                        name: "Window 1",
+                        column: "B",
+                        component_name: "windows",
+                        enabled: true
+                    },
+                    {
+                        name: "Lamp 1",
+                        column: "A",
                         component_name: "lamps",
                         enabled: true
                     },
                     {
-                        name: "Window 1",
-                        position: "B",
+                        name: "Window 2",
+                        column: "C",
                         component_name: "windows",
+                        enabled: true
+                    },
+                    {
+                        name: "Lamp 2",
+                        column: "D",
+                        component_name: "lamps",
                         enabled: true
                     }
                 ]
             }
         },
 
-        computed: {
-            list_a() {
-                return this.enabled_modules.filter(module => module.position === "A");
-            },
-            list_b() {
-                return this.enabled_modules.filter(module => module.position === "B");
-            }
-        },
-
         created() {
+            // map columns
+            this.column_a = this.enabled_modules.filter(module => module.column === "A");
+            this.column_b =  this.enabled_modules.filter(module => module.column === "B");
+            this.column_c = this.enabled_modules.filter(module => module.column === "C");
+            this.column_d =  this.enabled_modules.filter(module => module.column === "D");
+
             Event.$on('enabled_modules_update', (data) => {
                 //this.enabled_modules = data;
             });
         },
-
-        methods: {
-            positionToGridAreaNotation(position) {
-                const [from, to = null] = position.toLowerCase().split(':');
-
-                if (from.length !== 2 || (to && to.length !== 2)) {
-                    return ;
-                }
-
-                const areaFrom = `${from[1]} / ${this.indexInAlphabet(from[0])}`;
-                const area = to ? `${areaFrom} / ${Number(to[1]) + 1} / ${this.indexInAlphabet(to[0]) + 1}` : areaFrom;
-
-                return `grid-area: ${area}`;
-            },
-
-            indexInAlphabet(character) {
-                const index = character.toLowerCase().charCodeAt(0) - 96;
-                return index < 1 ? 1 : index;
-            }
-
-        }
     }
 </script>
