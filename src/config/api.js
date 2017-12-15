@@ -11,9 +11,11 @@ export const ENDPOINTS = {
     LAMP_SWITCH: 'house/lamp/switch/',
     WINDOWS: 'house/window',
     WINDOW_SWITCH: 'house/window/switch/',
-    HEATER: '/house/heater',
-    HEATER_TEMPERATURE: '/house/heater/temperature',
-    HOUSE_REMOTE: 'house/remote'
+    HEATER: 'house/heater',
+    HEATER_TEMPERATURE: 'house/heater/temperature',
+    HOUSE_REMOTE: 'house/remote',
+    WEATHER: 'weather',
+    NEWS: 'news'
 };
 
 export const HTTP_CODES = {

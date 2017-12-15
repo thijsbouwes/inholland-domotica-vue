@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Dashboard from '@/pages/Dashboard';
+import News from '@/pages/News';
 import Register from '@/pages/Register';
 import Login from '@/pages/Login';
 import NotFound from '@/pages/NotFound';
@@ -16,6 +17,12 @@ export const router = new Router({
             path: '/',
             name: 'Dashboard',
             component: Dashboard,
+            meta: { requiresAuth: true }
+        },
+        {
+            path: '/news',
+            name: 'News',
+            component: News,
             meta: { requiresAuth: true }
         },
         {

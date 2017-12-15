@@ -1,38 +1,20 @@
 <template>
 	<layout>
         <div class="row">
-            <div class="col s12 m6 l3">
-                <lamps v-if="enabled_modules.lamps"></lamps>
+            <div class="col s12 m6 l6 xl3">
+                <weather v-if="enabled_modules.weather"></weather>
             </div>
-
-            <div class="col s12 m6 l3">
+            <div class="col s12 m6 l6 xl3">
                 <windows v-if="enabled_modules.windows"></windows>
             </div>
 
-            <div class="col s12 m6 l3">
+            <div class="col s12 m6 l6 xl3">
+                <lamps v-if="enabled_modules.lamps"></lamps>
+            </div>
+
+            <div class="col s12 m6 l6 xl3">
                 <heater v-if="enabled_modules.heater"></heater>
-            </div>
-
-            <div class="col s6 m6 l3 x3">
                 <time-date v-if="enabled_modules.time_date"></time-date>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col s12 m6 l4">
-                <weather v-if="enabled_modules.weather"></weather>
-            </div>
-
-            <div class="col s12 m6 l3">
-
-            </div>
-
-            <div class="col s12 m6 l3">
-
-            </div>
-
-            <div class="col s12 m6 l3">
-
             </div>
         </div>
 
@@ -49,10 +31,11 @@
     import ActionButton from '../components/ActionButton';
     import TimeDate from '../components/TimeDate';
     import Weather from '../components/Weather';
+    import NewsFeed from '../components/NewsFeed';
     import {ENDPOINTS} from '../config/api';
 
     export default {
-        components: { Lamps, Windows, ActionButton, Layout, Heater, TimeDate, Weather },
+        components: { Lamps, Windows, ActionButton, Layout, Heater, TimeDate, Weather, NewsFeed },
 
         data() {
             return {

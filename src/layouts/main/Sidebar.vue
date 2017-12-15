@@ -6,11 +6,18 @@
                     <img :src="settings.background.url" :title="settings.background.name" width="100%">
                 </div>
 
-                <a href="#!user"><img class="circle" src="https://x1.xingassets.com/assets/frontend_minified/img/users/nobody_m.original.jpg"></a>
+                <a href="#!user"><img class="circle" src="/static/users/nobody.jpg"></a>
                 <a href="#!name"><span class="white-text name" v-text="settings.user.name"></span></a>
                 <a href="#!email"><span class="white-text email" v-text="settings.user.email"></span></a>
             </div>
         </li>
+
+        <!--Page links-->
+        <router-link tag="li" to="/" exact><a class="sidenav-close"><i class="material-icons">dashboard</i>Dashboard</a></router-link>
+        <router-link tag="li" to="/news" exact><a class="sidenav-close"><i class="material-icons">import_contacts</i>News</a></router-link>
+
+        <li><div class="divider"></div></li>
+        <li><a class="subheader">Settings</a></li>
 
         <!--Settings-->
         <li class="no-padding">

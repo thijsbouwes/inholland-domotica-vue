@@ -15,7 +15,7 @@
                     <div>Humidity % {{ forecast.humidity }}</div>
                     <div>Luchtdruk hPa {{ forecast.pressure }}</div>
                     <div>Wind m/s {{ forecast.speed }}</div>
-                    <div><a href="#!" class="btn-flat" :disabled="loading" @click="getLocation"><i class="material-icons left">sync</i>Locatie</a></div>
+                    <div><a href="#!" class="btn-flat" :disabled="loading" @click="getLocation"><i class="material-icons">sync</i></a></div>
                 </div>
             </div>
 
@@ -42,6 +42,7 @@
 <script>
     import {ENDPOINTS} from "../config/api";
     import moment from 'moment';
+    import Qs from 'qs';
 
     export default {
         data() {
@@ -126,19 +127,8 @@
             },
 
             loadWeather() {
-                let options = {
-                    baseURL: 'https://api.openweathermap.org',
-                    params: {
-                        lat: this.latitude,
-                        lon: this.longitude,
-                        cnt: 5,
-                        lang: 'nl',
-                        appid: '4307cdc9e2e0db4b488ea511971fb51e',
-                        units: 'metric',
-                    }
-                };
-
-                this.$http_external.get('/data/2.5/forecast/daily', options)
+                let url = ENDPOINTS.WEATHER + '/lat/' + this.latitude + '/lon/' + this.longitude + '/cnt/5/lang/nl/units/metric';
+                axios.get(url)
                     .then(response => {
                         this.weather_forecast = response.data.list;
                         this.weather_location = response.data.city;
