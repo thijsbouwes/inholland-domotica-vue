@@ -53,6 +53,19 @@ axios.interceptors.response.use(null, (error) => {
     return Promise.reject(error);
 });
 
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/sw.js').then(function(registration) {
+            // Registration was successful
+            console.log('ServiceWorker registration successful with scope: ', registration.scope);
+        }, function(err) {
+            // registration failed :(
+            console.log('ServiceWorker registration failed: ', err);
+        });
+    });
+}
+
+
 window.axios = require('axios');
 axios.defaults.baseURL = ENDPOINTS.BASE;
 
