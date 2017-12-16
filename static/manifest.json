@@ -1,5 +1,6 @@
 {
     "name": "Home Comfort",
+    "short_name": "Home",
     "icons": [
         {
             "src": "/static/favicons/android-chrome-192x192.png",
@@ -14,5 +15,6 @@
     ],
     "theme_color": "#3949ab",
     "background_color": "#ffffff",
-    "display": "standalone"
+    "display": "standalone",
+    "start_url": "/"
 }

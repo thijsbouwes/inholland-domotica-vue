@@ -41,9 +41,9 @@
                         <a class="collapsible-header"><i class="material-icons">widgets</i>Widgets</a>
                         <div class="collapsible-body">
                             <div class="switch icon-before" v-for="(module, index) in enabled_modules">
-                                <span>{{ index }}</span>
+                                <span>{{ module.name }}</span>
                                 <label class="right">
-                                    <input type="checkbox" :checked="module" @change="updateModule(index, $event)">
+                                    <input type="checkbox" :checked="module.enabled" @change="updateModule(index, module, $event)">
                                     <span class="lever"></span>
                                 </label>
                             </div>
@@ -104,14 +104,36 @@ export default {
                 background: {},
                 user: {},
             },
-            enabled_modules: {
-                lamps: true,
-                windows: true,
-                heater: true,
-                news_feed: true,
-                time_date: true,
-                weather: true
-            },
+            enabled_modules: [
+                {
+                    id: 1,
+                    name: "Window",
+                    column: "B",
+                    component_name: "windows",
+                    enabled: true
+                },
+                {
+                    id: 2,
+                    name: "Lamp",
+                    column: "A",
+                    component_name: "lamps",
+                    enabled: true
+                },
+                {
+                    id: 3,
+                    name: "Time & Date",
+                    column: "A",
+                    component_name: "time-date",
+                    enabled: false
+                },
+                {
+                    id: 4,
+                    name: "Weather",
+                    column: "B",
+                    component_name: "weather",
+                    enabled: true
+                }
+            ],
             backgrounds: [],
             bookmarks: [{ tag: "Google.nl" }]
         }
@@ -134,14 +156,12 @@ export default {
                 let elem_select = document.querySelector('select');
                 new M.Select(elem_select);
             });
-
-        Event.$emit('enabled_modules_update', this.enabled_modules);
     },
 
     watch: {
         enabled_modules: {
             handler() {
-                Event.$emit('enabled_modules_update', this.enabled_modules);
+                //Event.$emit('enabled_modules_update', this.enabled_modules);
             },
             deep: true
         },
@@ -187,8 +207,9 @@ export default {
             this.$router.push('/login');
         },
 
-        updateModule(index, event) {
-            this.$set(this.enabled_modules, index, event.target.checked);
+        updateModule(index, module, event) {
+            this.enabled_modules[index].enabled = event.target.checked;
+            Event.$emit('enabled_modules_update', { id: module.id, enabled: event.target.checked });
         }
     },
 }
