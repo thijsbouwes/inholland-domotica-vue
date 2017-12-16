@@ -129,8 +129,8 @@ export default {
                 {
                     id: 4,
                     name: "Weather",
-                    column: "B",
                     component_name: "weather",
+                    column: "B",
                     enabled: true
                 },
                 {
@@ -163,15 +163,6 @@ export default {
                 let elem_select = document.querySelector('select');
                 new M.Select(elem_select);
             });
-    },
-
-    watch: {
-        enabled_modules: {
-            handler() {
-                //Event.$emit('enabled_modules_update', this.enabled_modules);
-            },
-            deep: true
-        },
     },
 
     mounted() {

@@ -32,7 +32,6 @@
 
         methods: {
             getRemote() {
-                console.log("hello 1");
                 this.loading = true;
 
                 axios.get(ENDPOINTS.HOUSE_REMOTE)

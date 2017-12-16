@@ -1,7 +1,11 @@
 <template>
 	<layout>
         <div class="row">
-            <draggable v-model="column_a" :options="{group:'people'}" class="drag col m12 s6 l3">
+            <div class="progress" v-show="loading">
+                <div class="indeterminate"></div>
+            </div>
+
+            <draggable v-model="column_a" :options="{group:'people'}" @change="updateLayoutState()" class="drag col m12 s6 l3">
                 <template v-for="module in column_a">
                     <component :is="module.component_name"
                                :key="module.id"
@@ -10,7 +14,7 @@
                 </template>
             </draggable>
 
-            <draggable v-model="column_b" :options="{group:'people'}" class="drag col m12 s6 l3">
+            <draggable v-model="column_b" :options="{group:'people'}" @change="updateLayoutState()" class="drag col m12 s6 l3">
                 <template v-for="module in column_b">
                     <component :is="module.component_name"
                                v-if="module.enabled"
@@ -18,7 +22,7 @@
                 </template>
             </draggable>
 
-            <draggable v-model="column_c" :options="{group:'people'}" class="drag col m12 s6 l3">
+            <draggable v-model="column_c" :options="{group:'people'}" @change="updateLayoutState()" class="drag col m12 s6 l3">
                 <template v-for="module in column_c">
                     <component :is="module.component_name"
                                :key="module.id"
@@ -27,7 +31,7 @@
                 </template>
             </draggable>
 
-            <draggable v-model="column_d" :options="{group:'people'}" class="drag col m12 s6 l3">
+            <draggable v-model="column_d" :options="{group:'people'}" @change="updateLayoutState()" class="drag col m12 s6 l3">
                 <template v-for="module in column_d">
                     <component :is="module.component_name"
                                v-if="module.enabled"
@@ -35,6 +39,8 @@
                 </template>
             </draggable>
         </div>
+
+        <div class="fixed-action-btn-left"><a href="#!" class="waves-effect waves-light btn" v-show="layoutChanged" @click="saveLayout()"><i class="material-icons left">save</i>layout opslaan</a></div>
 
         <!--action button-->
         <action-button></action-button>
@@ -49,17 +55,18 @@
     import ActionButton from '../components/ActionButton';
     import TimeDate from '../components/TimeDate';
     import Weather from '../components/Weather';
+    import Scoreboard from '../components/Scoreboard';
     import NewsFeed from '../components/NewsFeed';
     import {ENDPOINTS} from '../config/api';
     import draggable from 'vuedraggable'
 
     export default {
-        components: { Lamps, Windows, ActionButton, Layout, Heater, TimeDate, Weather, NewsFeed, draggable },
+        components: { Lamps, Windows, ActionButton, Layout, Heater, TimeDate, Weather, NewsFeed, draggable, Scoreboard },
 
         data() {
             return {
-                column_at: [],
-                column_bt: [],
+                layoutChanged: false,
+                loading: false,
                 enabled_modules:  [
                     {
                         id: 1,
@@ -94,6 +101,13 @@
                         name: "Heater",
                         column: "D",
                         component_name: "heater",
+                        enabled: true
+                    },
+                    {
+                        id: 6,
+                        name: "Scoreboard",
+                        column: "D",
+                        component_name: "scoreboard",
                         enabled: true
                     }
                 ],
@@ -132,7 +146,7 @@
                 set(value) {
                     this.updateColumn(value, "D");
                 }
-            },
+            }
         },
 
         created() {
@@ -164,6 +178,17 @@
             getColumn(column) {
                 // Find module by column name
                 return this.enabled_modules.filter(module => module.column === column)
+            },
+
+            updateLayoutState() {
+                this.layoutChanged = true;
+            },
+
+            saveLayout() {
+                this.loading = true;
+                // Do axios
+                this.layoutChanged = false;
+                this.loading = false;
             }
         }
     }
