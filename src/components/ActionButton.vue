@@ -5,9 +5,8 @@
                 <i class="large material-icons">menu</i>
             </a>
             <ul>
-                <li><a class="btn-floating green modal-trigger" href="#remote"><i class="material-icons">settings_remote</i></a></li>
-                <li><a class="btn-floating blue"><i class="material-icons">dashboard</i></a></li>
-                <li><a class="btn-floating red"><router-link tag="a" to="/news" exact><i class="material-icons">import_contacts</i></router-link></a></li>
+                <li><a @click="reloadState" class="btn-floating green modal-trigger" href="#remote"><i class="material-icons">settings_remote</i></a></li>
+                <li><router-link class="btn-floating red" to="/news" exact><i class="material-icons">import_contacts</i></router-link></li>
             </ul>
         </div>
 
@@ -31,6 +30,12 @@
             let elem = document.querySelector('.fixed-action-btn');
             let options = { direction: 'top', hoverEnabled: true, toolbarEnabled: false };
             let instance = new M.FloatingActionButton(elem, options);
+        },
+
+        methods: {
+            reloadState() {
+                Event.$emit("reload_state_house")
+            }
         }
     }
 </script>

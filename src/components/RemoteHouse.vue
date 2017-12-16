@@ -6,12 +6,6 @@
             <img :src="base64" class="responsive-img" v-if="base64">
         </div>
 
-        <div class="center-align">
-            <button class="btn waves-effect waves-light" @click="getRemote">Reload state
-                <i class="material-icons right">autorenew</i>
-            </button>
-        </div>
-
         <div class="progress" v-show="loading">
             <div class="indeterminate"></div>
         </div>
@@ -32,10 +26,13 @@
 
         created() {
             this.getRemote();
+
+            Event.$on("reload_state_house", (data) => this.getRemote());
         },
 
         methods: {
             getRemote() {
+                console.log("hello 1");
                 this.loading = true;
 
                 axios.get(ENDPOINTS.HOUSE_REMOTE)

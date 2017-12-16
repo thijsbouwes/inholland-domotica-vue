@@ -17,6 +17,23 @@
                     ></component>
                 </template>
             </draggable>
+
+            <draggable v-model="column_c" :options="{group:'people'}" class="drag col m12 s6 l3">
+                <template v-for="module in column_c">
+                    <component :is="module.component_name"
+                               :key="module.id"
+                               v-if="module.enabled"
+                    ></component>
+                </template>
+            </draggable>
+
+            <draggable v-model="column_d" :options="{group:'people'}" class="drag col m12 s6 l3">
+                <template v-for="module in column_d">
+                    <component :is="module.component_name"
+                               v-if="module.enabled"
+                    ></component>
+                </template>
+            </draggable>
         </div>
 
         <!--action button-->
@@ -68,8 +85,15 @@
                     {
                         id: 4,
                         name: "Weather",
-                        column: "B",
+                        column: "C",
                         component_name: "weather",
+                        enabled: true
+                    },
+                    {
+                        id: 5,
+                        name: "Heater",
+                        column: "D",
+                        component_name: "heater",
                         enabled: true
                     }
                 ],
@@ -90,7 +114,23 @@
                     return this.getColumn("B");
                 },
                 set(value) {
-                   this.updateColumn(value, "B");
+                    this.updateColumn(value, "B");
+                }
+            },
+            column_c: {
+                get() {
+                    return this.getColumn("C");
+                },
+                set(value) {
+                    this.updateColumn(value, "C");
+                }
+            },
+            column_d: {
+                get() {
+                    return this.getColumn("D");
+                },
+                set(value) {
+                    this.updateColumn(value, "D");
                 }
             },
         },

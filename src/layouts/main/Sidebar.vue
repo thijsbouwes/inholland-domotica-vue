@@ -132,6 +132,13 @@ export default {
                     column: "B",
                     component_name: "weather",
                     enabled: true
+                },
+                {
+                    id: 5,
+                    name: "Heater",
+                    column: "A",
+                    component_name: "heater",
+                    enabled: true
                 }
             ],
             backgrounds: [],
