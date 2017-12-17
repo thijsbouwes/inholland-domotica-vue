@@ -4,11 +4,12 @@
     text-align: center;
 
     .item {
+        flex-grow: 1;
         cursor: pointer;
-        padding: 0 3% 5px;
+        padding-bottom: 5px;
 
         &.active {
-            border-bottom: 2px solid color('grey', 'lighten-2');
+            border-bottom: 2px solid $secondary-color;
         }
     }
 

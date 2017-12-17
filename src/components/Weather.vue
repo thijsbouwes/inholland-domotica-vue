@@ -19,23 +19,24 @@
                 </div>
             </div>
 
-            <div class="weather_days">
-                <div class="item" :class="{ active: active_forecast === index }" v-for="(weather, index) in weather_forecast" @click="updateForecast(index)">
-                    <div class="weather_day">{{ formatDay(weather.dt) }}</div>
-                    <img :src="getIcon(weather.weather[0].icon)" :alt="weather.weather[0].description">
-                    <div class="temps">
-                        <span class="temp_min" v-html="formatCelsius(weather.temp.min)"></span>
-                        <span class="temp_max" v-html="formatCelsius(weather.temp.max)"></span>
-                    </div>
-                </div>
-            </div>
-
             <div class="progress" v-show="loading">
                 <div class="indeterminate"></div>
             </div>
 
             <a class="waves-effect waves-light btn" v-show="! latitude" @click="getLocation"><i class="material-icons right">location_on</i>Get location</a>
         </div>
+
+        <div class="weather_days">
+            <div class="item" :class="{ active: active_forecast === index }" v-for="(weather, index) in weather_forecast" @click="updateForecast(index)">
+                <div class="weather_day">{{ formatDay(weather.dt) }}</div>
+                <img :src="getIcon(weather.weather[0].icon)" :alt="weather.weather[0].description">
+                <div class="temps">
+                    <span class="temp_min" v-html="formatCelsius(weather.temp.min)"></span>
+                    <span class="temp_max" v-html="formatCelsius(weather.temp.max)"></span>
+                </div>
+            </div>
+        </div>
+
     </div>
 </template>
 

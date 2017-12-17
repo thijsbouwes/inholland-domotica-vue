@@ -5,7 +5,7 @@
                 <div class="indeterminate"></div>
             </div>
 
-            <draggable v-model="column_a" :options="{group:'people'}" @change="updateLayoutState()" class="drag col m12 s6 l3">
+            <draggable v-model="column_a" :options="{group:'people'}" @change="updateLayoutState()" class="drag col s12 m6 l6 xl3">
                 <template v-for="module in column_a">
                     <component :is="module.component_name"
                                :key="module.id"
@@ -14,7 +14,7 @@
                 </template>
             </draggable>
 
-            <draggable v-model="column_b" :options="{group:'people'}" @change="updateLayoutState()" class="drag col m12 s6 l3">
+            <draggable v-model="column_b" :options="{group:'people'}" @change="updateLayoutState()" class="drag col s12 m6 l6 xl3">
                 <template v-for="module in column_b">
                     <component :is="module.component_name"
                                v-if="module.enabled"
@@ -22,7 +22,7 @@
                 </template>
             </draggable>
 
-            <draggable v-model="column_c" :options="{group:'people'}" @change="updateLayoutState()" class="drag col m12 s6 l3">
+            <draggable v-model="column_c" :options="{group:'people'}" @change="updateLayoutState()" class="drag col s12 m6 l6 xl3">
                 <template v-for="module in column_c">
                     <component :is="module.component_name"
                                :key="module.id"
@@ -31,7 +31,7 @@
                 </template>
             </draggable>
 
-            <draggable v-model="column_d" :options="{group:'people'}" @change="updateLayoutState()" class="drag col m12 s6 l3">
+            <draggable v-model="column_d" :options="{group:'people'}" @change="updateLayoutState()" class="drag col s12 m6 l6 xl3">
                 <template v-for="module in column_d">
                     <component :is="module.component_name"
                                v-if="module.enabled"
