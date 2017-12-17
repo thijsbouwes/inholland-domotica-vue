@@ -43,7 +43,6 @@
 <script>
     import {ENDPOINTS} from "../config/api";
     import moment from 'moment';
-    import Qs from 'qs';
 
     export default {
         data() {
