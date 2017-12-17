@@ -1,6 +1,6 @@
 <template>
     <div class="card">
-        <div class="card-tabs">
+        <div class="card-tabs score">
             <div class="card-content">
                 <span class="card-title">Scoreboard</span>
 
@@ -29,7 +29,7 @@
         components: { ScorePersonal, ScoreTop },
 
         mounted() {
-            let elem = document.querySelector('.tabs');
+            let elem = document.querySelector('.score .tabs');
             let instance = new M.Tabs(elem);
         }
     }

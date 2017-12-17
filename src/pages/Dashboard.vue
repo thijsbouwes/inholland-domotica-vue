@@ -57,11 +57,12 @@
     import Weather from '../components/Weather';
     import Scoreboard from '../components/Scoreboard';
     import NewsFeed from '../components/NewsFeed';
+    import TicTacToe from '../components/TicTacToe'
     import {ENDPOINTS} from '../config/api';
     import draggable from 'vuedraggable'
 
     export default {
-        components: { Lamps, Windows, ActionButton, Layout, Heater, TimeDate, Weather, NewsFeed, draggable, Scoreboard },
+        components: { Lamps, Windows, ActionButton, Layout, Heater, TimeDate, Weather, NewsFeed, draggable, Scoreboard, TicTacToe },
 
         data() {
             return {
@@ -108,6 +109,13 @@
                         name: "Scoreboard",
                         column: "D",
                         component_name: "scoreboard",
+                        enabled: true
+                    },
+                    {
+                        id: 7,
+                        name: "Tic Tac Toe",
+                        column: "B",
+                        component_name: "tic-tac-toe",
                         enabled: true
                     }
                 ],
