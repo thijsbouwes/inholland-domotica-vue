@@ -56,8 +56,6 @@ axios.interceptors.response.use(null, (error) => {
 window.axios = require('axios');
 axios.defaults.baseURL = ENDPOINTS.BASE;
 
-Vue.prototype.$http_external = axios.create();
-
 // Register event buss
 window.Event = new Vue();
 
