@@ -1,9 +1,9 @@
 import Vue from 'vue';
-import store from './store';
-import App from './App';
+import { store } from './store';
 import { router } from './router';
 import request from './service/request';
 import M from 'materialize-css';
+import App from './App';
 
 try {
     require('materialize-css/extras/noUiSlider/nouislider.css');

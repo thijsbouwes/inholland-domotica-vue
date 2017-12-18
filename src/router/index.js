@@ -1,11 +1,11 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Dashboard from '@/pages/Dashboard';
-import News from '@/pages/News';
-import Register from '@/pages/Register';
-import Login from '@/pages/Login';
-import NotFound from '@/pages/NotFound';
-import Auth from '@/service/auth-service';
+import Dashboard from '../pages/Dashboard';
+import News from '../pages/News';
+import Register from '../pages/Register';
+import Login from '../pages/Login';
+import NotFound from '../pages/NotFound';
+import Auth from '../service/auth-service';
 
 Vue.use(Router);
 
@@ -54,6 +54,5 @@ router.beforeEach((to, from, next) => {
     if (to.meta.requiresAuth && Auth.isLoggedIn() === false) {
         next('/login');
     }
-
     next();
 });
