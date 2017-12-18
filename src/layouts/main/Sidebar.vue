@@ -105,8 +105,9 @@
     import { mapMutations } from 'vuex';
     import { mapGetters } from 'vuex';
     import { mapActions } from 'vuex';
+    import * as types from '../../store/mutation-types';
     import Auth from '../../service/auth-service';
-    import {ENDPOINTS} from "../../config/api";
+    import { ENDPOINTS } from "../../config/api";
 
 export default {
     data() {
@@ -151,8 +152,7 @@ export default {
                     component_name: "heater",
                     enabled: true
                 }
-            ],
-            backgrounds: []
+            ]
         }
     },
 
@@ -167,7 +167,8 @@ export default {
         },
 
         ...mapGetters([
-            'bookmarks'
+            'bookmarks',
+            'backgrounds'
         ])
     },
 
@@ -180,13 +181,11 @@ export default {
                 M.updateTextFields();
             });
 
-        this.$http.get(ENDPOINTS.BACKGROUND_ALL)
-            .then(response => {
-                this.backgrounds = response.data;
-            })
-            .then(response => {
+
+        this.$store.dispatch('getAllBackgrounds')
+            .then(() => {
                 let elem_select = document.querySelector('select');
-                new M.Select(elem_select);
+                new this.$M.Select(elem_select);
             });
 
         this.$store.dispatch('getAllBookmarks');
@@ -234,7 +233,7 @@ export default {
         ]),
 
         ...mapMutations([
-            'set_new_bookmark'
+            types.SET_NEW_BOOKMARK
         ])
     },
 }

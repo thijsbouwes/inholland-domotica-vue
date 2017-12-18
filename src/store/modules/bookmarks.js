@@ -1,12 +1,12 @@
-import request from "../../service/request";
-import * as types from "../mutation-types";
-import {ENDPOINTS} from "../../config/api";
+import request from '../../service/request';
+import * as types from '../mutation-types';
+import { ENDPOINTS } from '../../config/api';
 import M from 'materialize-css';
 
 // initial state
 const state = {
     all: [],
-    bookmark_url: "",
+    bookmark_url: '',
 };
 
 // getters
@@ -39,13 +39,14 @@ const actions = {
             });
     },
 
-    createNewBookmark(context) {
-        if (context.getters.is_valid) {
-            let data = { url: context.state.bookmark_url, name: context.getters.hostname };
+    createNewBookmark({ commit, getters, state }) {
+        if (getters.is_valid) {
+            let data = { url: state.bookmark_url, name: getters.hostname };
+
             request.post(ENDPOINTS.BOOKMARKS, data)
-                .then(response => {
-                    context.commit(types.ADD_BOOKMARK, data);
-                    context.commit(types.RESET_NEW_BOOKMARK);
+                .then(() => {
+                    commit(types.ADD_BOOKMARK, data);
+                    commit(types.RESET_NEW_BOOKMARK);
                 });
         } else {
             M.toast({html: 'Enter a valid url', classes: 'red'});

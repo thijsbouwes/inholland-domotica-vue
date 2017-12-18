@@ -1,4 +1,5 @@
-import {ENDPOINTS} from "../config/api";
+import { ENDPOINTS } from '../config/api';
+import request from './request';
 let authRefreshTokenRequest;
 
 class AuthService {
@@ -7,7 +8,7 @@ class AuthService {
         let data = {email, password};
 
         // Login
-        return axios.post(ENDPOINTS.LOGIN, data)
+        return request.post(ENDPOINTS.LOGIN, data)
             .then(response => {
                 this.updateTokens(response.data.access_token, response.data.refresh_token);
                 return Promise.resolve(data);
@@ -21,7 +22,7 @@ class AuthService {
         let data = {name, email, password};
 
         // Register
-        return axios.post(ENDPOINTS.REGISTER, data)
+        return request.post(ENDPOINTS.REGISTER, data)
             .then(response => {
                 return Promise.resolve(response);
             })
@@ -32,7 +33,7 @@ class AuthService {
 
     requestRefreshToken() {
         // Get refresh token
-        return axios.post(ENDPOINTS.LOGIN_REFRESH, {token: this.getRefreshToken()})
+        return request.post(ENDPOINTS.LOGIN_REFRESH, {token: this.getRefreshToken()})
             .then(response => {
                 this.updateTokens(response.data.access_token, response.data.refresh_token);
                 return Promise.resolve(response);

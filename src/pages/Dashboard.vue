@@ -59,7 +59,6 @@
     import NewsFeed from '../components/NewsFeed';
     import TicTacToe from '../components/TicTacToe'
     import Bookmarks from '../components/Bookmarks'
-    import Count from '../components/Count'
     import {ENDPOINTS} from '../config/api';
     import draggable from 'vuedraggable'
 

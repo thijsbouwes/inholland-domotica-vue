@@ -1,7 +1,9 @@
-export const INCREMENT = 'increment';
+// bookmarks
+export const SET_BOOKMARKS = 'SET_BOOKMARKS';
+export const DELETE_BOOKMARK = 'DELETE_BOOKMARK';
+export const ADD_BOOKMARK = 'ADD_BOOKMARK';
+export const RESET_NEW_BOOKMARK = 'RESET_NEW_BOOKMARK';
+export const SET_NEW_BOOKMARK = 'SET_NEW_BOOKMARK';
 
-export const SET_BOOKMARKS = 'set_bookmarks';
-export const DELETE_BOOKMARK = 'delete_bookmark';
-export const ADD_BOOKMARK = 'add_bookmark';
-export const RESET_NEW_BOOKMARK = 'reset_new_bookmark';
-export const SET_NEW_BOOKMARK = 'set_new_bookmark';
+// backgrounds
+export const SET_BACKGROUNDS = 'SET_BACKGROUNDS';
