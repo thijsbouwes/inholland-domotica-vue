@@ -77,6 +77,7 @@
                             <div class="input-field">
                                 <input id="bookmark" type="url" class="validate" v-model="bookmark_url" required @keydown.enter.prevent="addNewBookmark()">
                                 <label class="active" for="bookmark">Bookmark</label>
+                                <span class="helper-text" data-error="Enter a full url" data-success="Url is correct">Enter a valid url https://example.nl</span>
                             </div>
                         </div>
                     </li>
@@ -222,7 +223,7 @@ export default {
 
         addNewBookmark() {
             if (this.isUrl(this.bookmark_url) === false) {
-                M.toast({'html': 'Enter a valid url', 'styles': 'red'});
+                M.toast({html: 'Enter a valid url', classes: 'red'});
 
                 return;
             }
