@@ -30,7 +30,7 @@
 
 		methods: {
 			updateStatus() {
-				axios.put(ENDPOINTS.WINDOW_SWITCH + this.windowList.id)
+				this.$http.put(ENDPOINTS.WINDOW_SWITCH + this.windowList.id)
 					.then(data => this.windowList = data.data)
 					.catch(error => console.log(error));
 			}

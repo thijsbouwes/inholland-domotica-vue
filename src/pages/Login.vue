@@ -51,11 +51,11 @@
                     .then(data => {
                         // Redirect
                         this.$router.push('/');
-                        M.toast({ html: "Welcome  👋🏼", classes: "green" });
+                        this.$M.toast({ html: "Welcome  👋🏼", classes: "green" });
                     })
                     .catch(error => {
                         // Show error
-                        M.toast({ html: "Error: " + error.response.status + ", " + error.response.data, classes: "red" });
+                        this.$M.toast({ html: "Error: " + error.response.status + ", " + error.response.data, classes: "red" });
                     });
             }
         }

@@ -35,7 +35,7 @@
             getRemote() {
                 this.loading = true;
 
-                axios.get(ENDPOINTS.HOUSE_REMOTE)
+                this.$http.get(ENDPOINTS.HOUSE_REMOTE)
                     .then(response => {
                         this.base64 = "data:image/png;base64," + response.data.image;
                         this.base64_updated_at = response.data.updated_at;

@@ -156,7 +156,7 @@
 
         mounted() {
             let elem = document.querySelector('.game .tabs');
-            let instance = new M.Tabs(elem);
+            let instance = new this.$M.Tabs(elem);
         }
     }
 </script>

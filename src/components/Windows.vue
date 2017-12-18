@@ -31,7 +31,7 @@ export default {
 	},
 
 	created() {
-		axios.get(ENDPOINTS.WINDOWS)
+		this.$http.get(ENDPOINTS.WINDOWS)
 			.then(data => {
 			    this.windows = data.data;
 				this.loading = false;

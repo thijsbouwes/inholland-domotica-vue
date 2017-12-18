@@ -22,7 +22,7 @@
         mounted() {
             let elem = document.querySelector('.fixed-action-btn');
             let options = { direction: 'top', hoverEnabled: true, toolbarEnabled: false, position: 'left' };
-            let instance = new M.FloatingActionButton(elem, options);
+            let instance = new this.$M.FloatingActionButton(elem, options);
         }
     }
 </script>

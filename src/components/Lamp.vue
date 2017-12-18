@@ -30,7 +30,7 @@ import {ENDPOINTS} from "../config/api";
 
 		methods: {
 			updateStatus() {
-				axios.put(ENDPOINTS.LAMP_SWITCH + this.lampList.id)
+				this.$http.put(ENDPOINTS.LAMP_SWITCH + this.lampList.id)
 					.then(data => this.lampList = data.data)
 					.catch(error => console.log(error));
 			}

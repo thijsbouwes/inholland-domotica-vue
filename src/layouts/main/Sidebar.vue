@@ -154,24 +154,24 @@ export default {
     },
 
     created() {
-        axios.get(ENDPOINTS.PROFILE_SETTINGS)
+        this.$http.get(ENDPOINTS.PROFILE_SETTINGS)
             .then(response => {
                 this.settings = response.data;
             })
             .then(response => {
-                M.updateTextFields();
+                this.$M.updateTextFields();
             });
 
-        axios.get(ENDPOINTS.BACKGROUND_ALL)
+        this.$http.get(ENDPOINTS.BACKGROUND_ALL)
             .then(response => {
                 this.backgrounds = response.data;
             })
             .then(response => {
                 let elem_select = document.querySelector('select');
-                new M.Select(elem_select);
+                new this.$M.Select(elem_select);
             });
 
-        axios.get(ENDPOINTS.BOOKMARKS)
+        this.$http.get(ENDPOINTS.BOOKMARKS)
             .then(response => {
                 this.bookmarks = response.data;
                 Event.$emit('bookmarks_updated', this.bookmarks);
@@ -181,23 +181,23 @@ export default {
     mounted() {
         // Create sidenav
         let elem = document.querySelector('.sidenav');
-        this.sidebar = new M.Sidenav(elem);
+        this.sidebar = new this.$M.Sidenav(elem);
 
         // Create dropdown
         let collapsibleElem = document.querySelector('.collapsible');
-        this.collapsible = new M.Collapsible(collapsibleElem);
+        this.collapsible = new this.$M.Collapsible(collapsibleElem);
     },
 
     methods: {
         doSubmit() {
             let data = { name: this.settings.user.name, background_id: this.settings.background.id };
 
-            axios.put(ENDPOINTS.PROFILE, data)
+            this.$http.put(ENDPOINTS.PROFILE, data)
                 .then(response => {
-                    M.toast({html: '<i class="material-icons">check_circle</i> saving profile', classes: 'green'});
+                    this.$M.toast({html: '<i class="material-icons">check_circle</i> saving profile', classes: 'green'});
                 })
                 .catch(error => {
-                    M.toast({html: '<i class="material-icons">error</i> error saving profile', classes: 'red'});
+                    this.$M.toast({html: '<i class="material-icons">error</i> error saving profile', classes: 'red'});
                 });
 
             this.sidebar.close();
@@ -215,7 +215,7 @@ export default {
         },
 
         deleteBookmark(index, bookmark) {
-            axios.delete(ENDPOINTS.BOOKMARKS + '/' + bookmark.id)
+            this.$http.delete(ENDPOINTS.BOOKMARKS + '/' + bookmark.id)
                 .then(response => {
                     this.bookmarks.splice(index, 1);
                 });
@@ -223,13 +223,13 @@ export default {
 
         addNewBookmark() {
             if (this.isUrl(this.bookmark_url) === false) {
-                M.toast({html: 'Enter a valid url', classes: 'red'});
+                this.$M.toast({html: 'Enter a valid url', classes: 'red'});
 
                 return;
             }
 
             let data = {'name': this.getHostname(this.bookmark_url), 'url': this.bookmark_url};
-            axios.post(ENDPOINTS.BOOKMARKS, data)
+            this.$http.post(ENDPOINTS.BOOKMARKS, data)
                 .then(response => {
                     this.bookmarks.push(data);
                     this.bookmark_url = '';

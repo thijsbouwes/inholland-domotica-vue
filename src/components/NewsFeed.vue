@@ -36,7 +36,7 @@
         },
 
         created() {
-            axios.get(ENDPOINTS.NEWS)
+            this.$http.get(ENDPOINTS.NEWS)
                 .then(response => {
                     this.news_feed = response.data;
                     this.loading = false;

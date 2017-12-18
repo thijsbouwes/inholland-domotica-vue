@@ -30,7 +30,7 @@
 
         mounted() {
             let elem = document.querySelector('.score .tabs');
-            let instance = new M.Tabs(elem);
+            let instance = new this.$M.Tabs(elem);
         }
     }
 </script>

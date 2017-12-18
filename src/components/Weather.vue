@@ -89,7 +89,7 @@
                     navigator.geolocation.getCurrentPosition(this.processLocation, this.errorLocation, this.location_options);
                 } else {
                     this.loading = false;
-                    M.toast({ html: "Error: geolocation is not supported by this browser.", classes: "red" });
+                    this.$M.toast({ html: "Error: geolocation is not supported by this browser.", classes: "red" });
                 }
             },
 
@@ -99,7 +99,7 @@
                 this.setLocationToLocalStorage();
 
                 this.loading = false;
-                M.toast({ html: "Locatie succesvol opgehaald", classes: "green" });
+                this.$M.toast({ html: "Locatie succesvol opgehaald", classes: "green" });
 
                 this.loadWeather();
             },
@@ -111,7 +111,7 @@
 
             errorLocation(error) {
                 this.loading = false;
-                M.toast({ html: "Error: " + error.code + ", " + error.message, classes: "red" });
+                this.$M.toast({ html: "Error: " + error.code + ", " + error.message, classes: "red" });
             },
 
             formatTime(time) {
@@ -128,7 +128,7 @@
 
             loadWeather() {
                 let url = ENDPOINTS.WEATHER + '/lat/' + this.latitude + '/lon/' + this.longitude + '/cnt/5/lang/nl/units/metric';
-                axios.get(url)
+                this.$http.get(url)
                     .then(response => {
                         this.weather_forecast = response.data.list;
                         this.weather_location = response.data.city;

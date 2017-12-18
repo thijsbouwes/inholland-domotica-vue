@@ -49,7 +49,7 @@
         },
 
         created() {
-            // axios.get(ENDPOINTS.LAMPS)
+            // this.$http.get(ENDPOINTS.LAMPS)
             //     .then(response => {
             //         this.lamps = response.data;
             //         this.loading = false;

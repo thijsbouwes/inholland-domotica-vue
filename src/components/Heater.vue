@@ -33,7 +33,7 @@
 		},
 
         created() {
-            axios.get(ENDPOINTS.HEATER)
+            this.$http.get(ENDPOINTS.HEATER)
                 .then(response => {
                     this.heater = response.data;
                     this.loading = false;
@@ -47,7 +47,7 @@
                 // Update temperature, round and remove postfix deg
                 this.heater.temperature = Math.round(this.heater_slider.noUiSlider.get().replace('&deg;', ''));
 
-                axios.put(ENDPOINTS.HEATER_TEMPERATURE, { temperature: this.heater.temperature })
+                this.$http.put(ENDPOINTS.HEATER_TEMPERATURE, { temperature: this.heater.temperature })
                     .then(response => {
                         this.heater = response.data;
                     })
