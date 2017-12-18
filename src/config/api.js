@@ -15,7 +15,8 @@ export const ENDPOINTS = {
     HEATER_TEMPERATURE: 'house/heater/temperature',
     HOUSE_REMOTE: 'house/remote',
     WEATHER: 'weather',
-    NEWS: 'news'
+    NEWS: 'news',
+    BOOKMARKS: 'bookmark',
 };
 
 export const HTTP_CODES = {

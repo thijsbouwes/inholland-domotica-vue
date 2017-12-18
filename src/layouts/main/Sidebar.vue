@@ -21,7 +21,7 @@
 
         <!--Settings-->
         <li class="no-padding">
-            <form method="post" class="form_user" @submit.prevent="doSubmit()">
+            <form method="post" class="form_user" @submit.prevent="doSubmit()" autocomplete="off">
                 <ul class="collapsible">
                     <li>
                         <a class="collapsible-header"><i class="material-icons">face</i>User</a>
@@ -69,8 +69,14 @@
                     <li>
                         <a class="collapsible-header"><i class="material-icons">bookmark</i>Bookmarks</a>
                         <div class="collapsible-body">
-                            <div class="chips">
-                                <input class="custom-class">
+                            <div class="chip" v-for="(bookmark, index) in bookmarks">
+                                <img :src="`http://s2.googleusercontent.com/s2/favicons?domain_url=${bookmark.name}`" alt="Contact Person">
+                                {{ bookmark.name }}
+                                <i class="close material-icons" @click="deleteBookmark(index, bookmark)">close</i>
+                            </div>
+                            <div class="input-field">
+                                <input id="bookmark" type="url" class="validate" v-model="bookmark_url" required @keydown.enter.prevent="addNewBookmark()">
+                                <label class="active" for="bookmark">Bookmark</label>
                             </div>
                         </div>
                     </li>
@@ -142,7 +148,7 @@ export default {
                 }
             ],
             backgrounds: [],
-            bookmarks: [{ tag: "Google.nl" }]
+            bookmarks: []
         }
     },
 
@@ -163,6 +169,12 @@ export default {
                 let elem_select = document.querySelector('select');
                 new M.Select(elem_select);
             });
+
+        axios.get(ENDPOINTS.BOOKMARKS)
+            .then(response => {
+                this.bookmarks = response.data;
+                Event.$emit('bookmarks_updated', this.bookmarks);
+            });
     },
 
     mounted() {
@@ -173,15 +185,6 @@ export default {
         // Create dropdown
         let collapsibleElem = document.querySelector('.collapsible');
         this.collapsible = new M.Collapsible(collapsibleElem);
-
-        // Create chips
-        let chipsElem = document.querySelector('.chips');
-        let chipsOption = {
-            placeholder: 'Enter a website',
-            secondaryPlaceholder: '+Website',
-            data: this.bookmarks
-        };
-        this.chipBookmarks = new M.Chips(chipsElem, chipsOption);
     },
 
     methods: {
@@ -208,6 +211,44 @@ export default {
         updateModule(index, module, event) {
             this.enabled_modules[index].enabled = event.target.checked;
             Event.$emit('enabled_modules_update', { id: module.id, enabled: event.target.checked });
+        },
+
+        deleteBookmark(index, bookmark) {
+            axios.delete(ENDPOINTS.BOOKMARKS + '/' + bookmark.id)
+                .then(response => {
+                    this.bookmarks.splice(index, 1);
+                });
+        },
+
+        addNewBookmark() {
+            if (this.isUrl(this.bookmark_url) === false) {
+                M.toast({'html': 'Enter a valid url', 'styles': 'red'});
+
+                return;
+            }
+
+            let data = {'name': this.getHostname(this.bookmark_url), 'url': this.bookmark_url};
+            axios.post(ENDPOINTS.BOOKMARKS, data)
+                .then(response => {
+                    this.bookmarks.push(data);
+                    this.bookmark_url = '';
+                });
+        },
+
+        getHostname(url) {
+            let match = url.match(/:\/\/(www[0-9]?\.)?(.[^/:]+)/i);
+
+            if (match != null && match.length > 2 && typeof match[2] === 'string' && match[2].length > 0) {
+                return match[2];
+            }
+
+            return 'default';
+        },
+
+        isUrl(str) {
+            let pattern = new RegExp('^((?:https?\\:\\/\\/|www\\.)(?:[-a-z0-9]+\\.)*[-a-z0-9]+.*)$');
+
+            return pattern.test(str);
         }
     },
 }
