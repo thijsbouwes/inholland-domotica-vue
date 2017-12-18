@@ -49,6 +49,7 @@
                             </div>
                         </div>
                     </li>
+
                     <li>
                         <a class="collapsible-header"><i class="material-icons">image</i>Background</a>
                         <div class="collapsible-body">
@@ -66,16 +67,17 @@
                             </div>
                         </div>
                     </li>
+
                     <li>
                         <a class="collapsible-header"><i class="material-icons">bookmark</i>Bookmarks</a>
                         <div class="collapsible-body">
                             <div class="chip" v-for="(bookmark, index) in bookmarks">
                                 <img :src="`http://s2.googleusercontent.com/s2/favicons?domain_url=${bookmark.name}`" alt="Contact Person">
                                 {{ bookmark.name }}
-                                <i class="close material-icons" @click="deleteBookmark(index, bookmark)">close</i>
+                                <i class="close material-icons" @click="deleteBookmark(bookmark)">close</i>
                             </div>
                             <div class="input-field">
-                                <input id="bookmark" type="url" class="validate" v-model="bookmark_url" required @keydown.enter.prevent="addNewBookmark()">
+                                <input id="bookmark" type="url" class="validate" v-model="bookmark_url" required @keydown.enter.prevent="createNewBookmark()">
                                 <label class="active" for="bookmark">Bookmark</label>
                                 <span class="helper-text" data-error="Enter a full url" data-success="Url is correct">Enter a valid url https://example.nl</span>
                             </div>
@@ -100,13 +102,15 @@
 </template>
 
 <script>
+    import { mapMutations } from 'vuex';
+    import { mapGetters } from 'vuex';
+    import { mapActions } from 'vuex';
     import Auth from '../../service/auth-service';
     import {ENDPOINTS} from "../../config/api";
 
 export default {
     data() {
         return {
-            bookmark_url: "",
             settings: {
                 background: {},
                 user: {},
@@ -148,9 +152,23 @@ export default {
                     enabled: true
                 }
             ],
-            backgrounds: [],
-            bookmarks: []
+            backgrounds: []
         }
+    },
+
+    computed: {
+        bookmark_url: {
+            get() {
+                return this.$store.state.bookmark_url;
+            },
+            set(value) {
+                this.$store.commit("set_new_bookmark", value)
+            }
+        },
+
+        ...mapGetters([
+            'bookmarks'
+        ])
     },
 
     created() {
@@ -159,7 +177,7 @@ export default {
                 this.settings = response.data;
             })
             .then(response => {
-                this.$M.updateTextFields();
+                M.updateTextFields();
             });
 
         this.$http.get(ENDPOINTS.BACKGROUND_ALL)
@@ -168,24 +186,20 @@ export default {
             })
             .then(response => {
                 let elem_select = document.querySelector('select');
-                new this.$M.Select(elem_select);
+                new M.Select(elem_select);
             });
 
-        this.$http.get(ENDPOINTS.BOOKMARKS)
-            .then(response => {
-                this.bookmarks = response.data;
-                Event.$emit('bookmarks_updated', this.bookmarks);
-            });
+        this.$store.dispatch('getAllBookmarks');
     },
 
     mounted() {
         // Create sidenav
         let elem = document.querySelector('.sidenav');
-        this.sidebar = new this.$M.Sidenav(elem);
+        this.sidebar = new M.Sidenav(elem);
 
         // Create dropdown
         let collapsibleElem = document.querySelector('.collapsible');
-        this.collapsible = new this.$M.Collapsible(collapsibleElem);
+        this.collapsible = new M.Collapsible(collapsibleElem);
     },
 
     methods: {
@@ -194,10 +208,10 @@ export default {
 
             this.$http.put(ENDPOINTS.PROFILE, data)
                 .then(response => {
-                    this.$M.toast({html: '<i class="material-icons">check_circle</i> saving profile', classes: 'green'});
+                    M.toast({html: '<i class="material-icons">check_circle</i> saving profile', classes: 'green'});
                 })
                 .catch(error => {
-                    this.$M.toast({html: '<i class="material-icons">error</i> error saving profile', classes: 'red'});
+                    M.toast({html: '<i class="material-icons">error</i> error saving profile', classes: 'red'});
                 });
 
             this.sidebar.close();
@@ -214,43 +228,14 @@ export default {
             Event.$emit('enabled_modules_update', { id: module.id, enabled: event.target.checked });
         },
 
-        deleteBookmark(index, bookmark) {
-            this.$http.delete(ENDPOINTS.BOOKMARKS + '/' + bookmark.id)
-                .then(response => {
-                    this.bookmarks.splice(index, 1);
-                });
-        },
+        ...mapActions([
+           'deleteBookmark',
+           'createNewBookmark'
+        ]),
 
-        addNewBookmark() {
-            if (this.isUrl(this.bookmark_url) === false) {
-                this.$M.toast({html: 'Enter a valid url', classes: 'red'});
-
-                return;
-            }
-
-            let data = {'name': this.getHostname(this.bookmark_url), 'url': this.bookmark_url};
-            this.$http.post(ENDPOINTS.BOOKMARKS, data)
-                .then(response => {
-                    this.bookmarks.push(data);
-                    this.bookmark_url = '';
-                });
-        },
-
-        getHostname(url) {
-            let match = url.match(/:\/\/(www[0-9]?\.)?(.[^/:]+)/i);
-
-            if (match != null && match.length > 2 && typeof match[2] === 'string' && match[2].length > 0) {
-                return match[2];
-            }
-
-            return 'default';
-        },
-
-        isUrl(str) {
-            let pattern = new RegExp('^((?:https?\\:\\/\\/|www\\.)(?:[-a-z0-9]+\\.)*[-a-z0-9]+.*)$');
-
-            return pattern.test(str);
-        }
+        ...mapMutations([
+            'set_new_bookmark'
+        ])
     },
 }
 </script>

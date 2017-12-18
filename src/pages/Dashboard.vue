@@ -58,12 +58,13 @@
     import Scoreboard from '../components/Scoreboard';
     import NewsFeed from '../components/NewsFeed';
     import TicTacToe from '../components/TicTacToe'
-    import Bookmark from '../components/Bookmark'
+    import Bookmarks from '../components/Bookmarks'
+    import Count from '../components/Count'
     import {ENDPOINTS} from '../config/api';
     import draggable from 'vuedraggable'
 
     export default {
-        components: { Lamps, Windows, ActionButton, Layout, Heater, TimeDate, Weather, NewsFeed, draggable, Scoreboard, TicTacToe, Bookmark },
+        components: { Lamps, Windows, ActionButton, Layout, Heater, TimeDate, Weather, NewsFeed, draggable, Scoreboard, TicTacToe, Bookmarks },
 
         data() {
             return {
@@ -121,11 +122,11 @@
                     },
                     {
                         id: 8,
-                        name: "Bookmark",
+                        name: "Bookmarks",
                         column: "B",
-                        component_name: "bookmark",
+                        component_name: "bookmarks",
                         enabled: true
-                    },
+                    }
                 ],
             }
         },

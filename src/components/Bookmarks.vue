@@ -12,21 +12,13 @@
 </template>
 
 <script>
-    import {ENDPOINTS} from "../config/api";
+    import { mapGetters } from "vuex";
 
     export default {
-        data() {
-            return {
-                loading: true,
-                bookmarks: []
-            }
-        },
-
-        created() {
-            console.log("hello from com");
-            Event.$on('bookmarks_updated', (data) => {
-                this.bookmarks = data;
-            });
+        computed: {
+            ...mapGetters([
+                'bookmarks'
+            ])
         }
     }
 </script>
