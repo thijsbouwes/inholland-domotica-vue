@@ -22,12 +22,9 @@
 </template>
 
 <script>
-    import Lamp from "./Lamp";
     import {ENDPOINTS} from "../config/api";
 
     export default {
-        components: { Lamp },
-
         data() {
             return {
                 loading: true,

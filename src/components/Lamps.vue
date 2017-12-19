@@ -3,11 +3,16 @@
 	    <div class="card-content">
 			<span class="card-title">Lamps</span>
 
-			<lamp
-				v-for="lamp in lamps"
-				:key="lamp.id"
-				:lamp="lamp">
-			</lamp>
+            <div class="switch house-item" v-for="lamp in lamps">
+                <span>
+                    <i class="material-icons prefix">lightbulb_outline</i>
+                    <span>{{ lamp.location }} {{ lamp.floor }}</span>
+                </span>
+                <label class="right">
+                    <input type="checkbox" :checked="lamp.status" @click="updateStatusLamp(lamp)">
+                    <span class="lever"></span>
+                </label>
+            </div>
 
 			<div class="progress" v-show="loading">
 				<div class="indeterminate"></div>
@@ -17,26 +22,29 @@
 </template>
 
 <script>
-import Lamp from "./Lamp";
-import {ENDPOINTS} from "../config/api";
+import { mapState } from 'vuex';
+import { mapGetters } from 'vuex';
+import { mapActions } from 'vuex';
 
 export default {
-	components: { Lamp },
+	computed: {
+		...mapState('lamps', [
+		   'loading'
+		]),
 
-	data() {
-		return {
-		    loading: true,
-			lamps: []
-		}
+		...mapGetters('lamps', [
+	        'lamps'
+		])
 	},
 
+    methods: {
+        ...mapActions('lamps', [
+           'updateStatusLamp'
+        ])
+    },
+
 	created() {
-		this.$http.get(ENDPOINTS.LAMPS)
-			.then(response => {
-			    this.lamps = response.data;
-				this.loading = false;
-            })
-			.catch(error => console.log(error));	
+	    this.$store.dispatch('lamps/getAllLamps');
 	}
 }
 </script>

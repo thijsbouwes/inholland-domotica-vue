@@ -16,7 +16,6 @@ const getters = {
 const actions = {
     getAllBackgrounds ({ commit, state }) {
         if (state.all.length > 0) {
-            console.log("allready have data");
             return;
         }
 

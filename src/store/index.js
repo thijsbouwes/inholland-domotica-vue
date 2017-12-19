@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import bookmarks from './modules/bookmarks'
 import backgrounds from './modules/backgrounds'
+import lamps from './modules/lamps'
 
 
 Vue.use(Vuex);
@@ -24,6 +25,7 @@ export const store = new Vuex.Store({
     actions,
     modules: {
         bookmarks,
-        backgrounds
+        backgrounds,
+        lamps
     }
 });
