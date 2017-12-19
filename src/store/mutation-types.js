@@ -18,3 +18,6 @@ export const SET_LAMP = 'SET_LAMP';
 // windows
 export const SET_WINDOWS = 'SET_WINDOWS';
 export const SET_WINDOW = 'SET_WINDOW';
+
+// heater
+export const SET_HEATER = 'SET_HEATER';

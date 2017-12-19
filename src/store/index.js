@@ -4,7 +4,7 @@ import bookmarks from './modules/bookmarks'
 import backgrounds from './modules/backgrounds'
 import lamps from './modules/lamps'
 import windows from './modules/windows'
-
+import heater from './modules/heater'
 
 Vue.use(Vuex);
 
@@ -28,6 +28,7 @@ export const store = new Vuex.Store({
         bookmarks,
         backgrounds,
         lamps,
-        windows
+        windows,
+        heater
     }
 });

@@ -21,42 +21,53 @@
 </template>
 
 <script>
-    import {ENDPOINTS} from "../config/api";
+    import { mapState } from 'vuex';
+    import { mapGetters } from 'vuex';
+    import { mapActions } from 'vuex';
     import noUiSlider from 'materialize-css/extras/noUiSlider/nouislider';
 
 	export default {
 	    data() {
 	        return {
-                loading: true,
-	            heater: {},
-			}
+                heater_slider: {}
+            }
+        },
+
+	    computed: {
+            ...mapState('heater', [
+                'loading'
+            ]),
+
+            ...mapGetters('heater', [
+                'heater'
+            ]),
 		},
 
         created() {
-            this.$http.get(ENDPOINTS.HEATER)
-                .then(response => {
-                    this.heater = response.data;
-                    this.loading = false;
-                    this.createSlider();
-                })
-                .catch(error => console.log(error));
+            this.$store.dispatch('heater/getHeater')
+				.then(() => {
+                   this.createSlider();
+				});
         },
 
         methods: {
-            updateHeater() {
-                // Update temperature, round and remove postfix deg
-                this.heater.temperature = Math.round(this.heater_slider.noUiSlider.get().replace('&deg;', ''));
+	        updateTemperatureFromSlider() {
+                let slider_state = this.heater_slider.noUiSlider.get();
 
-                this.$http.put(ENDPOINTS.HEATER_TEMPERATURE, { temperature: this.heater.temperature })
-                    .then(response => {
-                        this.heater = response.data;
-                    })
-                    .catch(error => console.log(error));
+                if (slider_state === false) {
+                    return;
+                }
+
+                // Round and remove postfix deg
+                let temperature =  Math.round(slider_state.replace('&deg;', ''));
+
+                this.$store.dispatch('heater/updateHeater', temperature)
             },
 
 			createSlider() {
                 // create slider
                 this.heater_slider = document.getElementById('heater-slider');
+
                 noUiSlider.create(this.heater_slider, {
                     start: [this.heater.temperature],
                     connect: [true, false],
@@ -73,7 +84,7 @@
                 });
 
                 // Update temperature after set
-                this.heater_slider.noUiSlider.on('set', this.updateHeater);
+                this.heater_slider.noUiSlider.on('set', this.updateTemperatureFromSlider);
 			}
         }
 	}
