@@ -28,5 +28,6 @@ export const SET_REMOTE_HOUSE = 'SET_REMOTE_HOUSE';
 // user
 export const SET_PROFILE = 'SET_PROFILE';
 export const SET_NAME = 'SET_NAME';
-export const SET_EMAIL = 'SET_EMAIL';
+export const ENABLE_MODULE = 'ENABLE_MODULE';
+export const SET_ENABLED_MODULES = 'SET_ENABLED_MODULES';
 export const SET_BACKGROUND = 'SET_BACKGROUND';

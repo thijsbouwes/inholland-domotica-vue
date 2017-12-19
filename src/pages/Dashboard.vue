@@ -48,6 +48,7 @@
 </template>
 
 <script>
+    import { mapGetters } from 'vuex';
     import Layout from '../layouts/main/Layout';
     import Lamps from '../components/Lamps';
     import Windows from '../components/Windows';
@@ -68,65 +69,7 @@
         data() {
             return {
                 layoutChanged: false,
-                loading: false,
-                enabled_modules:  [
-                    {
-                        id: 1,
-                        name: "Window",
-                        column: "B",
-                        component_name: "windows",
-                        enabled: true
-                    },
-                    {
-                        id: 2,
-                        name: "Lamp",
-                        column: "A",
-                        component_name: "lamps",
-                        enabled: true
-                    },
-                    {
-                        id: 3,
-                        name: "Time & Date",
-                        column: "A",
-                        component_name: "time-date",
-                        enabled: false
-                    },
-                    {
-                        id: 4,
-                        name: "Weather",
-                        column: "C",
-                        component_name: "weather",
-                        enabled: true
-                    },
-                    {
-                        id: 5,
-                        name: "Heater",
-                        column: "D",
-                        component_name: "heater",
-                        enabled: true
-                    },
-                    {
-                        id: 6,
-                        name: "Scoreboard",
-                        column: "D",
-                        component_name: "scoreboard",
-                        enabled: true
-                    },
-                    {
-                        id: 7,
-                        name: "Tic Tac Toe",
-                        column: "B",
-                        component_name: "tic-tac-toe",
-                        enabled: true
-                    },
-                    {
-                        id: 8,
-                        name: "Bookmarks",
-                        column: "B",
-                        component_name: "bookmarks",
-                        enabled: true
-                    }
-                ],
+                loading: false
             }
         },
 
@@ -162,14 +105,16 @@
                 set(value) {
                     this.updateColumn(value, "D");
                 }
-            }
-        },
+            },
 
-        created() {
-            Event.$on('enabled_modules_update', (data) => {
-                let module = this.enabled_modules.find(module => module.id === data.id);
-                module.enabled = data.enabled;
-            });
+            enabled_modules: {
+                get() {
+                    return this.$store.getters['profile/enabled_modules'];
+                },
+                set(value) {
+                    this.$store.commit('profile/SET_ENABLED_MODULES', value);
+                }
+            }
         },
 
         methods: {

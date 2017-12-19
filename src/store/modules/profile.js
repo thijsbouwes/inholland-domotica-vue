@@ -12,7 +12,65 @@ const state = {
         background: {
             url: '',
             name: ''
-        }
+        },
+        enabled_modules: [
+            {
+                id: 1,
+                name: "Window",
+                column: "B",
+                component_name: "windows",
+                enabled: true
+            },
+            {
+                id: 2,
+                name: "Lamp",
+                column: "A",
+                component_name: "lamps",
+                enabled: true
+            },
+            {
+                id: 3,
+                name: "Time & Date",
+                column: "A",
+                component_name: "time-date",
+                enabled: false
+            },
+            {
+                id: 4,
+                name: "Weather",
+                component_name: "weather",
+                column: "B",
+                enabled: true
+            },
+            {
+                id: 5,
+                name: "Heater",
+                column: "A",
+                component_name: "heater",
+                enabled: true
+            },
+            {
+                id: 6,
+                name: "Scoreboard",
+                column: "D",
+                component_name: "scoreboard",
+                enabled: true
+            },
+            {
+                id: 7,
+                name: "Tic Tac Toe",
+                column: "B",
+                component_name: "tic-tac-toe",
+                enabled: true
+            },
+            {
+                id: 8,
+                name: "Bookmarks",
+                column: "B",
+                component_name: "bookmarks",
+                enabled: true
+            }
+        ]
     },
     loading: true
 };
@@ -21,6 +79,7 @@ const state = {
 const getters = {
     user: state => state.all.user,
     background: state => state.all.background,
+    enabled_modules: state => state.all.enabled_modules,
 };
 
 // actions
@@ -43,8 +102,9 @@ const actions = {
 
 // mutations
 const mutations = {
-    [types.SET_PROFILE] (state, profile) {
-        state.all = profile;
+    [types.SET_PROFILE] (state, { user, background }) {
+        state.all.user = user;
+        state.all.background = background;
     },
 
     [types.SET_NAME] (state, name) {
@@ -53,6 +113,17 @@ const mutations = {
 
     [types.SET_BACKGROUND] (state, background) {
         state.all.background = background;
+    },
+
+    [types.ENABLE_MODULE] (state, module) {
+        let index = state.all.enabled_modules.indexOf(module);
+
+        // Toggle enabled
+        state.all.enabled_modules[index].enabled = !state.all.enabled_modules[index].enabled;
+    },
+
+    [types.SET_ENABLED_MODULES] (state, modules) {
+        state.all.enabled_modules = modules;
     },
 
     [types.LOADING_DONE] (state) {

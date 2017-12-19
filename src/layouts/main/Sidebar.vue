@@ -3,7 +3,7 @@
         <li>
             <div class="user-view">
                 <div class="background">
-                    <img :src="userBackground.url" :title="userBackground.name" width="100%">
+                    <img v-if="userBackground.url" :src="userBackground.url" :title="userBackground.name" width="100%">
                 </div>
 
                 <a href="#!user"><img class="circle" src="/static/users/nobody.jpg"></a>
@@ -44,7 +44,7 @@
                             <div class="switch icon-before" v-for="(module, index) in enabled_modules">
                                 <span>{{ module.name }}</span>
                                 <label class="right">
-                                    <input type="checkbox" :checked="module.enabled" @change="updateModule(index, module, $event)">
+                                    <input type="checkbox" :checked="module.enabled" @change="updateModule(module)">
                                     <span class="lever"></span>
                                 </label>
                             </div>
@@ -105,53 +105,12 @@
 <script>
     import { mapGetters } from 'vuex';
     import { mapActions } from 'vuex';
+    import { mapMutations } from 'vuex';
     import * as types from '../../store/mutation-types';
     import Auth from '../../service/auth-service';
     import { ENDPOINTS } from "../../config/api";
 
 export default {
-    data() {
-        return {
-            enabled_modules: [
-                {
-                    id: 1,
-                    name: "Window",
-                    column: "B",
-                    component_name: "windows",
-                    enabled: true
-                },
-                {
-                    id: 2,
-                    name: "Lamp",
-                    column: "A",
-                    component_name: "lamps",
-                    enabled: true
-                },
-                {
-                    id: 3,
-                    name: "Time & Date",
-                    column: "A",
-                    component_name: "time-date",
-                    enabled: false
-                },
-                {
-                    id: 4,
-                    name: "Weather",
-                    component_name: "weather",
-                    column: "B",
-                    enabled: true
-                },
-                {
-                    id: 5,
-                    name: "Heater",
-                    column: "A",
-                    component_name: "heater",
-                    enabled: true
-                }
-            ]
-        }
-    },
-
     computed: {
         bookmark_url: {
             get() {
@@ -187,6 +146,7 @@ export default {
         ...mapGetters({
             user: 'profile/user',
             background: 'profile/background',
+            enabled_modules: 'profile/enabled_modules',
             bookmarks: 'bookmarks/bookmarks',
             backgrounds: 'backgrounds/backgrounds'
         })
@@ -195,11 +155,13 @@ export default {
     created() {
         this.$store.dispatch('profile/loadProfile')
             .then(() => {
+                // Update text fields
                 M.updateTextFields();
             });
 
         this.$store.dispatch('backgrounds/getAllBackgrounds')
             .then(() => {
+                // Create select
                 let elem_select = document.querySelector('select');
                 new this.$M.Select(elem_select);
             });
@@ -212,7 +174,7 @@ export default {
         let elem = document.querySelector('.sidenav');
         this.sidebar = new M.Sidenav(elem);
 
-        // Create dropdown
+        // Create collaps
         let collapsibleElem = document.querySelector('.collapsible');
         this.collapsible = new M.Collapsible(collapsibleElem);
     },
@@ -236,10 +198,9 @@ export default {
             this.$router.push('/login');
         },
 
-        updateModule(index, module, event) {
-            this.enabled_modules[index].enabled = event.target.checked;
-            Event.$emit('enabled_modules_update', { id: module.id, enabled: event.target.checked });
-        },
+        ...mapMutations({
+            updateModule: 'profile/ENABLE_MODULE',
+        }),
 
         ...mapActions({
             deleteBookmark: 'bookmarks/deleteBookmark',
