@@ -2,9 +2,9 @@ import { mapGetters } from 'vuex';
 
 export default {
     computed: {
-        ...mapGetters([
-            'backgrounds'
-        ]),
+        ...mapGetters({
+            backgrounds: 'backgrounds/backgrounds'
+        }),
 
         randomBackground() {
             if (this.backgrounds.length > 0) {
@@ -17,6 +17,6 @@ export default {
     },
 
     created() {
-        this.$store.dispatch('getAllBackgrounds');
+        this.$store.dispatch('backgrounds/getAllBackgrounds');
     }
 }

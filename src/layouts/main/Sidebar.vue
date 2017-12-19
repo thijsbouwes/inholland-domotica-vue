@@ -77,7 +77,7 @@
                                 <i class="close material-icons" @click="deleteBookmark(bookmark)">close</i>
                             </div>
                             <div class="input-field">
-                                <input id="bookmark" type="url" class="validate" v-model="bookmark_url" required @keydown.enter.prevent="createNewBookmark()">
+                                <input id="bookmark" type="url" class="validate" v-model="bookmark_url" @keydown.enter.prevent="createNewBookmark()">
                                 <label class="active" for="bookmark">Bookmark</label>
                                 <span class="helper-text" data-error="Enter a full url" data-success="Url is correct">Enter a valid url https://example.nl</span>
                             </div>
@@ -167,7 +167,7 @@ export default {
 
         ...mapGetters({
             bookmarks: 'bookmarks/bookmarks',
-            backgrounds: 'backgrounds'
+            backgrounds: 'backgrounds/backgrounds'
         })
     },
 
@@ -181,7 +181,7 @@ export default {
             });
 
 
-        this.$store.dispatch('getAllBackgrounds')
+        this.$store.dispatch('backgrounds/getAllBackgrounds')
             .then(() => {
                 let elem_select = document.querySelector('select');
                 new this.$M.Select(elem_select);
