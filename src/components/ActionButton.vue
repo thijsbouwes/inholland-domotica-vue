@@ -5,7 +5,7 @@
                 <i class="large material-icons">menu</i>
             </a>
             <ul>
-                <li><a @click="reloadState" class="btn-floating green modal-trigger" href="#remote"><i class="material-icons">settings_remote</i></a></li>
+                <li><a @click="getRemoteHouse" class="btn-floating green modal-trigger" href="#remote"><i class="material-icons">settings_remote</i></a></li>
                 <li><router-link class="btn-floating red" to="/news" exact><i class="material-icons">import_contacts</i></router-link></li>
             </ul>
         </div>
@@ -15,16 +15,12 @@
 </template>
 
 <script>
+    import { mapActions } from 'vuex';
     import Modal from '../components/Modal';
     import RemoteHouse from '../components/RemoteHouse';
 
     export default {
         components: { Modal, RemoteHouse },
-
-        data() {
-            return {
-            }
-        },
 
         mounted() {
             let elem = document.querySelector('.fixed-action-btn');
@@ -33,9 +29,9 @@
         },
 
         methods: {
-            reloadState() {
-                Event.$emit("reload_state_house")
-            }
+            ...mapActions('remoteHouse', [
+                'getRemoteHouse'
+            ])
         }
     }
 </script>

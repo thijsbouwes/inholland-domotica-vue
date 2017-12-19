@@ -1,7 +1,6 @@
 <template>
     <div>
         <div class="fixed-action-btn">
-
             <a class="btn-floating btn-large">
                 <router-link tag="a" to="/" exact><i class="large material-icons">arrow_back</i></router-link>
             </a>

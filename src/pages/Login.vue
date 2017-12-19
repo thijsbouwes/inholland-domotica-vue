@@ -32,7 +32,7 @@
 
 <script>
     import ExternalLayout from '../layouts/external/Layout';
-    import RandomBackground from '../mixins/RandomBackground';
+    import RandomBackground from '../mixins/randomBackground';
     import Auth from '../service/auth-service';
 
     export default {

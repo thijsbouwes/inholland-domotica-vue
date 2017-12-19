@@ -11,7 +11,7 @@
 
 <script>
     import ExternalLayout from '../layouts/external/Layout';
-    import RandomBackground from '../mixins/RandomBackground';
+    import RandomBackground from '../mixins/randomBackground';
 
     export default {
         components: { ExternalLayout },

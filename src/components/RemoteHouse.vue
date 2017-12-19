@@ -1,10 +1,10 @@
 <template>
     <div>
-        <p>Updated at: {{ base64_updated_at }}</p>
+        <p>Updated at: {{ house.updated_at }}</p>
         <p>Location at: AMS Vultr server</p>
 
         <div class="center-align">
-            <img :src="base64" class="responsive-img" v-if="base64">
+            <img :src="houseImage" class="responsive-img" v-if="houseImage">
         </div>
 
         <div class="progress" v-show="loading">
@@ -14,42 +14,28 @@
 </template>
 
 <script>
-    import {ENDPOINTS} from '../config/api';
+    import { mapGetters } from 'vuex';
+    import { mapState } from 'vuex';
 
     export default {
-        data() {
-            return {
-                loading: true,
-                base64: "",
-                base64_updated_at: ""
-            }
-        },
+        computed: {
+            ...mapGetters('remoteHouse', [
+                'house',
+                'houseImage'
+            ]),
 
-        created() {
-            this.getRemote();
-
-            Event.$on("reload_state_house", (data) => this.getRemote());
+            ...mapState('remoteHouse', [
+                'loading'
+            ])
         },
 
         methods: {
-            getRemote() {
-                this.loading = true;
 
-                this.$http.get(ENDPOINTS.HOUSE_REMOTE)
-                    .then(response => {
-                        this.base64 = "data:image/png;base64," + response.data.image;
-                        this.base64_updated_at = response.data.updated_at;
-                        this.loading = false;
-                    })
-                    .catch(error => {
-                        console.log(error);
-                    });
-            }
         }
     }
 </script>
 
-<style>
+<style scoped>
     img {
         max-height: 450px;
     }

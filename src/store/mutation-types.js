@@ -21,3 +21,6 @@ export const SET_WINDOW = 'SET_WINDOW';
 
 // heater
 export const SET_HEATER = 'SET_HEATER';
+
+// remote house
+export const SET_REMOTE_HOUSE = 'SET_REMOTE_HOUSE';

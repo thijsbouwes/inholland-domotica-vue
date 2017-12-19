@@ -5,30 +5,17 @@ import backgrounds from './modules/backgrounds'
 import lamps from './modules/lamps'
 import windows from './modules/windows'
 import heater from './modules/heater'
+import remoteHouse from './modules/remoteHouse'
 
 Vue.use(Vuex);
 
-const state = {
-
-};
-
-const mutations =  {
-
-};
-
-const actions = {
-
-};
-
 export const store = new Vuex.Store({
-    state,
-    mutations,
-    actions,
     modules: {
         bookmarks,
         backgrounds,
         lamps,
         windows,
-        heater
+        heater,
+        remoteHouse
     }
 });
