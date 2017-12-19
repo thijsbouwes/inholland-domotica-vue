@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import bookmarks from './modules/bookmarks'
 import backgrounds from './modules/backgrounds'
 import lamps from './modules/lamps'
+import windows from './modules/windows'
 
 
 Vue.use(Vuex);
@@ -26,6 +27,7 @@ export const store = new Vuex.Store({
     modules: {
         bookmarks,
         backgrounds,
-        lamps
+        lamps,
+        windows
     }
 });

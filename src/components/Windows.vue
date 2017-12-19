@@ -3,11 +3,16 @@
 	    <div class="card-content">
 			<span class="card-title">Windows</span>
 
-			<window
-				v-for="window in windows"
-				:key="window.id"
-				:window="window">
-			</window>
+			<div class="switch house-item" v-for="window in windows">
+				<span>
+					<i class="material-icons">border_all</i>
+					<span>{{ window.location }} {{ window.floor }}</span>
+				</span>
+				<label class="right">
+					<input type="checkbox" :checked="window.status" @click="updateStatus(window)">
+					<span class="lever"></span>
+				</label>
+			</div>
 
 			<div class="progress" v-show="loading">
 				<div class="indeterminate"></div>
@@ -17,26 +22,29 @@
 </template>
 
 <script>
-import Window from "./Window";
-import {ENDPOINTS} from "../config/api";
+    import { mapState } from 'vuex';
+    import { mapGetters } from 'vuex';
+    import { mapActions } from 'vuex';
 
-export default {
-	components: { Window },
+    export default {
+        computed: {
+            ...mapState('windows', [
+                'loading'
+            ]),
 
-	data() {
-		return {
-            loading: true,
-			windows: []
-		}
-	},
+            ...mapGetters('windows', [
+                'windows'
+            ])
+        },
+
+        methods: {
+            ...mapActions('windows', [
+                'updateStatusWindow'
+            ])
+        },
 
 	created() {
-		this.$http.get(ENDPOINTS.WINDOWS)
-			.then(data => {
-			    this.windows = data.data;
-				this.loading = false;
-            })
-			.catch(error => console.log(error));	
+		this.$store.dispatch('windows/getAllWindows');
 	}
 }
 </script>
