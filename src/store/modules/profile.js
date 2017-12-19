@@ -1,0 +1,69 @@
+import request from '../../service/request';
+import * as types from '../mutation-types';
+import { ENDPOINTS } from '../../config/api';
+
+// initial state
+const state = {
+    all: {
+        user: {
+            name: '',
+            email: '',
+        },
+        background: {
+            url: '',
+            name: ''
+        }
+    },
+    loading: true
+};
+
+// getters
+const getters = {
+    user: state => state.all.user,
+    background: state => state.all.background,
+};
+
+// actions
+const actions = {
+    loadProfile({ commit }) {
+
+        return request.get(ENDPOINTS.PROFILE_SETTINGS)
+            .then(response => {
+                commit(types.SET_PROFILE, response.data);
+                commit(types.LOADING_DONE);
+            });
+    },
+
+    updateProfile({ getters }) {
+        let data = { name: getters.user.name, background_id: getters.background.id };
+
+        return request.put(ENDPOINTS.PROFILE, data)
+    }
+};
+
+// mutations
+const mutations = {
+    [types.SET_PROFILE] (state, profile) {
+        state.all = profile;
+    },
+
+    [types.SET_NAME] (state, name) {
+        state.all.user.name = name;
+    },
+
+    [types.SET_BACKGROUND] (state, background) {
+        state.all.background = background;
+    },
+
+    [types.LOADING_DONE] (state) {
+        state.loading = false;
+    }
+};
+
+export default {
+    namespaced: true,
+    state,
+    getters,
+    actions,
+    mutations
+}

@@ -3,12 +3,12 @@
         <li>
             <div class="user-view">
                 <div class="background">
-                    <img :src="settings.background.url" :title="settings.background.name" width="100%">
+                    <img :src="userBackground.url" :title="userBackground.name" width="100%">
                 </div>
 
                 <a href="#!user"><img class="circle" src="/static/users/nobody.jpg"></a>
-                <a href="#!name"><span class="white-text name" v-text="settings.user.name"></span></a>
-                <a href="#!email"><span class="white-text email" v-text="settings.user.email"></span></a>
+                <a href="#!name"><span class="white-text name" v-text="userName"></span></a>
+                <a href="#!email"><span class="white-text email" v-text="userEmail"></span></a>
             </div>
         </li>
 
@@ -27,16 +27,17 @@
                         <a class="collapsible-header"><i class="material-icons">face</i>User</a>
                         <div class="collapsible-body">
                             <div class="input-field">
-                                <input id="name" type="text" class="validate" v-model="settings.user.name" required>
+                                <input id="name" type="text" class="validate" v-model="userName" required>
                                 <label class="active" for="name">Naam</label>
                             </div>
 
                             <div class="input-field">
-                                <input id="email" type="email" class="validate" v-model="settings.user.email" required disabled>
+                                <input id="email" type="email" class="validate" :value="userEmail" required disabled>
                                 <label class="active" for="email">Email</label>
                             </div>
                         </div>
                     </li>
+
                     <li>
                         <a class="collapsible-header"><i class="material-icons">widgets</i>Widgets</a>
                         <div class="collapsible-body">
@@ -54,7 +55,7 @@
                         <a class="collapsible-header"><i class="material-icons">image</i>Background</a>
                         <div class="collapsible-body">
                             <div class="input-field">
-                                <select class="icons" v-model="settings.background" required>
+                                <select class="icons" v-model="userBackground" required>
                                     <option value="" disabled selected>Choose your option</option>
                                     <option
                                             v-for="background in backgrounds"
@@ -111,10 +112,6 @@
 export default {
     data() {
         return {
-            settings: {
-                background: {},
-                user: {},
-            },
             enabled_modules: [
                 {
                     id: 1,
@@ -165,21 +162,41 @@ export default {
             }
         },
 
+        userName: {
+            get() {
+                return this.user.name;
+            },
+            set(value) {
+                this.$store.commit('profile/SET_NAME', value)
+            }
+        },
+
+        userEmail() {
+            return this.user.email;
+        },
+
+        userBackground: {
+            get() {
+                return this.background;
+            },
+            set(value) {
+                this.$store.commit('profile/SET_BACKGROUND', value)
+            }
+        },
+
         ...mapGetters({
+            user: 'profile/user',
+            background: 'profile/background',
             bookmarks: 'bookmarks/bookmarks',
             backgrounds: 'backgrounds/backgrounds'
         })
     },
 
     created() {
-        this.$http.get(ENDPOINTS.PROFILE_SETTINGS)
-            .then(response => {
-                this.settings = response.data;
-            })
-            .then(response => {
+        this.$store.dispatch('profile/loadProfile')
+            .then(() => {
                 M.updateTextFields();
             });
-
 
         this.$store.dispatch('backgrounds/getAllBackgrounds')
             .then(() => {
@@ -202,13 +219,11 @@ export default {
 
     methods: {
         doSubmit() {
-            let data = { name: this.settings.user.name, background_id: this.settings.background.id };
-
-            this.$http.put(ENDPOINTS.PROFILE, data)
-                .then(response => {
+            this.$store.dispatch('profile/updateProfile')
+                .then(() => {
                     M.toast({html: '<i class="material-icons">check_circle</i> saving profile', classes: 'green'});
                 })
-                .catch(error => {
+                .catch(() => {
                     M.toast({html: '<i class="material-icons">error</i> error saving profile', classes: 'red'});
                 });
 
