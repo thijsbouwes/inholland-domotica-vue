@@ -16,9 +16,9 @@
 
     export default {
         computed: {
-            ...mapGetters([
-                'bookmarks'
-            ])
+            ...mapGetters({
+                bookmarks: 'bookmarks/bookmarks'
+            })
         }
     }
 </script>

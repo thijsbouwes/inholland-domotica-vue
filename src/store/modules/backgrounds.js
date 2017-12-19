@@ -14,8 +14,8 @@ const getters = {
 
 // actions
 const actions = {
-    getAllBackgrounds ({ commit, state }) {
-        if (state.all.length > 0) {
+    getAllBackgrounds ({ commit, getters }) {
+        if (getters.backgrounds.length > 0) {
             return;
         }
 

@@ -102,7 +102,6 @@
 </template>
 
 <script>
-    import { mapMutations } from 'vuex';
     import { mapGetters } from 'vuex';
     import { mapActions } from 'vuex';
     import * as types from '../../store/mutation-types';
@@ -159,17 +158,17 @@ export default {
     computed: {
         bookmark_url: {
             get() {
-                return this.$store.state.bookmark_url;
+                return this.$store.state.bookmarks.bookmark_url;
             },
             set(value) {
-                this.$store.commit("set_new_bookmark", value)
+                this.$store.commit('bookmarks/SET_NEW_BOOKMARK', value)
             }
         },
 
-        ...mapGetters([
-            'bookmarks',
-            'backgrounds'
-        ])
+        ...mapGetters({
+            bookmarks: 'bookmarks/bookmarks',
+            backgrounds: 'backgrounds'
+        })
     },
 
     created() {
@@ -188,7 +187,7 @@ export default {
                 new this.$M.Select(elem_select);
             });
 
-        this.$store.dispatch('getAllBookmarks');
+        this.$store.dispatch('bookmarks/getAllBookmarks');
     },
 
     mounted() {
@@ -227,14 +226,10 @@ export default {
             Event.$emit('enabled_modules_update', { id: module.id, enabled: event.target.checked });
         },
 
-        ...mapActions([
-           'deleteBookmark',
-           'createNewBookmark'
-        ]),
-
-        ...mapMutations([
-            types.SET_NEW_BOOKMARK
-        ])
+        ...mapActions({
+            deleteBookmark: 'bookmarks/deleteBookmark',
+            createNewBookmark: 'bookmarks/createNewBookmark'
+        })
     },
 }
 </script>
