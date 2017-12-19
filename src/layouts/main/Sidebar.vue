@@ -16,6 +16,8 @@
         <router-link tag="li" to="/" exact><a class="sidenav-close"><i class="material-icons">dashboard</i>Dashboard</a></router-link>
         <router-link tag="li" to="/news" exact><a class="sidenav-close"><i class="material-icons">import_contacts</i>News</a></router-link>
 
+        <router-link v-if="user.is_admin" tag="li" to="/users" exact><a class="sidenav-close"><i class="material-icons">supervisor_account</i>Users</a></router-link>
+
         <li><div class="divider"></div></li>
         <li><a class="subheader">Settings</a></li>
 
