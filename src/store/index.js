@@ -7,6 +7,7 @@ import windows from './modules/windows';
 import heater from './modules/heater';
 import remoteHouse from './modules/remoteHouse';
 import profile from './modules/profile';
+import widgets from './modules/widgets';
 
 Vue.use(Vuex);
 
@@ -18,6 +19,7 @@ export const store = new Vuex.Store({
         lamps,
         windows,
         heater,
-        remoteHouse
+        remoteHouse,
+        widgets
     }
 });

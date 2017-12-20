@@ -5,7 +5,7 @@
                 <div class="indeterminate"></div>
             </div>
 
-            <draggable v-model="column_a" :options="{group:'people'}" @change="updateLayoutState()" class="drag col s12 m6 l6 xl3">
+            <draggable v-model="column_a" :options="{group:'people'}" @change="setLayoutChanged" class="drag col s12 m6 l6 xl3">
                 <template v-for="module in column_a">
                     <component :is="module.component_name"
                                :key="module.id"
@@ -14,7 +14,7 @@
                 </template>
             </draggable>
 
-            <draggable v-model="column_b" :options="{group:'people'}" @change="updateLayoutState()" class="drag col s12 m6 l6 xl3">
+            <draggable v-model="column_b" :options="{group:'people'}" @change="setLayoutChanged" class="drag col s12 m6 l6 xl3">
                 <template v-for="module in column_b">
                     <component :is="module.component_name"
                                v-if="module.enabled"
@@ -22,7 +22,7 @@
                 </template>
             </draggable>
 
-            <draggable v-model="column_c" :options="{group:'people'}" @change="updateLayoutState()" class="drag col s12 m6 l6 xl3">
+            <draggable v-model="column_c" :options="{group:'people'}" @change="setLayoutChanged" class="drag col s12 m6 l6 xl3">
                 <template v-for="module in column_c">
                     <component :is="module.component_name"
                                :key="module.id"
@@ -31,7 +31,7 @@
                 </template>
             </draggable>
 
-            <draggable v-model="column_d" :options="{group:'people'}" @change="updateLayoutState()" class="drag col s12 m6 l6 xl3">
+            <draggable v-model="column_d" :options="{group:'people'}" @change="setLayoutChanged" class="drag col s12 m6 l6 xl3">
                 <template v-for="module in column_d">
                     <component :is="module.component_name"
                                v-if="module.enabled"
@@ -49,6 +49,9 @@
 
 <script>
     import { mapGetters } from 'vuex';
+    import { mapState } from 'vuex';
+    import { mapMutations } from 'vuex';
+    import { mapActions } from 'vuex';
     import Layout from '../layouts/main/Layout';
     import Lamps from '../components/Lamps';
     import Windows from '../components/Windows';
@@ -65,91 +68,75 @@
     export default {
         components: { Lamps, Windows, ActionButton, Layout, Heater, TimeDate, Weather, NewsFeed, draggable, Scoreboard, TicTacToe, Bookmarks },
 
-        data() {
-            return {
-                layoutChanged: false,
-                loading: false
-            }
-        },
-
         computed: {
             column_a: {
                 get() {
-                    return this.getColumn("A");
+                    return this.column_a;
                 },
-                set(value) {
-                    this.updateColumn(value, "A");
+                set(widgets) {
+                    this.$store.commit('setLayout', { widgets, column: "A" });
                 }
             },
             column_b: {
                 get() {
-                    return this.getColumn("B");
+                    return this.column_b;
                 },
-                set(value) {
-                    this.updateColumn(value, "B");
+                set(widgets) {
+                    this.$store.commit('setLayout', { widgets, column: "B" });
                 }
             },
             column_c: {
                 get() {
-                    return this.getColumn("C");
+                    return this.column_c;
                 },
-                set(value) {
-                    this.updateColumn(value, "C");
+                set(widgets) {
+                    this.$store.commit('setLayout', { widgets, column: "C" });
                 }
             },
             column_d: {
                 get() {
-                    return this.getColumn("D");
+                    return this.column_d;
                 },
-                set(value) {
-                    this.updateColumn(value, "D");
+                set(widgets) {
+                    this.$store.commit('setLayout', { widgets, column: "D" });
                 }
             },
 
-            enabled_modules: {
+            widgets: {
                 get() {
-                    return this.$store.getters['profile/enabled_modules'];
+                    return this.$store.getters['widgets/active_widgets'];
                 },
                 set(value) {
-                    this.$store.commit('profile/SET_ENABLED_MODULES', value);
+                    this.$store.commit('widgets/ENABLE_WIDGET', value);
                 }
-            }
+            },
+
+            ...mapGetters('widgets', [
+                'column_a',
+                'column_b',
+                'column_c',
+                'column_d'
+            ]),
+
+            ...mapState('widgets', [
+                'loading',
+                'layoutChanged'
+            ])
+        },
+
+        created() {
+            this.$store.dispatch('widgets/loadWidgets');
         },
 
         methods: {
-            updateColumn(columns, state) {
-                if (columns == null) {
-                    return;
-                }
+            ...mapActions({
+                saveLayout: 'widgets/saveLayout'
+            }),
 
-                // Set state
-                columns.map(column => column.column = state);
-
-                // Reset columns
-                columns.forEach((column, index) => {
-                   let module_index = this.enabled_modules.indexOf(column);
-                   this.enabled_modules.splice(module_index, 1);
-                });
-
-                // Push columns back
-                this.enabled_modules = this.enabled_modules.concat(columns);
-            },
-
-            getColumn(column) {
-                // Find module by column name
-                return this.enabled_modules.filter(module => module.column === column)
-            },
-
-            updateLayoutState() {
-                this.layoutChanged = true;
-            },
-
-            saveLayout() {
-                this.loading = true;
-                // Do axios
-                this.layoutChanged = false;
-                this.loading = false;
-            }
+            ...mapMutations({
+                setLayoutChanged: 'widgets/SET_LAYOUT_CHANGED',
+                setLayout: 'widgets/SET_LAYOUT'
+            })
         }
     }
 </script>

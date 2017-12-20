@@ -43,7 +43,7 @@
                     <li>
                         <a class="collapsible-header"><i class="material-icons">widgets</i>Widgets</a>
                         <div class="collapsible-body">
-                            <div class="switch icon-before" v-for="(module, index) in enabled_modules">
+                            <div class="switch icon-before" v-for="(module, index) in widgets">
                                 <span>{{ module.name }}</span>
                                 <label class="right">
                                     <input type="checkbox" :checked="module.enabled" @change="updateModule(module)">
@@ -148,7 +148,7 @@ export default {
         ...mapGetters({
             user: 'profile/user',
             background: 'profile/background',
-            enabled_modules: 'profile/enabled_modules',
+            widgets: 'widgets/available_widgets',
             bookmarks: 'bookmarks/bookmarks',
             backgrounds: 'backgrounds/backgrounds'
         })
