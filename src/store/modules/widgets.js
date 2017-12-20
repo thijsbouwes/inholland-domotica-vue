@@ -12,8 +12,8 @@ const state = {
 
 // getters
 const getters = {
-    available_widgets: state => state.all,
-    active_widgets: state => state.active,
+    widgets: state => state.all,
+    user_widgets: state => state.active.sort((a, b) => a.column_index - b.column_index),
 
     column_a: state => state.active.filter(widget => widget.column === 'A'),
     column_b: state => state.active.filter(widget => widget.column === 'B'),
@@ -38,34 +38,66 @@ const actions = {
         return request.put(ENDPOINTS.PROFILE, data)
     },
 
-    saveLayout({ commit }) {
-        // Do axios
-        commit(types.LOADING_DONE);
-        commit(types.SET_LAYOUT_CHANGED);
+    saveLayout({ getters, commit }) {
+        request.put(ENDPOINTS.WIDGETS, getters.user_widgets)
+            .then(response => {
+                commit(types.LOADING_DONE);
+                commit(types.SET_LAYOUT_CHANGED, false);
+            });
     }
 };
 
 // mutations
 const mutations = {
-    [types.ENABLE_WIDGET] (state, module) {
-        let index = state.all.indexOf(module);
+    [types.TOGGLE_WIDGET] (state, widget) {
+        // delete widget when all-ready active
+        let active_widget = state.active.find(user_widget => user_widget.widget_id === widget.id);
 
-        // Toggle enabled
-        state.all[index].enabled = !state.all[index].enabled;
+        if (active_widget !== undefined) {
+            let index = state.active.indexOf(active_widget);
+            state.active.splice(index, 1);
+        } else {
+            // add widget when not active
+            let newWidget = {
+                column: 'A',
+                widget_id: widget.id,
+                column_index: state.active.filter(widget => widget.column === 'A').length + 1
+            };
+
+            // add all data to widget
+            newWidget = Object.assign(newWidget, widget);
+
+            // push widget to active
+            state.active.push(newWidget);
+        }
+
+
     },
 
     [types.SET_WIDGETS] (state, { user_widgets, widgets }) {
-        state.all = widgets;
-        state.active = user_widgets;
+        state.all = widgets.map(widget => {
+            // check if widget is active
+            widget.enabled = (user_widgets.filter(user_widget => user_widget.widget_id === widget.id).length > 0);
+
+            return widget;
+        });
+
+        state.active = user_widgets.map(user_widget => {
+            // find widget by id
+           let widget = widgets.find(widget => widget.id === user_widget.widget_id);
+
+           // merge widget data in to user widget
+           return Object.assign(user_widget, widget);
+        });
     },
 
     [types.LOADING_DONE] (state) {
         state.loading = false;
     },
 
-    [types.SET_LAYOUT_CHANGED] (state) {
+    [types.SET_LAYOUT_CHANGED] (state, changed = true) {
         // toggle layout changed
-        state.layoutChanged = !state.layoutChanged;
+        state.layoutChanged = changed;
     },
 
     [types.SET_LAYOUT] (state, { widgets, column }) {
@@ -73,17 +105,11 @@ const mutations = {
             return;
         }
 
-        // Set state
-        widgets.map(widget => widget.column = column);
-
-        // Reset columns
-        widgets.forEach((widget, index) => {
-            let module_index = state.all.indexOf(widget);
-            state.all.splice(module_index, 1);
+        // Set column and column_index
+        widgets.map((widget, index) => {
+            widget.column = column;
+            widget.column_index = index + 1;
         });
-
-        // Push columns back
-        state.all = state.all.concat(widgets);
     }
 };
 

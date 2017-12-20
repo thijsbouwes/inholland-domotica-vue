@@ -6,41 +6,43 @@
             </div>
 
             <draggable v-model="column_a" :options="{group:'people'}" @change="setLayoutChanged" class="drag col s12 m6 l6 xl3">
-                <template v-for="module in column_a">
-                    <component :is="module.component_name"
-                               :key="module.id"
-                               v-if="module.enabled"
+                <template v-for="widget in column_a">
+                    <component :is="widget.component_name"
+                               :key="widget.widget_id"
                     ></component>
                 </template>
             </draggable>
 
             <draggable v-model="column_b" :options="{group:'people'}" @change="setLayoutChanged" class="drag col s12 m6 l6 xl3">
-                <template v-for="module in column_b">
-                    <component :is="module.component_name"
-                               v-if="module.enabled"
+                <template v-for="widget in column_b">
+                    <component :is="widget.component_name"
+                               v-if="widget.widget_id"
                     ></component>
                 </template>
             </draggable>
 
             <draggable v-model="column_c" :options="{group:'people'}" @change="setLayoutChanged" class="drag col s12 m6 l6 xl3">
-                <template v-for="module in column_c">
-                    <component :is="module.component_name"
-                               :key="module.id"
-                               v-if="module.enabled"
+                <template v-for="widget in column_c">
+                    <component :is="widget.component_name"
+                               :key="widget.widget_id"
                     ></component>
                 </template>
             </draggable>
 
             <draggable v-model="column_d" :options="{group:'people'}" @change="setLayoutChanged" class="drag col s12 m6 l6 xl3">
-                <template v-for="module in column_d">
-                    <component :is="module.component_name"
-                               v-if="module.enabled"
+                <template v-for="widget in column_d">
+                    <component :is="widget.component_name"
+                               :key="widget.widget_id"
                     ></component>
                 </template>
             </draggable>
         </div>
 
-        <div class="fixed-action-btn-left"><a href="#!" class="waves-effect waves-light btn" v-show="layoutChanged" @click="saveLayout()"><i class="material-icons left">save</i>layout opslaan</a></div>
+        <div class="fixed-action-btn-left">
+            <a href="#!" class="waves-effect waves-light btn" v-show="layoutChanged" @click="saveLayout()">
+                <i class="material-icons left">save</i>layout opslaan
+            </a>
+        </div>
 
         <!--action button-->
         <action-button></action-button>
@@ -71,52 +73,39 @@
         computed: {
             column_a: {
                 get() {
-                    return this.column_a;
+                    return this.$store.getters['widgets/column_a'];
                 },
                 set(widgets) {
-                    this.$store.commit('setLayout', { widgets, column: "A" });
+                    this.$store.commit('widgets/SET_LAYOUT', { widgets, column: "A" });
                 }
             },
+
             column_b: {
                 get() {
-                    return this.column_b;
+                    return this.$store.getters['widgets/column_b'];
                 },
                 set(widgets) {
-                    this.$store.commit('setLayout', { widgets, column: "B" });
+                    this.$store.commit('widgets/SET_LAYOUT', { widgets, column: "B" });
                 }
             },
+
             column_c: {
                 get() {
-                    return this.column_c;
+                    return this.$store.getters['widgets/column_c'];
                 },
                 set(widgets) {
-                    this.$store.commit('setLayout', { widgets, column: "C" });
+                    this.$store.commit('widgets/SET_LAYOUT', { widgets, column: "C" });
                 }
             },
+
             column_d: {
                 get() {
-                    return this.column_d;
+                    return this.$store.getters['widgets/column_d'];
                 },
                 set(widgets) {
-                    this.$store.commit('setLayout', { widgets, column: "D" });
+                    this.$store.commit('widgets/SET_LAYOUT', { widgets, column: "D" });
                 }
             },
-
-            widgets: {
-                get() {
-                    return this.$store.getters['widgets/active_widgets'];
-                },
-                set(value) {
-                    this.$store.commit('widgets/ENABLE_WIDGET', value);
-                }
-            },
-
-            ...mapGetters('widgets', [
-                'column_a',
-                'column_b',
-                'column_c',
-                'column_d'
-            ]),
 
             ...mapState('widgets', [
                 'loading',
@@ -134,8 +123,7 @@
             }),
 
             ...mapMutations({
-                setLayoutChanged: 'widgets/SET_LAYOUT_CHANGED',
-                setLayout: 'widgets/SET_LAYOUT'
+                setLayoutChanged: 'widgets/SET_LAYOUT_CHANGED'
             })
         }
     }

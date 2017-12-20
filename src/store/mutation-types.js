@@ -30,8 +30,9 @@ export const SET_PROFILE = 'SET_PROFILE';
 export const SET_NAME = 'SET_NAME';
 export const SET_BACKGROUND = 'SET_BACKGROUND';
 
+// widgets
 export const SET_WIDGETS = 'SET_WIDGETS';
-export const ENABLE_WIDGET = 'ENABLE_WIDGET';
+export const TOGGLE_WIDGET = 'TOGGLE_WIDGET';
 export const SET_LAYOUT_CHANGED = 'SET_LAYOUT_CHANGED';
 export const SET_LAYOUT = 'SET_LAYOUT';
 

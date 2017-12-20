@@ -43,10 +43,10 @@
                     <li>
                         <a class="collapsible-header"><i class="material-icons">widgets</i>Widgets</a>
                         <div class="collapsible-body">
-                            <div class="switch icon-before" v-for="(module, index) in widgets">
-                                <span>{{ module.name }}</span>
+                            <div class="switch icon-before" v-for="(widget, index) in widgets">
+                                <span>{{ widget.name }}</span>
                                 <label class="right">
-                                    <input type="checkbox" :checked="module.enabled" @change="updateModule(module)">
+                                    <input type="checkbox" :checked="widget.enabled" @change="updateWidget(widget)">
                                     <span class="lever"></span>
                                 </label>
                             </div>
@@ -148,7 +148,7 @@ export default {
         ...mapGetters({
             user: 'profile/user',
             background: 'profile/background',
-            widgets: 'widgets/available_widgets',
+            widgets: 'widgets/widgets',
             bookmarks: 'bookmarks/bookmarks',
             backgrounds: 'backgrounds/backgrounds'
         })
@@ -201,7 +201,7 @@ export default {
         },
 
         ...mapMutations({
-            updateModule: 'profile/ENABLE_MODULE',
+            updateWidget: 'widgets/TOGGLE_WIDGET',
         }),
 
         ...mapActions({
