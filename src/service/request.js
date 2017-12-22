@@ -1,5 +1,6 @@
 import axios from "axios/index";
-import {ENDPOINTS, HTTP_CODES} from "../config/api";
+import { ENDPOINTS, HTTP_CODES } from "../config/api";
+import { router } from '../router';
 import Auth from "./auth-service";
 
 // Add a request interceptor, to add token

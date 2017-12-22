@@ -15,10 +15,10 @@ const getters = {
     widgets: state => state.all,
     user_widgets: state => state.active.sort((a, b) => a.column_index - b.column_index),
 
-    column_a: state => state.active.filter(widget => widget.column === 'A'),
-    column_b: state => state.active.filter(widget => widget.column === 'B'),
-    column_c: state => state.active.filter(widget => widget.column === 'C'),
-    column_d: state => state.active.filter(widget => widget.column === 'D'),
+    column_a: state => state.active.filter(widget => widget.column === 'A').sort((a, b) => a.column_index - b.column_index),
+    column_b: state => state.active.filter(widget => widget.column === 'B').sort((a, b) => a.column_index - b.column_index),
+    column_c: state => state.active.filter(widget => widget.column === 'C').sort((a, b) => a.column_index - b.column_index),
+    column_d: state => state.active.filter(widget => widget.column === 'D').sort((a, b) => a.column_index - b.column_index),
 };
 
 // actions
@@ -54,6 +54,7 @@ const mutations = {
         let active_widget = state.active.find(user_widget => user_widget.widget_id === widget.id);
 
         if (active_widget !== undefined) {
+            widget.enabled = false;
             let index = state.active.indexOf(active_widget);
             state.active.splice(index, 1);
         } else {
@@ -67,11 +68,11 @@ const mutations = {
             // add all data to widget
             newWidget = Object.assign(newWidget, widget);
 
+            widget.enabled = true;
+
             // push widget to active
             state.active.push(newWidget);
         }
-
-
     },
 
     [types.SET_WIDGETS] (state, { user_widgets, widgets }) {
