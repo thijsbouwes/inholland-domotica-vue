@@ -7,6 +7,7 @@
             <ul>
                 <li><a @click="getRemoteHouse" class="btn-floating green modal-trigger" href="#remote"><i class="material-icons">settings_remote</i></a></li>
                 <li><router-link class="btn-floating red" to="/news" exact><i class="material-icons">import_contacts</i></router-link></li>
+                <li><router-link class="btn-floating blue" v-if="is_admin" to="/users" exact><i class="material-icons">supervisor_account</i>Users</router-link></li>
             </ul>
         </div>
 
@@ -16,6 +17,7 @@
 
 <script>
     import { mapActions } from 'vuex';
+    import { mapGetters } from 'vuex';
     import Modal from '../components/Modal';
     import RemoteHouse from '../components/RemoteHouse';
 
@@ -26,6 +28,12 @@
             let elem = document.querySelector('.fixed-action-btn');
             let options = { direction: 'top', hoverEnabled: true, toolbarEnabled: false };
             let instance = new this.$M.FloatingActionButton(elem, options);
+        },
+
+        computed: {
+            ...mapGetters({
+                is_admin: 'profile/is_admin'
+            })
         },
 
         methods: {

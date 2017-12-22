@@ -8,6 +8,7 @@ const state = {
         user: {
             name: '',
             email: '',
+            is_admin: false
         },
         background: {
             url: '',
@@ -20,6 +21,7 @@ const state = {
 // getters
 const getters = {
     user: state => state.all.user,
+    is_admin: state => state.all.user.is_admin,
     background: state => state.all.background
 };
 

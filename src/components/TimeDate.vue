@@ -16,30 +16,33 @@
 </template>
 
 <script>
-    import {ENDPOINTS} from "../config/api";
-    import moment from 'moment';
+    import { ENDPOINTS } from '../config/api';
+    import { mapState } from 'vuex';
 
     export default {
         data() {
             return {
                 date: '',
-                time: '',
-                dateFormat: 'DD-MM-YYYY',
-                timeFormat: 'HH:mm:ss',
-                timeZone: 'nl',
+                time: ''
             }
+        },
+
+        computed: {
+            ...mapState([
+                'time_format',
+                'date_format'
+            ]),
         },
 
         created() {
             this.refreshTime();
-            moment.locale(this.timeZone);
             setInterval(this.refreshTime, 1000);
         },
 
         methods: {
             refreshTime() {
-                this.date = moment().format(this.dateFormat);
-                this.time = moment().format(this.timeFormat);
+                this.date = this.$moment().format(this.date_format);
+                this.time = this.$moment().format(this.time_format);
             },
         }
     }

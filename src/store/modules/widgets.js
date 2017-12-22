@@ -32,12 +32,6 @@ const actions = {
             });
     },
 
-    updateWidgets({ getters }) {
-        let data = { name: getters.user.name, background_id: getters.background.id };
-
-        return request.put(ENDPOINTS.PROFILE, data)
-    },
-
     saveLayout({ getters, commit }) {
         request.put(ENDPOINTS.WIDGETS, getters.user_widgets)
             .then(response => {

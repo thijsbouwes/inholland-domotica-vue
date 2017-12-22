@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import { store } from '../store';
 import Router from 'vue-router';
 import Dashboard from '../pages/Dashboard';
 import News from '../pages/News';
@@ -30,7 +31,7 @@ export const router = new Router({
             path: '/users',
             name: 'Users',
             component: Users,
-            meta: { requiresAuth: true }
+            meta: { requiresAuth: true, requiresAdmin: true }
         },
         {
             path: '/login',
@@ -60,6 +61,14 @@ router.beforeEach((to, from, next) => {
 router.beforeEach((to, from, next) => {
     if (to.meta.requiresAuth && Auth.isLoggedIn() === false) {
         next('/login');
+    }
+    next();
+});
+
+// Check admin
+router.beforeEach((to, from, next) => {
+    if (to.meta.requiresAdmin && store.getters['profile/is_admin'] === false) {
+        next('/');
     }
     next();
 });

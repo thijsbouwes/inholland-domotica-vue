@@ -17,7 +17,8 @@ export const ENDPOINTS = {
     WEATHER: 'weather',
     NEWS: 'news',
     BOOKMARKS: 'bookmark',
-    WIDGETS: 'user/widgets'
+    WIDGETS: 'user/widgets',
+    USERS: 'admin/userlist'
 };
 
 export const HTTP_CODES = {
