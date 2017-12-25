@@ -24,7 +24,6 @@ const getters = {
 // actions
 const actions = {
     loadWidgets({ commit }) {
-
         return request.get(ENDPOINTS.WIDGETS)
             .then(response => {
                 commit(types.SET_WIDGETS, response.data);
@@ -33,7 +32,7 @@ const actions = {
     },
 
     saveLayout({ getters, commit }) {
-        request.put(ENDPOINTS.WIDGETS, getters.user_widgets)
+        return request.put(ENDPOINTS.WIDGETS, getters.user_widgets)
             .then(response => {
                 commit(types.LOADING_DONE);
                 commit(types.SET_LAYOUT_CHANGED, false);
@@ -48,30 +47,33 @@ const mutations = {
         let active_widget = state.active.find(user_widget => user_widget.widget_id === widget.id);
 
         if (active_widget !== undefined) {
+            // disable widget
             widget.enabled = false;
+
+            // delete widget from
             let index = state.active.indexOf(active_widget);
             state.active.splice(index, 1);
         } else {
             // add widget when not active
-            let newWidget = {
+            let new_widget = {
                 column: 'A',
                 widget_id: widget.id,
                 column_index: state.active.filter(widget => widget.column === 'A').length + 1
             };
 
             // add all data to widget
-            newWidget = Object.assign(newWidget, widget);
+            new_widget = Object.assign(new_widget, widget);
 
             widget.enabled = true;
 
             // push widget to active
-            state.active.push(newWidget);
+            state.active.push(new_widget);
         }
     },
 
     [types.SET_WIDGETS] (state, { user_widgets, widgets }) {
         state.all = widgets.map(widget => {
-            // check if widget is active
+            // set enabled property, based on if the widget is active
             widget.enabled = (user_widgets.filter(user_widget => user_widget.widget_id === widget.id).length > 0);
 
             return widget;

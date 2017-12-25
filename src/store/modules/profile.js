@@ -54,8 +54,11 @@ const actions = {
             })
     },
 
-    updateProfile({ getters }) {
+    updateProfile({ getters, dispatch }) {
         let data = { name: getters.user.name, background_id: getters.background.id };
+
+        // save widget layout
+        dispatch('widgets/saveLayout', null, { root: true });
 
         return request.put(ENDPOINTS.PROFILE, data)
     },
