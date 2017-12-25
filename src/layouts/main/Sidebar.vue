@@ -6,7 +6,7 @@
                     <img v-if="userBackground.url" :src="userBackground.url" :title="userBackground.name" width="100%">
                 </div>
 
-                <a href="#!user"><img class="circle" src="/static/users/nobody.jpg"></a>
+                <a href="#!user"><img class="circle" v-if="user_image" :src="user_image"></a>
                 <a href="#!name"><span class="white-text name" v-text="userName"></span></a>
                 <a href="#!email"><span class="white-text email" v-text="userEmail"></span></a>
             </div>
@@ -36,6 +36,16 @@
                             <div class="input-field">
                                 <input id="email" type="email" class="validate" :value="userEmail" required disabled>
                                 <label class="active" for="email">Email</label>
+                            </div>
+
+                            <div class="file-field input-field">
+                                <div class="btn">
+                                    <span>Image</span>
+                                    <input type="file" accept="image/*" @change="uploadImage">
+                                </div>
+                                <div class="file-path-wrapper">
+                                    <input class="file-path validate" type="text">
+                                </div>
                             </div>
                         </div>
                     </li>
@@ -123,6 +133,15 @@ export default {
             }
         },
 
+        user_image: {
+            get() {
+                return this.$store.state.profile.all.user_image;
+            },
+            set(value) {
+                this.$store.dispatch('profile/saveImage', value)
+            }
+        },
+
         userName: {
             get() {
                 return this.user.name;
@@ -182,6 +201,15 @@ export default {
     },
 
     methods: {
+        uploadImage(event) {
+            let files = event.target.files || event.dataTransfer.files;
+            if (!files.length) {
+                return;
+            }
+
+            this.user_image = files[0];
+        },
+
         doSubmit() {
             this.$store.dispatch('profile/updateProfile')
                 .then(() => {

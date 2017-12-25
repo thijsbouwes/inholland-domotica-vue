@@ -29,6 +29,7 @@ export const SET_REMOTE_HOUSE = 'SET_REMOTE_HOUSE';
 export const SET_PROFILE = 'SET_PROFILE';
 export const SET_NAME = 'SET_NAME';
 export const SET_BACKGROUND = 'SET_BACKGROUND';
+export const SET_IMAGE = 'SET_IMAGE';
 
 // widgets
 export const SET_WIDGETS = 'SET_WIDGETS';

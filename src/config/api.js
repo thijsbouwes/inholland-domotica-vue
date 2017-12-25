@@ -3,6 +3,7 @@ export const ENDPOINTS = {
     CHECK_AUTH: '',
     REGISTER: 'user/register',
     PROFILE: 'user/profile',
+    PROFILE_IMAGE: 'user/profile/image',
     PROFILE_SETTINGS: 'user/profile/all',
     BACKGROUND_ALL: 'background',
     LOGIN: 'auth/authorize',
