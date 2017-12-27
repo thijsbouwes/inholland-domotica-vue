@@ -47,7 +47,6 @@ const actions = {
 
         request.get(ENDPOINTS.PROFILE_IMAGE, { responseType: 'arraybuffer' })
             .then(response => {
-                console.log(response.headers['content-type']);
                 let buffer = new Buffer(response.data, 'binary').toString('base64');
 
                 commit(types.SET_IMAGE, 'data:' + response.headers['content-type'] + ';base64,' + buffer);
@@ -76,13 +75,7 @@ const actions = {
         let formData = new FormData();
         formData.append('file', file);
 
-        request.post(ENDPOINTS.PROFILE_IMAGE, formData)
-            .then(response => {
-                M.toast({html: 'Fuck yhea'});
-            })
-            .catch(error => {
-                alert("kak");
-            });
+        return request.post(ENDPOINTS.PROFILE_IMAGE, formData);
     }
 };
 
