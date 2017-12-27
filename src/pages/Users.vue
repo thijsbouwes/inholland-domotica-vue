@@ -5,7 +5,7 @@
                 <div class="card-content">
                     <span class="card-title">Users</span>
 
-                    <table class="striped">
+                    <table class="striped responsive-table">
                         <thead>
                             <tr>
                                 <th>Name</th>
