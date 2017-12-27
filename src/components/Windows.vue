@@ -9,7 +9,7 @@
 					<span>{{ window.location }} {{ window.floor }}</span>
 				</span>
 				<label class="right">
-					<input type="checkbox" :checked="window.status" @click="updateStatus(window)">
+					<input type="checkbox" :checked="window.status" @click="updateStatusWindow(window)">
 					<span class="lever"></span>
 				</label>
 			</div>
