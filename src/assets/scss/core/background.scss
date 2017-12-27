@@ -34,7 +34,7 @@
     @media only screen and (max-height: 950px) {
         &.dashboard {
             overflow: initial;
-            background-image: none;
+            background-image: none !important;
         }
     }
 }

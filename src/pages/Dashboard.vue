@@ -6,7 +6,7 @@
                     <div class="indeterminate"></div>
                 </div>
 
-                <draggable v-model="column_a" :options="{group:'people'}" @change="setLayoutChanged" class="drag col s12 m6 l6 xl3">
+                <draggable v-model="column_a" :options="{ group:'people', disabled: draggableDisabled() }" @change="setLayoutChanged" class="drag col s12 m6 l6 xl3">
                     <template v-for="widget in column_a">
                         <component :is="widget.component_name"
                                    :key="widget.widget_id"
@@ -14,7 +14,7 @@
                     </template>
                 </draggable>
 
-                <draggable v-model="column_b" :options="{group:'people'}" @change="setLayoutChanged" class="drag col s12 m6 l6 xl3">
+                <draggable v-model="column_b" :options="{ group:'people', disabled: draggableDisabled() }" @change="setLayoutChanged" class="drag col s12 m6 l6 xl3">
                     <template v-for="widget in column_b">
                         <component :is="widget.component_name"
                                    v-if="widget.widget_id"
@@ -22,7 +22,7 @@
                     </template>
                 </draggable>
 
-                <draggable v-model="column_c" :options="{group:'people'}" @change="setLayoutChanged" class="drag col s12 m6 l6 xl3">
+                <draggable v-model="column_c" :options="{ group:'people', disabled: draggableDisabled() }" @change="setLayoutChanged" class="drag col s12 m6 l6 xl3">
                     <template v-for="widget in column_c">
                         <component :is="widget.component_name"
                                    :key="widget.widget_id"
@@ -30,7 +30,7 @@
                     </template>
                 </draggable>
 
-                <draggable v-model="column_d" :options="{group:'people'}" @change="setLayoutChanged" class="drag col s12 m6 l6 xl3">
+                <draggable v-model="column_d" :options="{ group:'people', disabled: draggableDisabled()}" @change="setLayoutChanged" class="drag col s12 m6 l6 xl3">
                     <template v-for="widget in column_d">
                         <component :is="widget.component_name"
                                    :key="widget.widget_id"
@@ -132,6 +132,10 @@
         },
 
         methods: {
+            draggableDisabled() {
+                return window.innerWidth < 760;
+            },
+
             ...mapActions({
                 saveLayout: 'widgets/saveLayout'
             }),
