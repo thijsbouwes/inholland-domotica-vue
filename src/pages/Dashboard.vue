@@ -1,47 +1,49 @@
 <template>
 	<layout>
-        <div class="row">
-            <div class="progress" v-show="loading">
-                <div class="indeterminate"></div>
+        <div class="banner full-height dashboard" :style="userBackground">
+            <div class="row">
+                <div class="progress" v-show="loading">
+                    <div class="indeterminate"></div>
+                </div>
+
+                <draggable v-model="column_a" :options="{group:'people'}" @change="setLayoutChanged" class="drag col s12 m6 l6 xl3">
+                    <template v-for="widget in column_a">
+                        <component :is="widget.component_name"
+                                   :key="widget.widget_id"
+                        ></component>
+                    </template>
+                </draggable>
+
+                <draggable v-model="column_b" :options="{group:'people'}" @change="setLayoutChanged" class="drag col s12 m6 l6 xl3">
+                    <template v-for="widget in column_b">
+                        <component :is="widget.component_name"
+                                   v-if="widget.widget_id"
+                        ></component>
+                    </template>
+                </draggable>
+
+                <draggable v-model="column_c" :options="{group:'people'}" @change="setLayoutChanged" class="drag col s12 m6 l6 xl3">
+                    <template v-for="widget in column_c">
+                        <component :is="widget.component_name"
+                                   :key="widget.widget_id"
+                        ></component>
+                    </template>
+                </draggable>
+
+                <draggable v-model="column_d" :options="{group:'people'}" @change="setLayoutChanged" class="drag col s12 m6 l6 xl3">
+                    <template v-for="widget in column_d">
+                        <component :is="widget.component_name"
+                                   :key="widget.widget_id"
+                        ></component>
+                    </template>
+                </draggable>
             </div>
 
-            <draggable v-model="column_a" :options="{group:'people'}" @change="setLayoutChanged" class="drag col s12 m6 l6 xl3">
-                <template v-for="widget in column_a">
-                    <component :is="widget.component_name"
-                               :key="widget.widget_id"
-                    ></component>
-                </template>
-            </draggable>
-
-            <draggable v-model="column_b" :options="{group:'people'}" @change="setLayoutChanged" class="drag col s12 m6 l6 xl3">
-                <template v-for="widget in column_b">
-                    <component :is="widget.component_name"
-                               v-if="widget.widget_id"
-                    ></component>
-                </template>
-            </draggable>
-
-            <draggable v-model="column_c" :options="{group:'people'}" @change="setLayoutChanged" class="drag col s12 m6 l6 xl3">
-                <template v-for="widget in column_c">
-                    <component :is="widget.component_name"
-                               :key="widget.widget_id"
-                    ></component>
-                </template>
-            </draggable>
-
-            <draggable v-model="column_d" :options="{group:'people'}" @change="setLayoutChanged" class="drag col s12 m6 l6 xl3">
-                <template v-for="widget in column_d">
-                    <component :is="widget.component_name"
-                               :key="widget.widget_id"
-                    ></component>
-                </template>
-            </draggable>
-        </div>
-
-        <div class="fixed-action-btn-left">
-            <a href="#!" class="waves-effect waves-light btn" v-show="layoutChanged" @click="saveLayout()">
-                <i class="material-icons left">save</i>layout opslaan
-            </a>
+            <div class="fixed-action-btn-left">
+                <a href="#!" class="waves-effect waves-light btn" v-show="layoutChanged" @click="saveLayout()">
+                    <i class="material-icons left">save</i>layout opslaan
+                </a>
+            </div>
         </div>
 
         <!--action button-->
@@ -107,10 +109,22 @@
                 }
             },
 
+            userBackground() {
+                if (this.background.url !== '') {
+                    return `background-image: url(${ this.background.url });`;
+                }
+
+                return '';
+            },
+
+            ...mapGetters({
+                background: 'profile/background'
+            }),
+
             ...mapState('widgets', [
                 'loading',
                 'layoutChanged'
-            ])
+            ]),
         },
 
         created() {

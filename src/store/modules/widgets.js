@@ -37,38 +37,46 @@ const actions = {
                 commit(types.LOADING_DONE);
                 commit(types.SET_LAYOUT_CHANGED, false);
             });
-    }
-};
+    },
 
-// mutations
-const mutations = {
-    [types.TOGGLE_WIDGET] (state, widget) {
-        // delete widget when all-ready active
-        let active_widget = state.active.find(user_widget => user_widget.widget_id === widget.id);
+    toggleWidget({ getters, commit }, widget) {
+        // check if widget is all-ready active
+        let user_widget = state.active.find(user_widget => user_widget.widget_id === widget.id);
 
-        if (active_widget !== undefined) {
+        if (user_widget !== undefined) {
             // disable widget
-            widget.enabled = false;
-
-            // delete widget from
-            let index = state.active.indexOf(active_widget);
-            state.active.splice(index, 1);
+            commit(types.DISABLE_WIDGET, { user_widget, widget });
         } else {
             // add widget when not active
             let new_widget = {
                 column: 'A',
                 widget_id: widget.id,
-                column_index: state.active.filter(widget => widget.column === 'A').length + 1
+                column_index: getters.column_a.length + 1
             };
 
             // add all data to widget
             new_widget = Object.assign(new_widget, widget);
 
-            widget.enabled = true;
-
-            // push widget to active
-            state.active.push(new_widget);
+            commit(types.ENABLE_WIDGET, { new_widget, widget });
         }
+    }
+};
+
+// mutations
+const mutations = {
+    [types.ENABLE_WIDGET] (state, { new_widget, widget }) {
+        widget.enabled = true;
+
+        // push widget to active
+        state.active.push(new_widget);
+    },
+
+    [types.DISABLE_WIDGET] (state, { user_widget, widget }) {
+        widget.enabled = false;
+
+        // delete widget from
+        let index = state.active.indexOf(user_widget);
+        state.active.splice(index, 1);
     },
 
     [types.SET_WIDGETS] (state, { user_widgets, widgets }) {

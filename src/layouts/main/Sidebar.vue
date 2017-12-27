@@ -228,13 +228,10 @@ export default {
             this.$router.push('/login');
         },
 
-        ...mapMutations({
-            updateWidget: 'widgets/TOGGLE_WIDGET',
-        }),
-
         ...mapActions({
             deleteBookmark: 'bookmarks/deleteBookmark',
-            createNewBookmark: 'bookmarks/createNewBookmark'
+            createNewBookmark: 'bookmarks/createNewBookmark',
+            updateWidget: 'widgets/toggleWidget'
         })
     },
 }
