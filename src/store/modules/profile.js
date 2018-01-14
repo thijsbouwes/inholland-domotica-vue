@@ -17,6 +17,7 @@ const state = {
             name: ''
         },
     },
+    changed: false,
     loading: true
 };
 
@@ -53,11 +54,14 @@ const actions = {
             })
     },
 
-    updateProfile({ getters, dispatch }) {
+    updateProfile({ getters, dispatch, commit }) {
         let data = { name: getters.user.name, background_id: getters.background.id };
+console.log(data);
 
         // save widget layout
         dispatch('widgets/saveLayout', null, { root: true });
+
+        commit(types.DATA_SAVED);
 
         return request.put(ENDPOINTS.PROFILE, data)
     },
@@ -100,7 +104,16 @@ const mutations = {
 
     [types.LOADING_DONE] (state) {
         state.loading = false;
+    },
+
+    [types.DATA_SAVED] (state) {
+        state.changed = false;
+    },
+
+    [types.DATA_CHANGED] (state) {
+        state.changed = true;
     }
+
 };
 
 export default {

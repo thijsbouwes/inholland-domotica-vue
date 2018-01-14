@@ -1,6 +1,6 @@
 <template>
 	<layout>
-        <div class="banner full-height dashboard" :style="userBackground">
+        <div class="banner full-height dashboard" :style="user_background">
             <div class="row">
                 <div class="progress" v-show="loading">
                     <div class="indeterminate"></div>
@@ -109,7 +109,7 @@
                 }
             },
 
-            userBackground() {
+            user_background() {
                 if (this.background.url !== '') {
                     return `background-image: url(${ this.background.url });`;
                 }

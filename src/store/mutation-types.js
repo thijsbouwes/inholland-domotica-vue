@@ -30,6 +30,8 @@ export const SET_PROFILE = 'SET_PROFILE';
 export const SET_NAME = 'SET_NAME';
 export const SET_BACKGROUND = 'SET_BACKGROUND';
 export const SET_IMAGE = 'SET_IMAGE';
+export const DATA_CHANGED = 'DATA_CHANGED';
+export const DATA_SAVED = 'DATA_SAVED';
 
 // widgets
 export const SET_WIDGETS = 'SET_WIDGETS';
