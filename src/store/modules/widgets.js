@@ -7,6 +7,7 @@ const state = {
     all: [],
     active: [],
     loading: true,
+    draggable_disabled: true,
     layoutChanged: false
 };
 
@@ -35,6 +36,7 @@ const actions = {
         return request.put(ENDPOINTS.WIDGETS, getters.user_widgets)
             .then(response => {
                 commit(types.LOADING_DONE);
+                commit(types.TOGGLE_EDIT);
                 commit(types.SET_LAYOUT_CHANGED, false);
             });
     },
@@ -115,6 +117,10 @@ const mutations = {
             widget.column = column;
             widget.column_index = index + 1;
         });
+    },
+
+    [types.TOGGLE_EDIT] (state) {
+        state.draggable_disabled = !state.draggable_disabled;
     }
 };
 
