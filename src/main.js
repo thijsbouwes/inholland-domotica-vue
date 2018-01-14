@@ -2,6 +2,7 @@ import Vue from 'vue';
 import { store } from './store';
 import { router } from './router';
 import request from './service/request';
+import socket from './service/socket';
 import moment from 'moment';
 import M from 'materialize-css';
 import App from './App';
@@ -23,6 +24,7 @@ Vue.filter('formatDate', value => {
     return moment(value).format(store.state.time_date_format);
 });
 
+Vue.prototype.$socket = socket;
 Vue.prototype.$http = request;
 Vue.prototype.$M = M;
 Vue.prototype.$moment = moment;

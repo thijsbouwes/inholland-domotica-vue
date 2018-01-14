@@ -4,154 +4,266 @@
             <div class="card-content">
                 <span class="card-title">Tic Tac Toe</span>
 
-                <div id="local" class="game">
-                    <div :class="game_status_color" v-text="status_message"></div>
-                    <div :class="game_status_color">Total moves: {{ moves }}</div>
-                    <div>Wins X: {{ wins.X }}</div>
-                    <div>Wins O: {{ wins.O }}</div>
+                <div id="game" class="game">
+                    <div v-if="game_is_ready">
+                        <div>Playing against {{ opponent.name }}, ({{ player_symbol(opponent.id) }})</div>
+                        <div>Game created {{ active_game.created_at | formatDate }}</div>
+                        <div v-if="active_player_turn">{{ active_player.name }}'s turn,</div>
+                        <div v-else>Your turn!</div>
+                        <div>Total moves: {{ moves }}</div>
 
-                    <div class="grid-tic">
-                        <div class="cell"
-                             v-for="(cell, index) in cells"
-                             :key="index"
-                             :class="{ 'cell-set': cell }"
-                             @click="makeMove(index)"
-                        ><span>{{ cell }}</span></div>
+                        <div class="grid-tic">
+                            <div class="cell"
+                                 v-for="(cell, index) in cells"
+                                 :key="index"
+                                 :class="{ 'cell-set': cell }"
+                                 @click="makeMove(index)"
+                            ><span>{{ cell }}</span></div>
+                        </div>
                     </div>
 
-                </div>
-                <div id="online">
+                    <div v-else-if="waiting_for_opponent">
+                        <p>Waiting for opponent</p>
+                        <div class="progress">
+                            <div class="indeterminate"></div>
+                        </div>
+                    </div>
 
+                    <div v-else-if="waiting_for_invited_opponent">
+                        <p>Waiting for invited opponent</p>
+                        <div class="progress">
+                            <div class="indeterminate"></div>
+                        </div>
+                    </div>
+
+                    <div v-else>
+                        <form method="post" class="form_user" @submit.prevent="createLobby()" autocomplete="off">
+                            <p>
+                                <label>
+                                    <input type="checkbox" class="filled-in" checked="checked" v-model="public_lobby">
+                                    <span>Create public lobby</span>
+                                </label>
+                            </p>
+                            <div class="input-field" v-if="! public_lobby">
+                                <input id="email" type="email" class="validate" required v-model="player2_email">
+                                <label class="active" for="email">Opponent email</label>
+                            </div>
+                            <div class="center-align">
+                                <button class="btn waves-effect waves-light" type="submit" name="action">Create
+                                    <i class="material-icons right">add</i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="join">
+                    <table class="responsive-table highlight centered">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Created</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th colspan="3">Public lobby</th>
+                            </tr>
+                            <tr v-for="lobby in open_lobby_list" @click="joinGame(lobby)">
+                                <td v-text="lobby.name"></td>
+                                <td>{{ lobby.created_at | formatDate }}</td>
+                            </tr>
+
+                            <tr>
+                                <th colspan="3">Private invites</th>
+                            </tr>
+                            <tr v-for="lobby in private_lobby_list" @click="joinGame(lobby)">
+                                <td v-text="lobby.user1.name"></td>
+                                <td>{{ lobby.created_at | formatDate }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
+            <div class="progress" v-show="loading">
+                <div class="indeterminate"></div>
+            </div>
+
             <ul class="tabs tabs-fixed-width">
-                <li class="tab"><a class="active" href="#local">Local</a></li>
-                <li class="tab"><a href="#online">Online</a></li>
+                <li class="tab"><a class="active" href="#game">Game</a></li>
+                <li class="tab"><a href="#join">Join</a></li>
             </ul>
         </div>
     </div>
 </template>
 
 <script>
-    import ScorePersonal from "./ScorePersonal";
-    import ScoreTop from "./ScoreTop";
-    import {ENDPOINTS} from "../config/api";
+    import { mapGetters } from 'vuex';
+    import ScorePersonal from './ScorePersonal';
+    import ScoreTop from './ScoreTop';
+    import { ENDPOINTS } from '../config/api';
+    import { GAME_STATUS } from '../config/game';
+    import { CHANNELS } from "../config/game";
 
     export default {
         components: { ScorePersonal, ScoreTop },
 
         data() {
             return {
-                matches: 0,
-                wins: {
-                    O: 0,
-                    X: 0
+                loading: true,
+
+                // create game
+                public_lobby: true,
+                player2_email: '',
+
+                // game object
+                game: {
+                    invites: [],
+                    lobby_list: [],
+                    started: []
                 },
-                // can be O or X
-                active_player: 'O',
-
-                // maintains the status of the game: turn or win or draw
-                status: 'turn',
-
-                // status color is used as background color in the status bar
-                // it can hold the name of either of the following CSS classes
-                // statusTurn (default) is yellow for a turn
-                // statusWin is green for a win
-                // statusDraw is purple for a draw
-                game_status_color: 'status turn',
-
-                // no. of moves played by both players in a single game (max = 9)
-                moves: 0,
 
                 // stores the placement of X and O in cells by their cell number
-                cells: ['', '', '', '', '', '', '', '', ''],
-
-                // contains all (8) possible winning conditions
-                win_conditions: [
-                    [0, 1, 2], [3, 4, 5], [6, 7, 8], // rows
-                    [0, 3, 6], [1, 4, 7], [2, 5, 8], // columns
-                    [0, 4, 8], [0, 4, 8]             // diagonals
-                ],
+                cells: ['', '', '', '', '', '', '', '', '']
             }
         },
 
         computed: {
-            // helper property to get the non-active player
-            non_active_player () {
-                if (this.active_player === 'O') {
-                    return 'X'
-                }
-                return 'O'
+            active_game() {
+                return this.game.started[0];
             },
 
-            status_message() {
-                switch(this.status) {
-                    case 'win':
-                        return `${this.active_player} wins`;
-                    case 'draw':
-                        return 'Draw !';
-                    default:
-                        return `${this.active_player}'s turn`
+            game_is_ready() {
+                return this.game.started[0] !== undefined;
+            },
+
+            waiting_for_opponent() {
+                return this.game_is_ready && this.active_game.status === GAME_STATUS.WAITING_RANDOM_PLAYER_JOIN;
+            },
+
+            waiting_for_invited_opponent() {
+                return this.game_is_ready && this.active_game.status === GAME_STATUS.WAITING_INVITED_PLAYER_JOIN;
+            },
+
+            open_lobby_list() {
+                return this.game.lobby_list.filter(lobby => lobby.status === GAME_STATUS.WAITING_RANDOM_PLAYER_JOIN);
+            },
+
+            private_lobby_list() {
+                return this.game.invites.filter(invite => invite.status === GAME_STATUS.WAITING_INVITED_PLAYER_JOIN);
+            },
+
+            started_player() {
+                // check if user1 is logged in user
+                return this.active_game.user1.id === this.user.id;
+            },
+
+            opponent() {
+                if (this.started_player === false) {
+                    return this.active_game.user1;
+                } else {
+                    return this.active_game.user2;
                 }
+            },
+
+            active_player() {
+                let last_move_user = this.active_game.moves.slice().pop().user_id;
+
+                if (this.active_game.user1.id !== last_move_user) {
+                    return this.active_game.user1;
+                } else {
+                    return this.active_game.user2;
+                }
+            },
+
+            active_player_turn() {
+                return this.active_player === this.opponent;
+            },
+
+            moves() {
+                return this.active_game.moves.length;
+            },
+
+            ...mapGetters({
+                user: 'profile/user',
+            })
+        },
+
+        watch: {
+            game: {
+                handler() {
+                    // update view with new moves
+                    this.active_game.moves.map(move => {
+                        // Sets either X or O in the clicked cell of the cells array
+                        this.$set(this.cells, move.position, this.player_symbol(move.user_id));
+                    });
+                },
+                deep: true
             }
         },
 
-
         methods: {
+            createLobby() {
+                let data = {};
+                if (! this.public_lobby) {
+                    data = { player2_email: this.player2_email };
+                }
+
+                this.$http.post(ENDPOINTS.GAME_CREATE, data)
+                    .then(response => {
+                        this.startGame(response.data);
+                        console.log(response.data);
+                    });
+            },
+
+            joinLobby(lobby) {
+                this.$http.put(ENDPOINTS.GAME_JOIN, { id: lobby.id })
+                    .then(response => {
+                        this.startGame(response.data);
+                        console.log(response.data);
+                    });
+            },
+
+            startGame(lobby) {
+                this.game.started.push(lobby);
+            },
+
             makeMove(index) {
-                if (this.cells[index] !== "") {
-                    return;
-                }
-
-                // Sets either X or O in the clicked cell of the cells array
-                this.$set(this.cells, index, this.active_player);
-
-                // Increments the number of moves
-                this.moves++;
-
-                // Stores the game status by calling the changeGameStatus method
-                this.status = this.changeGameStatus();
-
-                // Switch active player
-                this.active_player = this.non_active_player;
+                this.$http.post(ENDPOINTS.GAME_MOVE_CREATE, { game_id: this.active_game.id, position: index })
+                    .then(response => {
+                        // push move to current game
+                        this.active_game.moves.push(response.data);
+                    });
             },
 
-            // compares 3 cell values based on the cells in the condition
-            checkForWin () {
-                this.win_conditions.forEach(condition => {
-                    let cells = this.cells;
+            player_symbol(player_id) {
+                // check if user1 is logged in user
+                if (this.active_game.user1.id === player_id) {
+                    return 'X';
+                } else {
+                    return 'O';
+                }
+            },
+        },
 
-                    console.log(cells[condition[0]]);
-                    console.log(cells[condition[1]]);
-                    console.log(cells[condition[2]]);
+        created() {
+            // listen for new games
+            let PUBLIC_GAMES = this.$socket.subscribe(CHANNELS.PUBLIC_GAMES);
 
-                    if (this.areEqual(cells[condition[0]], cells[condition[1]], cells[condition[2]])) {
-                        return true
-                    }
+            PUBLIC_GAMES.bind('game_created', data => {
+                if (this.game_is_ready === false) {
+                    this.$M.toast({ html: `<span>New public game, created by ${data.user1.name}</span>` + '<button onclick="' + this.joinLobby( data ) + '" class="btn-flat toast-action">Join</button>' });
+                }
+            });
+
+            // fetch game status
+            this.$http(ENDPOINTS.GAME)
+                .then(response => {
+                    this.game = response.data;
+
+                    this.loading = false;
                 });
-            },
-
-            // loops through each value and compares them with an empty sting and for inequality
-            areEqual () {
-                let len = arguments.length;
-
-                for (let i = 1; i < len; i++){
-                    if (arguments[i] === '' || arguments[i] !== arguments[i-1])
-                        return false;
-                }
-                return true;
-            },
-
-            changeGameStatus () {
-                if (this.checkForWin()) {
-                    return 'win';
-                } else if (this.moves === 9) {
-                    return 'draw';
-                }
-
-                return 'turn';
-            }
         },
 
         mounted() {

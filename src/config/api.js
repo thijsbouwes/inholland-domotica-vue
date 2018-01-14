@@ -19,7 +19,11 @@ export const ENDPOINTS = {
     NEWS: 'news',
     BOOKMARKS: 'bookmark',
     WIDGETS: 'user/widgets',
-    USERS: 'admin/userlist'
+    USERS: 'admin/userlist',
+    GAME: 'game',
+    GAME_CREATE: 'game/create',
+    GAME_JOIN: 'game/join',
+    GAME_MOVE_CREATE: 'game/move/create'
 };
 
 export const HTTP_CODES = {

@@ -13,6 +13,7 @@
     "axios": "^0.17.1",
     "materialize-css": "1.0.0-alpha.1",
     "moment": "^2.20.1",
+    "pusher-js": "^4.2.1",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
     "vuedraggable": "^2.15.0",
