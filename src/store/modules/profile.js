@@ -56,8 +56,7 @@ const actions = {
 
     updateProfile({ getters, dispatch, commit }) {
         let data = { name: getters.user.name, background_id: getters.background.id };
-console.log(data);
-
+        
         // save widget layout
         dispatch('widgets/saveLayout', null, { root: true });
 

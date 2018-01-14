@@ -40,4 +40,5 @@ export const DISABLE_WIDGET = 'DISABLE_WIDGET';
 export const SET_LAYOUT_CHANGED = 'SET_LAYOUT_CHANGED';
 export const SET_LAYOUT = 'SET_LAYOUT';
 export const TOGGLE_EDIT = 'TOGGLE_EDIT';
+export const EDIT_DONE = 'EDIT_DONE';
 

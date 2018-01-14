@@ -36,7 +36,7 @@ const actions = {
         return request.put(ENDPOINTS.WIDGETS, getters.user_widgets)
             .then(response => {
                 commit(types.LOADING_DONE);
-                commit(types.TOGGLE_EDIT);
+                commit(types.EDIT_DONE);
                 commit(types.SET_LAYOUT_CHANGED, false);
             });
     },
@@ -121,6 +121,10 @@ const mutations = {
 
     [types.TOGGLE_EDIT] (state) {
         state.draggable_disabled = !state.draggable_disabled;
+    },
+
+    [types.EDIT_DONE] (state) {
+        state.draggable_disabled = true;
     }
 };
 
