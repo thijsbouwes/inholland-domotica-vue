@@ -97,12 +97,6 @@
                         </div>
                     </li>
                 </ul>
-
-                <div class="center-align">
-                    <button class="btn waves-effect waves-light" type="submit" name="action">Save
-                        <i class="material-icons right">save</i>
-                    </button>
-                </div>
             </form>
         </li>
 
@@ -193,7 +187,14 @@ export default {
     mounted() {
         // Create sidenav
         let elem = document.querySelector('.sidenav');
-        this.sidebar = new M.Sidenav(elem);
+        let ref = this;
+
+        let options = {
+            onCloseStart: () => {
+                this.doSubmit();
+            }
+        };
+        this.sidebar = new M.Sidenav(elem, options);
 
         // Create collaps
         let collapsibleElem = document.querySelector('.collapsible');
@@ -218,8 +219,6 @@ export default {
                 .catch(() => {
                     M.toast({html: '<i class="material-icons">error</i> error saving profile', classes: 'red'});
                 });
-
-            this.sidebar.close();
         },
 
         logout() {
