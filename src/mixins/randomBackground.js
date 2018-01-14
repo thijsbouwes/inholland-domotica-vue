@@ -8,7 +8,10 @@ export default {
 
         randomBackground() {
             if (this.backgrounds.length > 0) {
-                let background = this.backgrounds[Math.floor(Math.random() * this.backgrounds.length)];
+                // remove No background
+                let backgrounds = this.backgrounds.filter(background => background.id !== 1);
+
+                let background = backgrounds[Math.floor(Math.random() * backgrounds.length)];
                 return `background-image: url(${ background.url });`;
             }
 
