@@ -85,7 +85,7 @@
                         <a class="collapsible-header"><i class="material-icons">bookmark</i>Bookmarks</a>
                         <div class="collapsible-body">
                             <div class="chip" v-for="(bookmark, index) in bookmarks">
-                                <img :src="`http://s2.googleusercontent.com/s2/favicons?domain_url=${bookmark.name}`" alt="Contact Person">
+                                <img :src="`https://s2.googleusercontent.com/s2/favicons?domain_url=${bookmark.name}`" alt="Contact Person">
                                 {{ bookmark.name }}
                                 <i class="close material-icons" @click="deleteBookmark(bookmark)">close</i>
                             </div>
