@@ -3,7 +3,7 @@
         <div class="card-tabs score">
             <div class="card-content">
                 <span class="card-title">Scoreboard</span>
-
+                <slot></slot>
                 <div id="personal">
                     <score-personal></score-personal>
                 </div>

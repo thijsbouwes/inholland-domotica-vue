@@ -2,7 +2,7 @@
 	<div class="card">
 	    <div class="card-content">
 			<span class="card-title">Windows</span>
-
+			<slot></slot>
 			<div class="switch house-item" v-for="window in windows">
 				<span>
 					<i class="material-icons">border_all</i>

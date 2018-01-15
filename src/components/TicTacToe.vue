@@ -3,7 +3,7 @@
         <div class="card-tabs game">
             <div class="card-content">
                 <span class="card-title">Tic Tac Toe</span>
-
+                <slot></slot>
                 <div id="game" class="game">
                     <div v-if="game_is_ready">
                         <div>Playing against {{ opponent.name }}, ({{ player_symbol(opponent.id) }})</div>

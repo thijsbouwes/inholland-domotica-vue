@@ -3,7 +3,7 @@
 		<div class="card">
 		    <div class="card-content">
 				<span class="card-title">Heater</span>
-
+				<slot></slot>
 				<div class="switch house-item" v-show="!loading">
 					<span>
 						<i class="material-icons prefix">whatshot</i>

@@ -2,7 +2,7 @@
 	<div class="card">
 	    <div class="card-content">
 			<span class="card-title">Lamps</span>
-
+            <slot></slot>
             <div class="switch house-item" v-for="lamp in lamps">
                 <span>
                     <i class="material-icons prefix">lightbulb_outline</i>

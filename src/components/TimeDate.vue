@@ -2,6 +2,7 @@
     <div>
         <div class="card">
             <div class="card-content">
+                <slot></slot>
                 <div class="house-item center">
                     <i class="material-icons small">access_time</i>
                     <h5>{{ time }}</h5>

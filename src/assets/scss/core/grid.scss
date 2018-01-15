@@ -5,6 +5,12 @@
         animation: shake 0.5s infinite;
         -webkit-animation: shake 0.5s infinite;
     }
+
+    .delete {
+        position: absolute;
+        top: 24px;
+        right: 24px;
+    }
 }
 
 @keyframes shake {

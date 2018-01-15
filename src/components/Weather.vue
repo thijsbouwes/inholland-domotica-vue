@@ -2,7 +2,7 @@
     <div class="card">
         <div class="card-content">
             <span class="card-title">Weather</span>
-
+            <slot></slot>
             <div class="forecast" v-if="forecast">
                 <div class="description">
                     <img :src="getIcon(forecast.weather[0].icon)" :alt="forecast.weather[0].description">

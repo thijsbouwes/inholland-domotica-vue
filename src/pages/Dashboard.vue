@@ -10,7 +10,9 @@
                     <template v-for="widget in column_a">
                         <component :is="widget.component_name"
                                    :key="widget.widget_id"
-                        ></component>
+                        >
+                            <a href="#" class="delete" @click="updateWidget(widget)" v-if="!draggable_disabled"><i class="material-icons">close</i></a>
+                        </component>
                     </template>
                 </draggable>
 
@@ -18,7 +20,9 @@
                     <template v-for="widget in column_b">
                         <component :is="widget.component_name"
                                    v-if="widget.widget_id"
-                        ></component>
+                        >
+                            <a href="#" class="delete" @click="updateWidget(widget)" v-if="!draggable_disabled"><i class="material-icons">close</i></a>
+                        </component>
                     </template>
                 </draggable>
 
@@ -26,7 +30,9 @@
                     <template v-for="widget in column_c">
                         <component :is="widget.component_name"
                                    :key="widget.widget_id"
-                        ></component>
+                        >
+                            <a href="#" class="delete" @click="updateWidget(widget)" v-if="!draggable_disabled"><i class="material-icons">close</i></a>
+                        </component>
                     </template>
                 </draggable>
 
@@ -34,7 +40,9 @@
                     <template v-for="widget in column_d">
                         <component :is="widget.component_name"
                                    :key="widget.widget_id"
-                        ></component>
+                        >
+                            <a href="#" class="delete" @click="updateWidget(widget)" v-if="!draggable_disabled"><i class="material-icons">close</i></a>
+                        </component>
                     </template>
                 </draggable>
             </div>
@@ -134,7 +142,8 @@
 
         methods: {
             ...mapActions({
-                saveLayout: 'widgets/saveLayout'
+                saveLayout: 'widgets/saveLayout',
+                updateWidget: 'widgets/toggleWidget'
             }),
 
             ...mapMutations({
