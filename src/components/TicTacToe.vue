@@ -8,9 +8,10 @@
                     <div v-if="game_is_ready">
                         <div>Playing against {{ opponent.name }}, ({{ player_symbol(opponent.id) }})</div>
                         <div>Game created {{ active_game.created_at | formatDate }}</div>
-                        <div v-if="active_player_turn">{{ active_player.name }}'s turn,</div>
+                        <div v-if="opponent_turn">{{ active_player.name }}'s turn,</div>
                         <div v-else>Your turn!</div>
                         <div>Total moves: {{ moves }}</div>
+                        <div><a href="#!" @click="leaveLobby()"><i class="material-icons">close</i></a> </div>
 
                         <div class="grid-tic">
                             <div class="cell"
@@ -66,18 +67,18 @@
                         </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                            <tr class="lobby_type">
                                 <th colspan="3">Public lobby</th>
                             </tr>
-                            <tr v-for="lobby in open_lobby_list" @click="joinGame(lobby)">
-                                <td v-text="lobby.name"></td>
+                            <tr v-for="lobby in open_lobby_list" @click="joinLobby(lobby)">
+                                <td v-text="lobby.user1.name"></td>
                                 <td>{{ lobby.created_at | formatDate }}</td>
                             </tr>
 
-                            <tr>
+                            <tr class="lobby_type">
                                 <th colspan="3">Private invites</th>
                             </tr>
-                            <tr v-for="lobby in private_lobby_list" @click="joinGame(lobby)">
+                            <tr v-for="lobby in private_lobby_list" @click="joinLobby(lobby)">
                                 <td v-text="lobby.user1.name"></td>
                                 <td>{{ lobby.created_at | formatDate }}</td>
                             </tr>
@@ -112,6 +113,7 @@
         data() {
             return {
                 loading: true,
+                tabs: {},
 
                 // create game
                 public_lobby: true,
@@ -168,7 +170,13 @@
             },
 
             active_player() {
-                let last_move_user = this.active_game.moves.slice().pop().user_id;
+                // started player starts
+                let last_move_user = this.started_player.user_id;
+
+                if (this.active_game.moves.length > 0) {
+                    // get last move user_id
+                    last_move_user = this.active_game.moves.slice().pop().user_id;
+                }
 
                 if (this.active_game.user1.id !== last_move_user) {
                     return this.active_game.user1;
@@ -177,7 +185,7 @@
                 }
             },
 
-            active_player_turn() {
+            opponent_turn() {
                 return this.active_player === this.opponent;
             },
 
@@ -193,6 +201,10 @@
         watch: {
             game: {
                 handler() {
+                    if (this.game_is_ready === false) {
+                        return;
+                    }
+
                     // update view with new moves
                     this.active_game.moves.map(move => {
                         // Sets either X or O in the clicked cell of the cells array
@@ -206,6 +218,8 @@
         methods: {
             createLobby() {
                 let data = {};
+
+                // private lobby add email
                 if (! this.public_lobby) {
                     data = { player2_email: this.player2_email };
                 }
@@ -213,7 +227,6 @@
                 this.$http.post(ENDPOINTS.GAME_CREATE, data)
                     .then(response => {
                         this.startGame(response.data);
-                        console.log(response.data);
                     });
             },
 
@@ -221,7 +234,16 @@
                 this.$http.put(ENDPOINTS.GAME_JOIN, { id: lobby.id })
                     .then(response => {
                         this.startGame(response.data);
-                        console.log(response.data);
+                        lobby.status = GAME_STATUS.STARTED;
+                        this.tabs.select('game');
+                    });
+            },
+
+            leaveLobby() {
+                this.$http.put(ENDPOINTS.GAME_LEAVE, { id: this.active_game.id })
+                    .then(response => {
+                        let index = this.game.started.indexOf(this.active_game);
+                        this.game.started.splice(index, 1);
                     });
             },
 
@@ -230,6 +252,10 @@
             },
 
             makeMove(index) {
+                if (this.opponent_turn) {
+                    return;
+                }
+
                 this.$http.post(ENDPOINTS.GAME_MOVE_CREATE, { game_id: this.active_game.id, position: index })
                     .then(response => {
                         // push move to current game
@@ -268,7 +294,7 @@
 
         mounted() {
             let elem = document.querySelector('.game .tabs');
-            let instance = new this.$M.Tabs(elem);
+            this.tabs = new this.$M.Tabs(elem);
         }
     }
 </script>

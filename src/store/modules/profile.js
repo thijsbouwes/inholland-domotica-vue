@@ -54,11 +54,8 @@ const actions = {
             })
     },
 
-    updateProfile({ getters, dispatch, commit }) {
+    updateProfile({ getters, commit }) {
         let data = { name: getters.user.name, background_id: getters.background.id };
-        
-        // save widget layout
-        dispatch('widgets/saveLayout', null, { root: true });
 
         commit(types.DATA_SAVED);
 

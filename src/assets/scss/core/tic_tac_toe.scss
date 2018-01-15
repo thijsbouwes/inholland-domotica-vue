@@ -50,3 +50,14 @@ $grid-size: 60px;
         cursor: initial;
     }
 }
+
+table > tbody {
+    tr.lobby_type {
+        background-color: $primary-color;
+        color: #ffffff;
+
+        &:hover {
+            background-color: $primary-color;
+        }
+    }
+}

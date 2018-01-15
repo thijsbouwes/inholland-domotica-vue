@@ -41,7 +41,7 @@ const actions = {
             });
     },
 
-    toggleWidget({ getters, commit }, widget) {
+    toggleWidget({ getters, commit, dispatch }, widget) {
         // check if widget is all-ready active
         let user_widget = state.active.find(user_widget => user_widget.widget_id === widget.id);
 
@@ -61,6 +61,8 @@ const actions = {
 
             commit(types.ENABLE_WIDGET, { new_widget, widget });
         }
+
+        dispatch('saveLayout');
     }
 };
 

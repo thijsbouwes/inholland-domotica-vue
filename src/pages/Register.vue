@@ -19,7 +19,7 @@
                     <div class="input-field">
                         <i class="material-icons prefix">lock_outline</i>
                         <label for="password">Password</label>
-                        <input id="password" v-model="user.password" type="password" class="validate" name="password" length="255" maxlength="255" minlength="6" required>
+                        <input id="password" v-model="user.password" type="password" class="validate" name="password" length="255" maxlength="255" minlength="8" required>
                     </div>
 
                     <div class="input-field center-align">
