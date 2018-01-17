@@ -3,3 +3,4 @@ export const PUSHER_CONFIG = {
     APP_CLUSTER: 'eu',
     ENCRYPTED: true,
 };
+

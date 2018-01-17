@@ -1,4 +1,4 @@
-$grid-size: 60px;
+$grid-size: 85px;
 
 .grid-tic {
     display: flex;
@@ -18,7 +18,7 @@ $grid-size: 60px;
 
         background-color: color('grey', 'lighten-5');
         cursor: pointer;
-        border: 1px solid color('grey', 'lighten-2');
+        border: 3px solid color('grey', 'lighten-2');
 
         // Remove vertical lines
         &:nth-child(3),
@@ -49,6 +49,55 @@ $grid-size: 60px;
     .cell-set {
         cursor: initial;
     }
+
+    .x,
+    .o {
+        height: 48px;
+        stroke-width: 48px;
+        stroke-dashoffset: 0;
+        transform-origin: 50% 50% 0;
+
+        path {
+            fill: none;
+            stroke-width: 16px;
+        }
+    }
+
+    .x {
+        path {
+            stroke-dasharray: 135;
+            animation: stroke-x 1s;
+            stroke: $primary-color;
+        }
+    }
+
+    .o {
+        path {
+            stroke-dasharray: 300;
+            animation: stroke-o 1s;
+            stroke: color('grey', 'lighten-2');
+        }
+    }
+}
+
+.players {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    span {
+        padding: 10px 20px;
+
+        &.active {
+            border-bottom: 2px solid $secondary-color;
+        }
+    }
+}
+
+.status {
+    display: flex;
+    justify-content: space-around;
+    padding: 15px;
 }
 
 table > tbody {
@@ -59,5 +108,22 @@ table > tbody {
         &:hover {
             background-color: $primary-color;
         }
+    }
+}
+
+@keyframes stroke-o {
+    0% {
+        stroke-dashoffset: 300;
+    }
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+@keyframes stroke-x {
+    0% {
+        stroke-dashoffset: 135;
+    }
+    100% {
+        stroke-dashoffset: 0;
     }
 }

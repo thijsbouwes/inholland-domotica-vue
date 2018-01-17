@@ -2,16 +2,17 @@
     <div class="card">
         <div class="card-tabs game">
             <div class="card-content">
-                <span class="card-title">Tic Tac Toe</span>
                 <slot></slot>
                 <div id="game" class="game">
-                    <div v-if="game_is_ready">
-                        <div>Playing against {{ opponent.name }}, ({{ player_symbol(opponent.id) }})</div>
-                        <div>Game created {{ active_game.created_at | formatDate }}</div>
-                        <div v-if="opponent_turn">{{ active_player.name }}'s turn,</div>
-                        <div v-else>Your turn!</div>
-                        <div>Total moves: {{ moves }}</div>
-                        <div><a href="#!" @click="leaveLobby()"><i class="material-icons">close</i></a> </div>
+                    <div v-if="game_is_started">
+                        <div class="players">
+                            <span class="z-depth-2" :class="{ active: !opponent_turn}">{{ player_symbol(user.id) }} - {{ user.name }}</span>
+                            <span class="z-depth-2" :class="{ active: opponent_turn}">{{ player_symbol(opponent.id) }} - {{ opponent.name }}</span>
+                        </div>
+
+                        <div class="status">
+                            <span>{{ player_symbol(active_player.id) }} turn</span>
+                        </div>
 
                         <div class="grid-tic">
                             <div class="cell"
@@ -19,12 +20,25 @@
                                  :key="index"
                                  :class="{ 'cell-set': cell }"
                                  @click="makeMove(index)"
-                            ><span>{{ cell }}</span></div>
+                            >
+                                <svg class="x" v-show="cell === 'X'" aria-label="X" role="img" viewBox="0 0 128 128">
+                                    <path d="M16,16L112,112"></path>
+                                    <path d="M112,16L16,112"></path>
+                                </svg>
+                                <svg class="o" v-show="cell === 'O'" aria-label="O" role="img" viewBox="0 0 128 128">
+                                    <path d="M64,16A48,48 0 1,0 64,112A48,48 0 1,0 64,16"></path>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <div class="status">
+                            <a class="waves-effect waves-light btn-flat" @click="leaveLobby()">Leave<i class="material-icons right">close</i></a>
                         </div>
                     </div>
 
                     <div v-else-if="waiting_for_opponent">
                         <p>Waiting for opponent</p>
+                        <div><a href="#!" @click="leaveLobby()"><i class="material-icons">close</i></a> </div>
                         <div class="progress">
                             <div class="indeterminate"></div>
                         </div>
@@ -32,8 +46,22 @@
 
                     <div v-else-if="waiting_for_invited_opponent">
                         <p>Waiting for invited opponent</p>
+                        <div><a href="#!" @click="leaveLobby()"><i class="material-icons">close</i></a> </div>
                         <div class="progress">
                             <div class="indeterminate"></div>
+                        </div>
+                    </div>
+
+                    <div v-else-if="game_is_finished">
+                        <p>Game is finished</p>
+                        <div v-if="active_game.winner.id === user.id">
+                            <p>You are the winner!</p>
+                        </div>
+                        <div v-else-if="active_game.winner.id">
+                            <p>{{ active_game.winner.name }} is the winner!</p>
+                        </div>
+                        <div v-else>
+                            <p>Its a draw!</p>
                         </div>
                     </div>
 
@@ -59,7 +87,7 @@
                 </div>
 
                 <div id="join">
-                    <table class="responsive-table highlight centered">
+                    <table class="highlight centered">
                         <thead>
                         <tr>
                             <th>Name</th>
@@ -93,7 +121,7 @@
 
             <ul class="tabs tabs-fixed-width">
                 <li class="tab"><a class="active" href="#game">Game</a></li>
-                <li class="tab"><a href="#join">Join</a></li>
+                <li class="tab" :class="{ disabled: game_is_ready }"><a href="#join">Join</a></li>
             </ul>
         </div>
     </div>
@@ -126,6 +154,12 @@
                     started: []
                 },
 
+                new_public_game: {},
+
+                // game socket
+                GAME_SOCKET: {},
+                PUBLIC_GAMES: {},
+
                 // stores the placement of X and O in cells by their cell number
                 cells: ['', '', '', '', '', '', '', '', '']
             }
@@ -133,19 +167,35 @@
 
         computed: {
             active_game() {
-                return this.game.started[0];
+                if (this.game_is_ready) {
+                    return this.game.started[0];
+                }
+
+                return {
+                    status: null,
+                    user1: null,
+                    user2: null
+                }
             },
 
             game_is_ready() {
                 return this.game.started[0] !== undefined;
             },
 
+            game_is_started() {
+                return this.active_game.status === GAME_STATUS.STARTED;
+            },
+
+            game_is_finished() {
+                return this.active_game.status === GAME_STATUS.FINISHED;
+            },
+
             waiting_for_opponent() {
-                return this.game_is_ready && this.active_game.status === GAME_STATUS.WAITING_RANDOM_PLAYER_JOIN;
+                return this.active_game.status === GAME_STATUS.WAITING_RANDOM_PLAYER_JOIN;
             },
 
             waiting_for_invited_opponent() {
-                return this.game_is_ready && this.active_game.status === GAME_STATUS.WAITING_INVITED_PLAYER_JOIN;
+                return this.active_game.status === GAME_STATUS.WAITING_INVITED_PLAYER_JOIN;
             },
 
             open_lobby_list() {
@@ -224,31 +274,45 @@
                     data = { player2_email: this.player2_email };
                 }
 
+                data.socket_id = this.$socket.connection.socket_id;
+
                 this.$http.post(ENDPOINTS.GAME_CREATE, data)
                     .then(response => {
-                        this.startGame(response.data);
+                        this.startGame(response.data, GAME_STATUS.WAITING_RANDOM_PLAYER_JOIN);
+                        this.setupSocket();
                     });
             },
 
             joinLobby(lobby) {
-                this.$http.put(ENDPOINTS.GAME_JOIN, { id: lobby.id })
+                let socket_id = this.$socket.connection.socket_id;
+
+                this.$http.put(ENDPOINTS.GAME_JOIN, { id: lobby.id, socket_id })
                     .then(response => {
-                        this.startGame(response.data);
-                        lobby.status = GAME_STATUS.STARTED;
+                        this.startGame(response.data, GAME_STATUS.STARTED);
+                        this.setupSocket();
                         this.tabs.select('game');
                     });
             },
 
             leaveLobby() {
-                this.$http.put(ENDPOINTS.GAME_LEAVE, { id: this.active_game.id })
+                let socket_id = this.$socket.connection.socket_id;
+                this.$http.put(ENDPOINTS.GAME_LEAVE, { id: this.active_game.id, socket_id })
                     .then(response => {
-                        let index = this.game.started.indexOf(this.active_game);
-                        this.game.started.splice(index, 1);
+                        this.leaveGame();
                     });
             },
 
-            startGame(lobby) {
+            leaveGame() {
+                this.GAME_SOCKET.unsubscribe();
+                this.GAME_SOCKET.unbind();
+
+                let index = this.game.started.indexOf(this.active_game);
+                this.game.started.splice(index, 1);
+            },
+
+            startGame(lobby, status) {
                 this.game.started.push(lobby);
+                lobby.status = status;
             },
 
             makeMove(index) {
@@ -256,11 +320,23 @@
                     return;
                 }
 
-                this.$http.post(ENDPOINTS.GAME_MOVE_CREATE, { game_id: this.active_game.id, position: index })
+                let socket_id = this.$socket.connection.socket_id;
+
+                this.$http.post(ENDPOINTS.GAME_MOVE_CREATE, { game_id: this.active_game.id, position: index, socket_id })
                     .then(response => {
-                        // push move to current game
-                        this.active_game.moves.push(response.data);
+                        this.applyMove(response.data);
                     });
+            },
+
+            applyMove(data) {
+                // push move to current game
+                this.active_game.moves.push(data.moves.pop());
+
+                // update the winner
+                this.active_game.winner = data.winner;
+
+                // update game status
+                this.active_game.status = data.status;
             },
 
             player_symbol(player_id) {
@@ -271,16 +347,51 @@
                     return 'O';
                 }
             },
+
+            setupSocket() {
+                if (this.game_is_ready === false) {
+                    return;
+                }
+
+                this.GAME_SOCKET = this.$socket.subscribe(CHANNELS.PRIVATE_GAME_CHANNELNAME + this.active_game.id);
+
+                this.GAME_SOCKET.bind('game_join', data => {
+                    console.log("Someone joined the game!");
+                    this.active_game.status = data.status;
+                    this.active_game.user2 = data.user2;
+                });
+
+
+                this.GAME_SOCKET.bind('game_leave', data => {
+                    console.log("Some leaved the game");
+
+                    this.leaveGame();
+
+                    this.$M.toast({ html:
+                        `<span>${ this.opponent.name } leaved the game</span>`
+                    });
+                });
+
+                this.GAME_SOCKET.bind('create_move', data => {
+                    console.log("Something moved");
+                    this.applyMove(data);
+                });
+
+            }
         },
 
         created() {
             // listen for new games
-            let PUBLIC_GAMES = this.$socket.subscribe(CHANNELS.PUBLIC_GAMES);
+            this.PUBLIC_GAMES = this.$socket.subscribe(CHANNELS.PUBLIC_GAMES);
 
-            PUBLIC_GAMES.bind('game_created', data => {
-                if (this.game_is_ready === false) {
-                    this.$M.toast({ html: `<span>New public game, created by ${data.user1.name}</span>` + '<button onclick="' + this.joinLobby( data ) + '" class="btn-flat toast-action">Join</button>' });
+            this.PUBLIC_GAMES.bind('game_created', data => {
+                if (this.game_is_started === true) {
+                    return;
                 }
+
+                this.$M.toast({ html:
+                    `<span>New public game, created by ${ data.user1.name }</span>` + '<button class="btn-flat join-game toast-action">Join</button>'
+                });
             });
 
             // fetch game status
@@ -288,8 +399,17 @@
                 .then(response => {
                     this.game = response.data;
 
+                    this.setupSocket();
                     this.loading = false;
                 });
+        },
+
+        destroyed() {
+            this.PUBLIC_GAMES.unbind();
+
+            if (Object.keys(this.GAME_SOCKET).length > 0) {
+                this.GAME_SOCKET.unbind();
+            }
         },
 
         mounted() {
