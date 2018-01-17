@@ -14,6 +14,22 @@
                             <span>{{ player_symbol(active_player.id) }} turn</span>
                         </div>
 
+                        <div>
+                            <svg class="gameboard">
+                                <path class="line" d="M135,90L0,90"></path>
+                                <path class="line" d="M135,90L270,90"></path>
+
+                                <path class="line" d="M135,180L0,180"></path>
+                                <path class="line" d="M135,180L270,180"></path>
+
+                                <path class="line" d="M90,135L90,0"></path>
+                                <path class="line" d="M90,135L90,270"></path>
+
+                                <path class="line" d="M180,135L180,0"></path>
+                                <path class="line" d="M180,135L180,270"></path>
+
+                            </svg>
+                        </div>
                         <div class="grid-tic">
                             <div class="cell"
                                  v-for="(cell, index) in cells"

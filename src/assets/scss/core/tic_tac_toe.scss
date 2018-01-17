@@ -9,6 +9,7 @@ $grid-size: 85px;
     flex-wrap: wrap;
 
     .cell {
+        z-index: 3;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -16,9 +17,8 @@ $grid-size: 85px;
         height: $grid-size;
         width: $grid-size;
 
-        background-color: color('grey', 'lighten-5');
         cursor: pointer;
-        border: 3px solid color('grey', 'lighten-2');
+        //border: 3px solid color('grey', 'lighten-2');
 
         // Remove vertical lines
         &:nth-child(3),
@@ -49,7 +49,6 @@ $grid-size: 85px;
     .cell-set {
         cursor: initial;
     }
-
     .x,
     .o {
         height: 48px;
@@ -77,6 +76,29 @@ $grid-size: 85px;
             animation: stroke-o 1s;
             stroke: color('grey', 'lighten-2');
         }
+    }
+}
+
+.gameboard {
+    width: 270px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    z-index: 0;
+    margin: 0 auto;
+    margin-top: -7px;
+    height: 100%;
+
+    .line {
+        fill: none;
+        stroke-dasharray: 135;
+        animation: stroke 1s;
+        stroke-dashoffset: 0;
+
+        stroke: $secondary-color;
+        stroke-width: 6px;
+        transition-duration: 0.375s;
+        -webkit-transition-duration: 0.375s;
     }
 }
 
@@ -111,6 +133,14 @@ table > tbody {
     }
 }
 
+@keyframes stroke {
+    0% {
+        stroke-dashoffset: 135;
+    }
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
 @keyframes stroke-o {
     0% {
         stroke-dashoffset: 300;
