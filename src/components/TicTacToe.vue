@@ -251,8 +251,7 @@
             },
 
             active_player() {
-                // started player starts
-                let last_move_user = this.user.id;
+                let last_move_user = null;
 
                 if (this.active_game.moves.length > 0) {
                     // get last move user_id
