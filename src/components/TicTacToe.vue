@@ -89,7 +89,7 @@
                             </div>
                         </div>
                         <div class="status">
-                            <a class="waves-effect waves-light btn-flat" @click="finishGame()">Finish game<i class="material-icons left">check</i></a>
+                            <a class="waves-effect waves-light btn-flat" @click="leaveGame()">Finish game<i class="material-icons left">check</i></a>
                         </div>
                     </div>
 
@@ -333,10 +333,6 @@
                     .then(response => {
                         this.leaveGame();
                     });
-            },
-
-            finishGame() {
-                this.game.started.splice(0, this.game.started.length);
             },
 
             leaveGame() {
