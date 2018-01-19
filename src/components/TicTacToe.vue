@@ -194,6 +194,7 @@
                     return this.game.started[0];
                 }
 
+                // return default state
                 return {
                     status: null,
                     moves: [],
