@@ -196,6 +196,7 @@
 
                 return {
                     status: null,
+                    moves: [],
                     user1: {
                         id: null,
                         name: null
@@ -250,7 +251,7 @@
 
             active_player() {
                 // started player starts
-                let last_move_user = this.started_player.user_id;
+                let last_move_user = this.user.id;
 
                 if (this.active_game.moves.length > 0) {
                     // get last move user_id
