@@ -53,31 +53,43 @@
                     </div>
 
                     <div v-else-if="waiting_for_opponent">
-                        <p>Waiting for opponent</p>
-                        <div><a href="#!" @click="leaveLobby()"><i class="material-icons">close</i></a> </div>
+                        <h5>Waiting for opponent</h5>
                         <div class="progress">
                             <div class="indeterminate"></div>
+                        </div>
+                        <div class="status">
+                            <a class="waves-effect waves-light btn-flat" @click="leaveLobby()">Leave<i class="material-icons right">close</i></a>
                         </div>
                     </div>
 
                     <div v-else-if="waiting_for_invited_opponent">
-                        <p>Waiting for invited opponent</p>
-                        <div><a href="#!" @click="leaveLobby()"><i class="material-icons">close</i></a> </div>
+                        <h5>Waiting for invited opponent</h5>
                         <div class="progress">
                             <div class="indeterminate"></div>
+                        </div>
+                        <div class="status">
+                            <a class="waves-effect waves-light btn-flat" @click="leaveLobby()">Leave<i class="material-icons right">close</i></a>
                         </div>
                     </div>
 
                     <div v-else-if="game_is_finished">
-                        <p>Game is finished</p>
-                        <div v-if="active_game.winner.id === user.id">
-                            <p>You are the winner!</p>
+                        <div class="players">
+                            <span class="z-depth-2" :class="{ active: active_game.winner.id === user.id}">{{ player_symbol(user.id) }} - {{ user.name }}</span>
+                            <span class="z-depth-2" :class="{ active: active_game.winner.id === opponent.id}">{{ player_symbol(opponent.id) }} - {{ opponent.name }}</span>
                         </div>
-                        <div v-else-if="active_game.winner.id">
-                            <p>{{ active_game.winner.name }} is the winner!</p>
+                        <div class="status">
+                            <div v-if="active_game.winner.id === user.id">
+                                <p>You are the winner!</p>
+                            </div>
+                            <div v-else-if="active_game.winner.id">
+                                <p>{{ active_game.winner.name }} is the winner!</p>
+                            </div>
+                            <div v-else>
+                                <p>Its a draw!</p>
+                            </div>
                         </div>
-                        <div v-else>
-                            <p>Its a draw!</p>
+                        <div class="status">
+                            <a class="waves-effect waves-light btn-flat" @click="finishGame()">Finish game<i class="material-icons left">check</i></a>
                         </div>
                     </div>
 
@@ -104,25 +116,19 @@
 
                 <div id="join">
                     <table class="highlight centered">
-                        <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Created</th>
-                        </tr>
-                        </thead>
                         <tbody>
-                            <tr class="lobby_type">
-                                <th colspan="3">Public lobby</th>
+                            <tr class="lobby_type" v-if="private_lobby_list.length > 0">
+                                <th colspan="3">Private invites</th>
                             </tr>
-                            <tr v-for="lobby in open_lobby_list" @click="joinLobby(lobby)">
+                            <tr v-for="lobby in private_lobby_list" @click="joinLobby(lobby)">
                                 <td v-text="lobby.user1.name"></td>
                                 <td>{{ lobby.created_at | formatDate }}</td>
                             </tr>
 
                             <tr class="lobby_type">
-                                <th colspan="3">Private invites</th>
+                                <th colspan="3">Public lobby</th>
                             </tr>
-                            <tr v-for="lobby in private_lobby_list" @click="joinLobby(lobby)">
+                            <tr v-for="lobby in open_lobby_list" @click="joinLobby(lobby)">
                                 <td v-text="lobby.user1.name"></td>
                                 <td>{{ lobby.created_at | formatDate }}</td>
                             </tr>
@@ -175,6 +181,7 @@
                 // game socket
                 GAME_SOCKET: {},
                 PUBLIC_GAMES: {},
+                PRIVATE_USER: {},
 
                 // stores the placement of X and O in cells by their cell number
                 cells: ['', '', '', '', '', '', '', '', '']
@@ -189,8 +196,14 @@
 
                 return {
                     status: null,
-                    user1: null,
-                    user2: null
+                    user1: {
+                        id: null,
+                        name: null
+                    },
+                    user2: {
+                        id: null,
+                        name: null
+                    }
                 }
             },
 
@@ -255,10 +268,6 @@
                 return this.active_player === this.opponent;
             },
 
-            moves() {
-                return this.active_game.moves.length;
-            },
-
             ...mapGetters({
                 user: 'profile/user',
             })
@@ -294,13 +303,21 @@
 
                 this.$http.post(ENDPOINTS.GAME_CREATE, data)
                     .then(response => {
-                        this.startGame(response.data, GAME_STATUS.WAITING_RANDOM_PLAYER_JOIN);
+                        if (this.public_lobby) {
+                            this.startGame(response.data, GAME_STATUS.WAITING_RANDOM_PLAYER_JOIN);
+                        } else {
+                            this.startGame(response.data, GAME_STATUS.WAITING_INVITED_PLAYER_JOIN);
+                        }
                         this.setupSocket();
                     });
             },
 
             joinLobby(lobby) {
                 let socket_id = this.$socket.connection.socket_id;
+
+                // make sure cells are empty
+                this.cells.fill('');
+                console.log(this.cells);
 
                 this.$http.put(ENDPOINTS.GAME_JOIN, { id: lobby.id, socket_id })
                     .then(response => {
@@ -316,6 +333,10 @@
                     .then(response => {
                         this.leaveGame();
                     });
+            },
+
+            finishGame() {
+                this.game.started.splice(0, this.game.started.length);
             },
 
             leaveGame() {
@@ -393,6 +414,10 @@
                     this.applyMove(data);
                 });
 
+            },
+
+            sayHello() {
+                console.log("hello");
             }
         },
 
@@ -401,12 +426,15 @@
             this.PUBLIC_GAMES = this.$socket.subscribe(CHANNELS.PUBLIC_GAMES);
 
             this.PUBLIC_GAMES.bind('game_created', data => {
+                // push new game to lobby list
+                this.game.lobby_list.unshift(data);
+
                 if (this.game_is_started === true) {
                     return;
                 }
 
                 this.$M.toast({ html:
-                    `<span>New public game, created by ${ data.user1.name }</span>` + '<button class="btn-flat join-game toast-action">Join</button>'
+                    `<span>New public game, created by ${ data.user1.name }</span>`
                 });
             });
 
@@ -422,6 +450,7 @@
 
         destroyed() {
             this.PUBLIC_GAMES.unbind();
+            // this.PRIVATE_USER.unbind();
 
             if (Object.keys(this.GAME_SOCKET).length > 0) {
                 this.GAME_SOCKET.unbind();

@@ -19,36 +19,12 @@ $grid-size: 85px;
 
         cursor: pointer;
         //border: 3px solid color('grey', 'lighten-2');
-
-        // Remove vertical lines
-        &:nth-child(3),
-        &:nth-child(6),
-        &:nth-child(9) {
-            border-right: 0;
-        }
-        &:nth-child(1),
-        &:nth-child(4),
-        &:nth-child(7) {
-            border-left: 0;
-        }
-
-        // Remove horizontal lines
-        &:nth-child(n+0):nth-child(-n+3) {
-            border-top: 0;
-        }
-        &:nth-child(n+7):nth-child(-n+9) {
-            border-bottom: 0;
-        }
-
-        span {
-            font-weight: bold;
-            font-size: 1.5em;
-        }
     }
 
     .cell-set {
         cursor: initial;
     }
+
     .x,
     .o {
         height: 48px;
@@ -102,37 +78,7 @@ $grid-size: 85px;
     }
 }
 
-.players {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-
-    span {
-        padding: 10px 20px;
-
-        &.active {
-            border-bottom: 2px solid $secondary-color;
-        }
-    }
-}
-
-.status {
-    display: flex;
-    justify-content: space-around;
-    padding: 15px;
-}
-
-table > tbody {
-    tr.lobby_type {
-        background-color: $primary-color;
-        color: #ffffff;
-
-        &:hover {
-            background-color: $primary-color;
-        }
-    }
-}
-
+// board animation
 @keyframes stroke {
     0% {
         stroke-dashoffset: 135;
@@ -155,5 +101,49 @@ table > tbody {
     }
     100% {
         stroke-dashoffset: 0;
+    }
+}
+
+.players {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    span {
+        padding: 10px 20px;
+
+        &.active {
+            border-bottom: 2px solid $secondary-color;
+        }
+    }
+}
+
+.status {
+    display: flex;
+    justify-content: space-around;
+    padding: 15px;
+}
+
+
+// join table
+#join {
+    display: block;
+    max-height: 500px;
+    overflow: scroll;
+}
+
+table > tbody {
+    tr.lobby_type {
+        background-color: $primary-color;
+        color: #ffffff;
+
+        th {
+            font-weight: normal;
+            font-size: 1.2em;
+        }
+
+        &:hover {
+            background-color: $primary-color;
+        }
     }
 }
