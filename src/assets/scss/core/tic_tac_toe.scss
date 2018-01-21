@@ -147,10 +147,15 @@ $grid-size: 85px;
     overflow-y: scroll;
 }
 
-table > tbody {
+#join table > tbody {
+    tr {
+        cursor: pointer;
+    }
+
     tr.lobby_type {
         background-color: $primary-color;
         color: #ffffff;
+        cursor: initial;
 
         th {
             font-weight: normal;
