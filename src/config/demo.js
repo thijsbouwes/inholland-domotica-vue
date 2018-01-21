@@ -1,0 +1,6 @@
+export const DEMO_STATUS = {
+    OPEN_SIDEBAR: 0,
+    ENABLE_WIDGETS: 3,
+    SETUP_BACKGROUND: 4,
+    CLOSE_SIDEBAR: 5
+};

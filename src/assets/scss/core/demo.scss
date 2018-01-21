@@ -1,0 +1,29 @@
+.demo {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 60px);
+    width: 100%;
+    z-index: 999;
+
+    h2 {
+        color: color('grey', 'lighten-2');
+
+        &:after {
+            content: '|';
+            margin-left: 2px;
+            animation: keystroke 0.75s infinite;
+        }
+    }
+}
+
+
+@keyframes keystroke {
+    0%, 100%  {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+}

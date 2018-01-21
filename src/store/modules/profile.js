@@ -14,6 +14,7 @@ const state = {
             email: '',
             is_admin: false,
             image: null,
+            created_at: null
         },
         background: {
             url: '',
