@@ -11,11 +11,8 @@ const socket = new Pusher(PUSHER_CONFIG.APP_KEY, {
     encrypted: PUSHER_CONFIG.ENCRYPTED,
 
     authorizer: (channel, options) => {
-        console.log(channel.name);
-
         // auth private channel
         if (channel.name.includes(CHANNELS.PRIVATE_GAME_CHANNELNAME)) {
-            console.log("game auth");
             let game_id = channel.name.split("-").pop();
 
             return {
@@ -29,8 +26,7 @@ const socket = new Pusher(PUSHER_CONFIG.APP_KEY, {
         }
 
         // auth private user
-        if (channel.name.includes(CHANNELS.PRIVATE_USER)) {
-            console.log("user auth");
+        if (channel.name.includes(CHANNELS.PRIVATE_USER_CHANNELNAME)) {
             return {
                 authorize: (socketId, callback) => {
                     request.post(ENDPOINTS.PUSHER_USER_AUTH, { socket_id: socketId } )
@@ -39,8 +35,6 @@ const socket = new Pusher(PUSHER_CONFIG.APP_KEY, {
                         });
                 }
             }
-        } else {
-            console.log("fail");
         }
     },
 });

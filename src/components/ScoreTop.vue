@@ -4,9 +4,9 @@
             <thead>
             <tr>
                 <th>Name</th>
+                <th>Wins</th>
                 <th>Loses</th>
                 <th>Ties</th>
-                <th>Wins</th>
                 <th>Total</th>
             </tr>
             </thead>
@@ -14,9 +14,9 @@
             <tbody>
             <tr v-for="score in scores">
                 <td v-text="score.user"></td>
+                <td v-text="score.wins"></td>
                 <td v-text="score.loses"></td>
                 <td v-text="score.ties"></td>
-                <td v-text="score.wins"></td>
                 <td v-text="score.total_games_played"></td>
             </tr>
             </tbody>

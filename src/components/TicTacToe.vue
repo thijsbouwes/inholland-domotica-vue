@@ -405,7 +405,6 @@
                     this.active_game.user2 = data.user2;
                 });
 
-
                 this.GAME_SOCKET.bind('game_leave', data => {
                     this.leaveGame();
 
@@ -449,7 +448,6 @@
 
         destroyed() {
             this.PUBLIC_GAMES.unbind();
-            // this.PRIVATE_USER.unbind();
 
             if (Object.keys(this.GAME_SOCKET).length > 0) {
                 this.GAME_SOCKET.unbind();
@@ -459,6 +457,10 @@
         mounted() {
             let elem = document.querySelector('.game .tabs');
             this.tabs = new this.$M.Tabs(elem);
+
+            // this.user.socket.bind('game_invite', data => {
+            //     console.log(data);
+            // });
         }
     }
 </script>

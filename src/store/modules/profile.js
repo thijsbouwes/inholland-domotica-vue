@@ -1,6 +1,8 @@
 import request from '../../service/request';
+import socket from '../../service/socket';
 import * as types from '../mutation-types';
 import { ENDPOINTS } from '../../config/api';
+import { CHANNELS } from "../../config/game";
 
 // initial state
 const state = {
@@ -17,6 +19,7 @@ const state = {
             name: ''
         },
     },
+    socket: {},
     changed: false,
     loading: true
 };
@@ -36,6 +39,7 @@ const actions = {
             .then(response => {
                 commit(types.SET_PROFILE, response.data);
                 commit(types.LOADING_DONE);
+                commit(types.SETUP_SOCKET);
                 dispatch('loadProfileImage');
             });
     },
@@ -108,8 +112,11 @@ const mutations = {
 
     [types.DATA_CHANGED] (state) {
         state.changed = true;
-    }
+    },
 
+    [types.SETUP_SOCKET] () {
+        state.socket = socket.subscribe(CHANNELS.PRIVATE_USER_CHANNELNAME + state.all.user.id);
+    }
 };
 
 export default {
