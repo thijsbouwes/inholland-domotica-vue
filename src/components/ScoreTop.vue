@@ -4,16 +4,20 @@
             <thead>
             <tr>
                 <th>Name</th>
-                <th>Gewonnen</th>
-                <th>Verloren</th>
+                <th>Loses</th>
+                <th>Ties</th>
+                <th>Wins</th>
+                <th>Total</th>
             </tr>
             </thead>
 
             <tbody>
             <tr v-for="score in scores">
-                <td v-text="score.name"></td>
-                <td v-text="score.won"></td>
-                <td v-html="score.lost"></td>
+                <td v-text="score.user"></td>
+                <td v-text="score.loses"></td>
+                <td v-text="score.ties"></td>
+                <td v-text="score.wins"></td>
+                <td v-text="score.total_games_played"></td>
             </tr>
             </tbody>
         </table>
@@ -24,37 +28,22 @@
     </div>
 </template>
 <script>
+    import { ENDPOINTS } from '../config/api';
     export default {
         data() {
             return {
                 loading: false,
-                scores: [
-                    {
-                        name: "Alvin",
-                        won: 14,
-                        lost: 2
-                    },
-                    {
-                        name: "Hendrik",
-                        won: 5,
-                        lost: 1
-                    },
-                    {
-                        name: "Pietjan",
-                        won: 9,
-                        lost: 5
-                    }
-                ]
+                scores: []
             }
         },
 
         created() {
-            // this.$http.get(ENDPOINTS.LAMPS)
-            //     .then(response => {
-            //         this.lamps = response.data;
-            //         this.loading = false;
-            //     })
-            //     .catch(error => console.log(error));
+            this.$http.get(ENDPOINTS.GAME_HIGHSCORE)
+                .then(response => {
+                    this.scores = response.data;
+                    this.loading = false;
+                })
+                .catch(error => console.log(error));
         }
     }
 </script>
