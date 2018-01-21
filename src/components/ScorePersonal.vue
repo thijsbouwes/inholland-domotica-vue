@@ -1,6 +1,7 @@
 <template>
     <div>
-        <doughnut-personal-score v-if="played_games" ref="Doughnut" :data="stats"></doughnut-personal-score>
+        <h6 v-text="status_title"></h6>
+        <doughnut-personal-score v-if="played_games" ref="Doughnut" :data="stats" :options="options"></doughnut-personal-score>
         <div v-else><p>Play a game first!</p></div>
 
         <div class="progress" v-show="loading">
@@ -19,16 +20,27 @@
             return {
                 loading: false,
                 played_games: true,
+                status_title: "",
+
+                options: {
+                    responsive: true,
+                    legend: {
+                        position: 'top',
+                    },
+                    animation: {
+                        animateScale: true,
+                        animateRotate: true
+                    }
+                },
 
                 stats: {
                     datasets:[{
-                        data: [10, 10, 10, 10],
+                        data: [10, 10, 10],
                         label: 'Dataset 1',
                         backgroundColor: [
                             '#ff6384',
                             '#36a2eb',
-                            '#cc65fe',
-                            '#ffce56'
+                            '#cc65fe'
                         ],
                     }],
 
@@ -36,7 +48,6 @@
                         'Wins',
                         'Loses',
                         'Ties',
-                        'Total played games'
                     ]
                 }
             }
@@ -45,12 +56,16 @@
         created() {
             this.$http.get(ENDPOINTS.GAME_USER_STATS)
                 .then(response => {
-                    delete response.data.user;
-
                     // see if you played games
                     if (response.data.total_games_played <= 0) {
                         this.played_games = false;
                     }
+
+                    this.status_title = `${ response.data.user } played ${ response.data.total_games_played } rounds`;
+
+                    // delete unnecessary data for pie
+                    delete response.data.user;
+                    delete response.data.total_games_played;
 
                     this.stats.datasets[0].data = Object.values(response.data);
                     // this.stats.labels = Object.keys(response.data);

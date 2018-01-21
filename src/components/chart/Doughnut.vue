@@ -4,21 +4,7 @@
 
     export default {
         extends: Doughnut,
-        props: ['data'],
-        data() {
-            return {
-                options: {
-                    responsive: true,
-                    legend: {
-                        position: 'top',
-                    },
-                    animation: {
-                        animateScale: true,
-                        animateRotate: true
-                    }
-                }
-            }
-        },
+        props: ['data', 'options'],
         mounted () {
             this.renderChart(this.data, this.options)
         },
