@@ -8,8 +8,7 @@ const state = {
     active: [],
     loading: true,
     draggable_disabled: true,
-    layoutChanged: false,
-    column_types: ["A", "B", "C", "D"]
+    layoutChanged: false
 };
 
 // getters
