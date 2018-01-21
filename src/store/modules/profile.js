@@ -1,5 +1,6 @@
 import request from '../../service/request';
 import socket from '../../service/socket';
+import { Event } from '../../service/event';
 import * as types from '../mutation-types';
 import { ENDPOINTS } from '../../config/api';
 import { CHANNELS } from "../../config/game";
@@ -40,6 +41,9 @@ const actions = {
                 commit(types.SET_PROFILE, response.data);
                 commit(types.LOADING_DONE);
                 commit(types.SETUP_SOCKET);
+
+                Event.$emit('PROFILE_LOADED');
+
                 dispatch('loadProfileImage');
             });
     },

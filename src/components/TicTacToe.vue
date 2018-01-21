@@ -156,9 +156,11 @@
 
 <script>
     import { mapGetters } from 'vuex';
+    import { mapState } from 'vuex';
     import { ENDPOINTS } from '../config/api';
     import { GAME_STATUS } from '../config/game';
     import { CHANNELS } from "../config/game";
+    import { Event } from "../service/event";
 
     export default {
         data() {
@@ -269,6 +271,10 @@
             opponent_turn() {
                 return this.active_player === this.opponent;
             },
+
+            ...mapState({
+                user_socket: state => state.profile.socket,
+            }),
 
             ...mapGetters({
                 user: 'profile/user',
@@ -406,17 +412,28 @@
                 });
 
                 this.GAME_SOCKET.bind('game_leave', data => {
-                    this.leaveGame();
-
                     this.$M.toast({ html:
                         `<span>${ this.opponent.name } leaved the game</span>`
                     });
+
+                    this.leaveGame();
                 });
 
                 this.GAME_SOCKET.bind('create_move', data => {
                     this.applyMove(data);
                 });
 
+            },
+
+            setupPrivateSocket() {
+                this.user_socket.bind('game_invite', data => {
+                    // push new game to lobby list
+                    this.game.invites.unshift(data);
+
+                    this.$M.toast({ html:
+                            `<span>New private invite by ${ data.user1.name }</span>`
+                    });
+                });
             }
         },
 
@@ -444,6 +461,15 @@
                     this.setupSocket();
                     this.loading = false;
                 });
+
+            // Check if socket exist
+            if (Object.keys(this.user_socket) > 0) {
+                this.setupPrivateSocket();
+            }
+
+            Event.$on('PROFILE_LOADED', () => {
+                this.setupPrivateSocket();
+            })
         },
 
         destroyed() {
@@ -457,10 +483,6 @@
         mounted() {
             let elem = document.querySelector('.game .tabs');
             this.tabs = new this.$M.Tabs(elem);
-
-            // this.user.socket.bind('game_invite', data => {
-            //     console.log(data);
-            // });
         }
     }
 </script>
