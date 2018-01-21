@@ -29,29 +29,39 @@ $grid-size: 85px;
     .o {
         height: 48px;
         stroke-width: 48px;
-        stroke-dashoffset: 0;
-        transform-origin: 50% 50% 0;
 
         path {
-            fill: none;
             stroke-width: 16px;
         }
     }
+}
 
-    .x {
-        path {
-            stroke-dasharray: 135;
-            animation: stroke-x 1s;
-            stroke: $primary-color;
-        }
+.x,
+.o {
+    height: 24px;
+    stroke-width: 24px;
+    stroke-dashoffset: 0;
+    transform-origin: 50% 50% 0;
+
+    path {
+        fill: none;
+        stroke-width: 10px;
     }
+}
 
-    .o {
-        path {
-            stroke-dasharray: 300;
-            animation: stroke-o 1s;
-            stroke: color('grey', 'lighten-2');
-        }
+.x {
+    path {
+        stroke-dasharray: 135;
+        animation: stroke-x 1s;
+        stroke: $primary-color;
+    }
+}
+
+.o {
+    path {
+        stroke-dasharray: 300;
+        animation: stroke-o 1s;
+        stroke: color('grey', 'lighten-2');
     }
 }
 
@@ -109,8 +119,9 @@ $grid-size: 85px;
     justify-content: space-around;
     align-items: center;
 
-    span {
+    & > span {
         padding: 10px 20px;
+        display: flex;
 
         &.active {
             border-bottom: 2px solid $secondary-color;
@@ -118,9 +129,15 @@ $grid-size: 85px;
     }
 }
 
+.svg-player {
+    height: 24px;
+    margin-right: 1em;
+}
+
 .status {
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
+    align-items: center;
     padding: 15px;
 }
 
@@ -129,7 +146,7 @@ $grid-size: 85px;
 #join {
     display: block;
     max-height: 500px;
-    overflow: scroll;
+    overflow-y: scroll;
 }
 
 table > tbody {

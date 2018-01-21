@@ -6,12 +6,16 @@
                 <div id="game" class="game">
                     <div v-if="game_is_started">
                         <div class="players">
-                            <span class="z-depth-2" :class="{ active: !opponent_turn}">{{ player_symbol(user.id) }} - {{ user.name }}</span>
-                            <span class="z-depth-2" :class="{ active: opponent_turn}">{{ player_symbol(opponent.id) }} - {{ opponent.name }}</span>
+                            <span class="z-depth-2" :class="{ active: !opponent_turn}">
+                                <span class="svg-player" v-html="player_symbol(user.id)"></span> {{ user.name }}
+                            </span>
+                            <span class="z-depth-2" :class="{ active: opponent_turn}">
+                                <span class="svg-player" v-html="player_symbol(opponent.id)"></span> {{ opponent.name }}
+                            </span>
                         </div>
 
                         <div class="status">
-                            <span>{{ player_symbol(active_player.id) }} turn</span>
+                            <span class="svg-player" v-html="player_symbol(active_player.id)"></span> plays
                         </div>
 
                         <div>
@@ -37,13 +41,7 @@
                                  :class="{ 'cell-set': cell }"
                                  @click="makeMove(index)"
                             >
-                                <svg class="x" v-show="cell === 'X'" aria-label="X" role="img" viewBox="0 0 128 128">
-                                    <path d="M16,16L112,112"></path>
-                                    <path d="M112,16L16,112"></path>
-                                </svg>
-                                <svg class="o" v-show="cell === 'O'" aria-label="O" role="img" viewBox="0 0 128 128">
-                                    <path d="M64,16A48,48 0 1,0 64,112A48,48 0 1,0 64,16"></path>
-                                </svg>
+                                <span v-html="cell"></span>
                             </div>
                         </div>
 
@@ -74,9 +72,14 @@
 
                     <div v-else-if="game_is_finished">
                         <div class="players">
-                            <span class="z-depth-2" :class="{ active: active_game.winner.id === user.id}">{{ player_symbol(user.id) }} - {{ user.name }}</span>
-                            <span class="z-depth-2" :class="{ active: active_game.winner.id === opponent.id}">{{ player_symbol(opponent.id) }} - {{ opponent.name }}</span>
+                            <span class="z-depth-2" :class="{ active: active_game.winner.id === user.id}">
+                                <span class="svg-player" v-html="player_symbol(user.id)"></span> {{ user.name }}
+                            </span>
+                            <span class="z-depth-2" :class="{ active: active_game.winner.id === opponent.id}">
+                                <span class="svg-player" v-html="player_symbol(opponent.id)"></span> {{ opponent.name }}
+                            </span>
                         </div>
+
                         <div class="status">
                             <div v-if="active_game.winner.id === user.id">
                                 <p>You are the winner!</p>
@@ -339,8 +342,13 @@
                 this.GAME_SOCKET.unsubscribe();
                 this.GAME_SOCKET.unbind();
 
-                let index = this.game.started.indexOf(this.active_game);
-                this.game.started.splice(index, 1);
+                let index_started = this.game.started.indexOf(this.active_game);
+                let index_lobby_list = this.game.lobby_list.indexOf(this.active_game);
+                let index_invites = this.game.invites.indexOf(this.active_game);
+
+                this.game.started.splice(index_started, 1);
+                this.game.lobby_list.splice(index_lobby_list, 1);
+                this.game.invites.splice(index_invites, 1);
             },
 
             startGame(lobby, status) {
@@ -377,9 +385,9 @@
             player_symbol(player_id) {
                 // check if user1 is logged in user
                 if (this.active_game.user1.id === player_id) {
-                    return 'X';
+                    return '<svg class="x" aria-label="X" role="img" viewBox="0 0 128 128"><path d="M16,16L112,112"></path><path d="M112,16L16,112"></path></svg>'
                 } else {
-                    return 'O';
+                    return '<svg class="o" aria-label="O" role="img" viewBox="0 0 128 128"><path d="M64,16A48,48 0 1,0 64,112A48,48 0 1,0 64,16"></path></svg>';
                 }
             },
 
