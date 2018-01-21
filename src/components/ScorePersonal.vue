@@ -1,6 +1,7 @@
 <template>
     <div>
-        <doughnut-personal-score ref="Doughnut" :data="stats"></doughnut-personal-score>
+        <doughnut-personal-score v-if="played_games" ref="Doughnut" :data="stats"></doughnut-personal-score>
+        <div v-else><p>Play a game first!</p></div>
 
         <div class="progress" v-show="loading">
             <div class="indeterminate"></div>
@@ -17,6 +18,7 @@
         data() {
             return {
                 loading: false,
+                played_games: true,
 
                 stats: {
                     datasets:[{
@@ -34,7 +36,7 @@
                         'Wins',
                         'Loses',
                         'Ties',
-                        'Total games played'
+                        'Total played games'
                     ]
                 }
             }
@@ -44,6 +46,11 @@
             this.$http.get(ENDPOINTS.GAME_USER_STATS)
                 .then(response => {
                     delete response.data.user;
+
+                    // see if you played games
+                    if (response.data.total_games_played <= 0) {
+                        this.played_games = false;
+                    }
 
                     this.stats.datasets[0].data = Object.values(response.data);
                     // this.stats.labels = Object.keys(response.data);
