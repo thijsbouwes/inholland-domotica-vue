@@ -106,7 +106,7 @@
                                     </label>
                                 </p>
                                 <div class="input-field" v-if="! public_lobby">
-                                    <input id="email" type="email" class="validate" required v-model="player2_email">
+                                    <input id="email" type="email" class="validate" required v-model="opponent_email">
                                     <label class="active" for="email">Opponent email</label>
                                 </div>
                                 <div class="center-align">
@@ -170,7 +170,7 @@
 
                 // create game
                 public_lobby: true,
-                player2_email: '',
+                opponent_email: '',
 
                 // game object
                 game: {
@@ -311,7 +311,7 @@
 
                 // private lobby add email
                 if (! this.public_lobby) {
-                    data = { player2_email: this.player2_email };
+                    data = { opponent_email: this.opponent_email };
                 }
 
                 data.socket_id = this.$socket.connection.socket_id;
