@@ -46,8 +46,15 @@ const actions = {
         // check if widget is all-ready active
         let user_widget = state.active.find(user_widget => user_widget.widget_id === widget.id);
 
-        let column_types = state.active.map(user_widget => user_widget.column);
-        console.log(column_types);
+        let columns = {
+            A: getters.column_a.length,
+            B: getters.column_b.length,
+            C: getters.column_c.length,
+            D: getters.column_d.length,
+        };
+
+        // find smallest column
+        let smallest_column = Object.keys(columns).reduce((a, b) => columns[a] < columns[b] ? a : b);
 
         if (user_widget !== undefined) {
             // disable widget
@@ -55,9 +62,9 @@ const actions = {
         } else {
             // add widget when not active
             let new_widget = {
-                column: 'A',
+                column: smallest_column,
                 widget_id: widget.id,
-                column_index: getters.column_a.length + 1
+                column_index: columns[smallest_column] + 1
             };
 
             // add all data to widget
