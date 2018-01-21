@@ -3,7 +3,6 @@ import request from './request';
 let authRefreshTokenRequest;
 
 class AuthService {
-
     login(email, password) {
         let data = {email, password};
 

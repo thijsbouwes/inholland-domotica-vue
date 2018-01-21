@@ -134,7 +134,7 @@ export default {
         demo() {
             if (this.user.created_at) {
                 // if account is less then a minute old
-                return moment(this.user.created_at).add(1, 'minutes') > moment();
+                return moment(this.user.created_at).add(15, 'seconds') > moment();
             }
 
             return false;
