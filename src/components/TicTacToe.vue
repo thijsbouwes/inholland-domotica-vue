@@ -4,117 +4,119 @@
             <div class="card-content">
                 <slot></slot>
                 <div id="game" class="game">
-                    <div v-if="game_is_started">
-                        <div class="players">
-                            <span class="z-depth-2" :class="{ active: !opponent_turn}">
-                                <span class="svg-player" v-html="player_symbol(user.id)"></span> {{ user.name }}
-                            </span>
-                            <span class="z-depth-2" :class="{ active: opponent_turn}">
-                                <span class="svg-player" v-html="player_symbol(opponent.id)"></span> {{ opponent.name }}
-                            </span>
-                        </div>
+                    <transition name="game-state" mode="out-in">
+                        <div v-if="game_is_started" key="game_is_started">
+                            <div class="players">
+                                <span class="z-depth-2" :class="{ active: !opponent_turn}">
+                                    <span class="svg-player" v-html="player_symbol(user.id)"></span> {{ user.name }}
+                                </span>
+                                <span class="z-depth-2" :class="{ active: opponent_turn}">
+                                    <span class="svg-player" v-html="player_symbol(opponent.id)"></span> {{ opponent.name }}
+                                </span>
+                            </div>
 
-                        <div class="status">
-                            <span class="svg-player" v-html="player_symbol(active_player.id)"></span> plays
-                        </div>
+                            <div class="status">
+                                <span class="svg-player" v-html="player_symbol(active_player.id)"></span> plays
+                            </div>
 
-                        <div>
-                            <svg class="gameboard">
-                                <path class="line" d="M135,90L0,90"></path>
-                                <path class="line" d="M135,90L270,90"></path>
+                            <div>
+                                <svg class="gameboard">
+                                    <path class="line" d="M135,90L0,90"></path>
+                                    <path class="line" d="M135,90L270,90"></path>
 
-                                <path class="line" d="M135,180L0,180"></path>
-                                <path class="line" d="M135,180L270,180"></path>
+                                    <path class="line" d="M135,180L0,180"></path>
+                                    <path class="line" d="M135,180L270,180"></path>
 
-                                <path class="line" d="M90,135L90,0"></path>
-                                <path class="line" d="M90,135L90,270"></path>
+                                    <path class="line" d="M90,135L90,0"></path>
+                                    <path class="line" d="M90,135L90,270"></path>
 
-                                <path class="line" d="M180,135L180,0"></path>
-                                <path class="line" d="M180,135L180,270"></path>
+                                    <path class="line" d="M180,135L180,0"></path>
+                                    <path class="line" d="M180,135L180,270"></path>
 
-                            </svg>
-                        </div>
-                        <div class="grid-tic">
-                            <div class="cell"
-                                 v-for="(cell, index) in cells"
-                                 :key="index"
-                                 :class="{ 'cell-set': cell }"
-                                 @click="makeMove(index)"
-                            >
-                                <span v-html="cell"></span>
+                                </svg>
+                            </div>
+                            <div class="grid-tic">
+                                <div class="cell"
+                                     v-for="(cell, index) in cells"
+                                     :key="index"
+                                     :class="{ 'cell-set': cell }"
+                                     @click="makeMove(index)"
+                                >
+                                    <span v-html="cell"></span>
+                                </div>
+                            </div>
+
+                            <div class="status">
+                                <a class="waves-effect waves-light btn-flat" @click="leaveLobby()">Leave<i class="material-icons right">close</i></a>
                             </div>
                         </div>
 
-                        <div class="status">
-                            <a class="waves-effect waves-light btn-flat" @click="leaveLobby()">Leave<i class="material-icons right">close</i></a>
-                        </div>
-                    </div>
-
-                    <div v-else-if="waiting_for_opponent">
-                        <h5>Waiting for opponent</h5>
-                        <div class="progress">
-                            <div class="indeterminate"></div>
-                        </div>
-                        <div class="status">
-                            <a class="waves-effect waves-light btn-flat" @click="leaveLobby()">Leave<i class="material-icons right">close</i></a>
-                        </div>
-                    </div>
-
-                    <div v-else-if="waiting_for_invited_opponent">
-                        <h5>Waiting for invited opponent</h5>
-                        <div class="progress">
-                            <div class="indeterminate"></div>
-                        </div>
-                        <div class="status">
-                            <a class="waves-effect waves-light btn-flat" @click="leaveLobby()">Leave<i class="material-icons right">close</i></a>
-                        </div>
-                    </div>
-
-                    <div v-else-if="game_is_finished">
-                        <div class="players">
-                            <span class="z-depth-2" :class="{ active: active_game.winner.id === user.id}">
-                                <span class="svg-player" v-html="player_symbol(user.id)"></span> {{ user.name }}
-                            </span>
-                            <span class="z-depth-2" :class="{ active: active_game.winner.id === opponent.id}">
-                                <span class="svg-player" v-html="player_symbol(opponent.id)"></span> {{ opponent.name }}
-                            </span>
-                        </div>
-
-                        <div class="status">
-                            <div v-if="active_game.winner.id === user.id">
-                                <p>You are the winner!</p>
+                        <div v-else-if="waiting_for_opponent" key="waiting_for_opponent">
+                            <h5>Waiting for opponent</h5>
+                            <div class="progress">
+                                <div class="indeterminate"></div>
                             </div>
-                            <div v-else-if="active_game.winner.id">
-                                <p>{{ active_game.winner.name }} is the winner!</p>
-                            </div>
-                            <div v-else>
-                                <p>Its a draw!</p>
+                            <div class="status">
+                                <a class="waves-effect waves-light btn-flat" @click="leaveLobby()">Leave<i class="material-icons right">close</i></a>
                             </div>
                         </div>
-                        <div class="status">
-                            <a class="waves-effect waves-light btn-flat" @click="leaveGame()">Finish game<i class="material-icons left">check</i></a>
-                        </div>
-                    </div>
 
-                    <div v-else>
-                        <form method="post" class="form_user" @submit.prevent="createLobby()" autocomplete="off">
-                            <p>
-                                <label>
-                                    <input type="checkbox" class="filled-in" checked="checked" v-model="public_lobby">
-                                    <span>Create public lobby</span>
-                                </label>
-                            </p>
-                            <div class="input-field" v-if="! public_lobby">
-                                <input id="email" type="email" class="validate" required v-model="player2_email">
-                                <label class="active" for="email">Opponent email</label>
+                        <div v-else-if="waiting_for_invited_opponent" key="waiting_for_invited">
+                            <h5>Waiting for invited opponent</h5>
+                            <div class="progress">
+                                <div class="indeterminate"></div>
                             </div>
-                            <div class="center-align">
-                                <button class="btn waves-effect waves-light" type="submit" name="action">Create
-                                    <i class="material-icons right">add</i>
-                                </button>
+                            <div class="status">
+                                <a class="waves-effect waves-light btn-flat" @click="leaveLobby()">Leave<i class="material-icons right">close</i></a>
                             </div>
-                        </form>
-                    </div>
+                        </div>
+
+                        <div v-else-if="game_is_finished" key="game_is_finished">
+                            <div class="players">
+                                <span class="z-depth-2" :class="{ active: active_game.winner.id === user.id}">
+                                    <span class="svg-player" v-html="player_symbol(user.id)"></span> {{ user.name }}
+                                </span>
+                                <span class="z-depth-2" :class="{ active: active_game.winner.id === opponent.id}">
+                                    <span class="svg-player" v-html="player_symbol(opponent.id)"></span> {{ opponent.name }}
+                                </span>
+                            </div>
+
+                            <div class="status">
+                                <div v-if="active_game.winner.id === user.id">
+                                    <p>You are the winner!</p>
+                                </div>
+                                <div v-else-if="active_game.winner.id">
+                                    <p>{{ active_game.winner.name }} is the winner!</p>
+                                </div>
+                                <div v-else>
+                                    <p>Its a draw!</p>
+                                </div>
+                            </div>
+                            <div class="status">
+                                <a class="waves-effect waves-light btn-flat" @click="leaveGame()">Finish game<i class="material-icons left">check</i></a>
+                            </div>
+                        </div>
+
+                        <div v-else key="create_game">
+                            <form method="post" class="form_user" @submit.prevent="createLobby()" autocomplete="off">
+                                <p>
+                                    <label>
+                                        <input type="checkbox" class="filled-in" checked="checked" v-model="public_lobby">
+                                        <span>Create public lobby</span>
+                                    </label>
+                                </p>
+                                <div class="input-field" v-if="! public_lobby">
+                                    <input id="email" type="email" class="validate" required v-model="player2_email">
+                                    <label class="active" for="email">Opponent email</label>
+                                </div>
+                                <div class="center-align">
+                                    <button class="btn waves-effect waves-light" type="submit" name="action">Create
+                                        <i class="material-icons right">add</i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </transition>
                 </div>
 
                 <div id="join">
@@ -321,9 +323,6 @@
             joinLobby(lobby) {
                 let socket_id = this.$socket.connection.socket_id;
 
-                // make sure cells are empty
-                this.cells.fill('');
-
                 this.$http.put(ENDPOINTS.GAME_JOIN, { id: lobby.id, socket_id })
                     .then(response => {
                         this.startGame(response.data, GAME_STATUS.STARTED);
@@ -352,6 +351,9 @@
             },
 
             startGame(lobby, status) {
+                // make sure cells are empty
+                this.cells.fill('');
+
                 this.game.started.push(lobby);
                 lobby.status = status;
                 this.setupSocket();

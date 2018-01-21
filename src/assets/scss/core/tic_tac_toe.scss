@@ -52,7 +52,7 @@ $grid-size: 85px;
 .x {
     path {
         stroke-dasharray: 135;
-        animation: stroke-x 1s;
+        animation: stroke-x 0.5s;
         stroke: $primary-color;
     }
 }
@@ -60,7 +60,7 @@ $grid-size: 85px;
 .o {
     path {
         stroke-dasharray: 300;
-        animation: stroke-o 1s;
+        animation: stroke-o 0.5s;
         stroke: color('grey', 'lighten-2');
     }
 }
@@ -78,13 +78,11 @@ $grid-size: 85px;
     .line {
         fill: none;
         stroke-dasharray: 135;
-        animation: stroke 1s;
+        animation: stroke 0.5s;
         stroke-dashoffset: 0;
 
         stroke: $secondary-color;
         stroke-width: 6px;
-        transition-duration: 0.375s;
-        -webkit-transition-duration: 0.375s;
     }
 }
 
@@ -163,4 +161,13 @@ table > tbody {
             background-color: $primary-color;
         }
     }
+}
+
+.game-state-enter-active, .game-state-leave-active {
+    transition: opacity .5s cubic-bezier(0.4,0.0,1,1);
+}
+
+.game-state-enter, .game-state-leave-to {
+    opacity: 0;
+    transition: opacity .5s cubic-bezier(0.4,0.0,1,1);
 }
