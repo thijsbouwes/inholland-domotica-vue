@@ -13,16 +13,6 @@ const state = {
 const getters = {
     bookmarks: state => state.all,
 
-    hostname: state => {
-        let match = state.bookmark_url.match(/:\/\/(www[0-9]?\.)?(.[^/:]+)/i);
-
-        if (match != null && match.length > 2 && typeof match[2] === 'string' && match[2].length > 0) {
-            return match[2];
-        }
-
-        return '';
-    },
-
     is_valid: state => {
         let pattern = new RegExp('^((?:https?\\:\\/\\/|www\\.)(?:[-a-z0-9]+\\.)*[-a-z0-9]+.*)$');
 
@@ -41,7 +31,7 @@ const actions = {
 
     createNewBookmark({ commit, getters, state }) {
         if (getters.is_valid) {
-            let data = { url: state.bookmark_url, name: getters.hostname };
+            let data = { url: state.bookmark_url };
 
             request.post(ENDPOINTS.BOOKMARKS, data)
                 .then(() => {

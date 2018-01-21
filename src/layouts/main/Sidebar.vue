@@ -86,8 +86,8 @@
                             <a class="collapsible-header"><i class="material-icons">bookmark</i>Bookmarks</a>
                             <div class="collapsible-body">
                                 <div class="chip" v-for="(bookmark, index) in bookmarks">
-                                    <img :src="`https://s2.googleusercontent.com/s2/favicons?domain_url=${bookmark.name}`" alt="Contact Person">
-                                    {{ bookmark.name }}
+                                    <img :src="`https://s2.googleusercontent.com/s2/favicons?domain_url=${ hostname(bookmark.url) }`" alt="Contact Person">
+                                    {{ hostname(bookmark.url) }}
                                     <i class="close material-icons" @click="deleteBookmark(bookmark)">close</i>
                                 </div>
                                 <div class="input-field">
@@ -234,6 +234,16 @@ export default {
     },
 
     methods: {
+        hostname(url) {
+            let match = url.match(/:\/\/(www[0-9]?\.)?(.[^/:]+)/i);
+
+            if (match != null && match.length > 2 && typeof match[2] === 'string' && match[2].length > 0) {
+                return match[2];
+            }
+
+            return '';
+        },
+
         uploadImage(event) {
             let files = event.target.files || event.dataTransfer.files;
             if (!files.length) {
