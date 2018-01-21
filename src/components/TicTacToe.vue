@@ -151,15 +151,11 @@
 
 <script>
     import { mapGetters } from 'vuex';
-    import ScorePersonal from './ScorePersonal';
-    import ScoreTop from './ScoreTop';
     import { ENDPOINTS } from '../config/api';
     import { GAME_STATUS } from '../config/game';
     import { CHANNELS } from "../config/game";
 
     export default {
-        components: { ScorePersonal, ScoreTop },
-
         data() {
             return {
                 loading: true,
@@ -277,6 +273,13 @@
         watch: {
             game: {
                 handler() {
+                    // join waiting lobby, so we keep the lobby list clean
+                    if (this.game.waiting.length > 0 && this.game_is_ready === false) {
+                        let lobby = this.game.waiting.pop();
+                        this.startGame(lobby, lobby.status);
+                    }
+
+                    // handle moves
                     if (this.game_is_ready === false) {
                         return;
                     }
@@ -309,7 +312,6 @@
                         } else {
                             this.startGame(response.data, GAME_STATUS.WAITING_INVITED_PLAYER_JOIN);
                         }
-                        this.setupSocket();
                     });
             },
 
@@ -318,13 +320,10 @@
 
                 // make sure cells are empty
                 this.cells.fill('');
-                console.log(this.cells);
 
                 this.$http.put(ENDPOINTS.GAME_JOIN, { id: lobby.id, socket_id })
                     .then(response => {
                         this.startGame(response.data, GAME_STATUS.STARTED);
-                        this.setupSocket();
-                        this.tabs.select('game');
                     });
             },
 
@@ -347,6 +346,8 @@
             startGame(lobby, status) {
                 this.game.started.push(lobby);
                 lobby.status = status;
+                this.setupSocket();
+                this.tabs.select('game');
             },
 
             makeMove(index) {
@@ -390,15 +391,12 @@
                 this.GAME_SOCKET = this.$socket.subscribe(CHANNELS.PRIVATE_GAME_CHANNELNAME + this.active_game.id);
 
                 this.GAME_SOCKET.bind('game_join', data => {
-                    console.log("Someone joined the game!");
                     this.active_game.status = data.status;
                     this.active_game.user2 = data.user2;
                 });
 
 
                 this.GAME_SOCKET.bind('game_leave', data => {
-                    console.log("Some leaved the game");
-
                     this.leaveGame();
 
                     this.$M.toast({ html:
@@ -407,14 +405,9 @@
                 });
 
                 this.GAME_SOCKET.bind('create_move', data => {
-                    console.log("Something moved");
                     this.applyMove(data);
                 });
 
-            },
-
-            sayHello() {
-                console.log("hello");
             }
         },
 
@@ -439,7 +432,6 @@
             this.$http(ENDPOINTS.GAME)
                 .then(response => {
                     this.game = response.data;
-
                     this.setupSocket();
                     this.loading = false;
                 });

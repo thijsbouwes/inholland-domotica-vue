@@ -24,6 +24,8 @@
     </div>
 </template>
 <script>
+    import { ENDPOINTS } from '../config/api';
+
     export default {
         data() {
             return {
@@ -49,12 +51,12 @@
         },
 
         created() {
-            // this.$http.get(ENDPOINTS.LAMPS)
-            //     .then(response => {
-            //         this.lamps = response.data;
-            //         this.loading = false;
-            //     })
-            //     .catch(error => console.log(error));
+            this.$http.get(ENDPOINTS.GAME_USER_STATS)
+                .then(response => {
+                    console.log(response.data);
+                    this.loading = false;
+                })
+                .catch(error => console.log(error));
         },
 
         methods: {

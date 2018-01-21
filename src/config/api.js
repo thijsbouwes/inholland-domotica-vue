@@ -25,6 +25,7 @@ export const ENDPOINTS = {
     GAME_JOIN: 'game/join',
     GAME_LEAVE: 'game/leave',
     GAME_MOVE_CREATE: 'game/move/create',
+    GAME_USER_STATS: 'game/user/stats',
     PUSHER_AUTH: 'game/pusher',
     PUSHER_USER_AUTH: 'game/user/pusher'
 };
