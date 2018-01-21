@@ -8,7 +8,11 @@
     z-index: 999;
 
     h2 {
-        color: color('grey', 'lighten-2');
+        padding: 1.1em 0.9em;
+        background-color: rgba(57,73,171, 0.5);
+        width: 100%;
+        text-align: center;
+        color: #ffffff;
 
         &:after {
             content: '|';

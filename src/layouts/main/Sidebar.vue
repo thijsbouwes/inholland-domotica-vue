@@ -107,7 +107,7 @@
                 <a class="waves-effect" href="#" @click="logout"><i class="material-icons">exit_to_app</i>Logout</a>
             </li>
         </ul>
-        <span class="demo" v-if="demo"><h2 class="demo-text"></h2></span>
+        <div class="demo" v-show="demo_visible"><h2 class="demo-text"></h2></div>
     </div>
     </template>
 
@@ -126,7 +126,7 @@
 export default {
     data() {
         return {
-            // demo: true,
+            demo_visible: false
         }
     },
 
@@ -202,6 +202,7 @@ export default {
                 M.updateTextFields();
 
                 if (this.demo) {
+                    this.demo_visible = true;
                     this.runDemo();
                 }
             });
@@ -219,7 +220,6 @@ export default {
     mounted() {
         // Create sidenav
         let elem = document.querySelector('.sidenav');
-        let ref = this;
 
         let options = {
             onCloseStart: () => {
@@ -298,7 +298,7 @@ export default {
                     this.interactWithApp(arrayPos);
                 },
                 onComplete: () => {
-                    // this.demo = false;
+                    this.demo_visible = false;
                 }
             };
 
