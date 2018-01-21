@@ -1,22 +1,6 @@
 <template>
     <div>
-        <table class="striped centered">
-            <thead>
-            <tr>
-                <th>Name</th>
-                <th>Tegenstander</th>
-                <th>Gewonnen</th>
-            </tr>
-            </thead>
-
-            <tbody>
-                <tr v-for="score in scores">
-                    <td v-text="score.name"></td>
-                    <td v-text="score.opponent"></td>
-                    <td v-html="wonOrLost(score.won)"></td>
-                </tr>
-            </tbody>
-        </table>
+        <doughnut-personal-score ref="Doughnut" :data="stats"></doughnut-personal-score>
 
         <div class="progress" v-show="loading">
             <div class="indeterminate"></div>
@@ -25,48 +9,49 @@
 </template>
 <script>
     import { ENDPOINTS } from '../config/api';
+    import DoughnutPersonalScore from './chart/Doughnut';
 
     export default {
+        components: { DoughnutPersonalScore },
+
         data() {
             return {
                 loading: false,
-                scores: [
-                    {
-                        name: "Alvin",
-                        opponent: "Jonathan",
-                        won: false,
-                    },
-                    {
-                        name: "Alvin",
-                        opponent: "Henk",
-                        won: true,
-                    },
-                    {
-                        name: "Alvin",
-                        opponent: "Joop",
-                        won: false,
-                    }
-                ]
+
+                stats: {
+                    datasets:[{
+                        data: [10, 10, 10, 10],
+                        label: 'Dataset 1',
+                        backgroundColor: [
+                            '#ff6384',
+                            '#36a2eb',
+                            '#cc65fe',
+                            '#ffce56'
+                        ],
+                    }],
+
+                    labels: [
+                        'Wins',
+                        'Loses',
+                        'Ties',
+                        'Total games played'
+                    ]
+                }
             }
         },
 
         created() {
             this.$http.get(ENDPOINTS.GAME_USER_STATS)
                 .then(response => {
-                    console.log(response.data);
+                    delete response.data.user;
+
+                    this.stats.datasets[0].data = Object.values(response.data);
+                    // this.stats.labels = Object.keys(response.data);
+
+                    this.$refs.Doughnut.update();
                     this.loading = false;
                 })
                 .catch(error => console.log(error));
-        },
-
-        methods: {
-            wonOrLost(won) {
-                if (won) {
-                    return '<i class="material-icons">check</i>'
-                }
-
-                return '<i class="material-icons">clear</i>'
-            }
         }
     }
 </script>
