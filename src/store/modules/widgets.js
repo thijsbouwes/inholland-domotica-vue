@@ -8,7 +8,8 @@ const state = {
     active: [],
     loading: true,
     draggable_disabled: true,
-    layoutChanged: false
+    layoutChanged: false,
+    column_types: ["A", "B", "C", "D"]
 };
 
 // getters
@@ -44,6 +45,9 @@ const actions = {
     toggleWidget({ getters, commit, dispatch }, widget) {
         // check if widget is all-ready active
         let user_widget = state.active.find(user_widget => user_widget.widget_id === widget.id);
+
+        let column_types = state.active.map(user_widget => user_widget.column);
+        console.log(column_types);
 
         if (user_widget !== undefined) {
             // disable widget

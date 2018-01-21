@@ -285,9 +285,9 @@ export default {
         runDemo() {
             let options = {
                 strings: [
-                    `${this.user.name} welcome to Home comfort 👋`,
+                    `${this.user.name} welcome to Home Comfort 👋`,
                     "Let me show you around",
-                    "In the sidebar, you can mange everything",
+                    "In the sidebar, you can manage everything",
                     "Lets enable some widgets",
                     "Setup your background here",
                     `Enjoy your dashboard ${this.user.name} 👍`
@@ -298,7 +298,10 @@ export default {
                     this.interactWithApp(arrayPos);
                 },
                 onComplete: () => {
-                    this.demo_visible = false;
+                    // wait 1s and close demo
+                    setTimeout(() => {
+                        this.demo_visible = false;
+                    }, 1000);
                 }
             };
 
